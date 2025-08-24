@@ -25,6 +25,10 @@ export default function MyGalleryPage() {
     setLoading(true)
     setError(null)
     try {
+      if (!auth) {
+        setError('Please sign in to view your gallery')
+        return
+      }
       const u = auth.currentUser
       if (!u) throw new Error('Please sign in to view your gallery')
       const idToken = await u.getIdToken()
