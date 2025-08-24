@@ -22,7 +22,21 @@ export default function AuthButtons() {
   if (!user) {
     return (
       <div className="flex items-center gap-2">
-        <Button variant="outline" onClick={() => auth && GoogleProvider && signInWithPopup(auth, GoogleProvider)}>Google</Button>
+        <Button
+          variant="outline"
+          onClick={async () => {
+            const c = getClientApp()
+            if (!c || !c.GoogleProvider) {
+              setErr('Sign-in unavailable: missing client configuration')
+              return
+            }
+            try {
+              await signInWithPopup(c.auth, c.GoogleProvider)
+            } catch (e: any) {
+              setErr(e?.message || 'Google sign-in failed')
+            }
+          }}
+        >Google</Button>
         <Button variant="outline" onClick={() => setShowEmail((v) => !v)}>Email</Button>
         {showEmail && (
           <div className="absolute right-4 top-14 z-50 w-64 rounded-md border bg-white p-3 shadow">
@@ -39,9 +53,10 @@ export default function AuthButtons() {
                 onClick={async () => {
                   setErr(null)
                   try {
-                    if (!auth) throw new Error('Auth not ready')
-                    if (mode === 'signin') await signInWithEmailAndPassword(auth, email, password)
-                    else await createUserWithEmailAndPassword(auth, email, password)
+                    const c = getClientApp()
+                    if (!c) throw new Error('Sign-in unavailable: missing client configuration')
+                    if (mode === 'signin') await signInWithEmailAndPassword(c.auth, email, password)
+                    else await createUserWithEmailAndPassword(c.auth, email, password)
                     setShowEmail(false)
                   } catch (e: any) {
                     setErr(e?.message || 'Auth error')

@@ -14,12 +14,11 @@ const config = {
 } as const
 
 function hasValidClientConfig() {
+  // For Auth/Firestore/Storage, apiKey, authDomain, projectId, appId are sufficient
   return Boolean(
     config.apiKey &&
     config.authDomain &&
     config.projectId &&
-    config.storageBucket &&
-    config.messagingSenderId &&
     config.appId
   )
 }
