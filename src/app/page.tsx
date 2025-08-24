@@ -177,8 +177,9 @@ export default function HomePage() {
               <div className="flex gap-2">
                 <Button onClick={async () => {
                   try {
-                    const { auth } = getClientApp()
-                    const user = auth.currentUser
+                    const client = getClientApp()
+                    if (!client) throw new Error('Authentication not configured')
+                    const user = client.auth.currentUser
                     if (!user) throw new Error('Please sign in to continue')
                     const idToken = await user.getIdToken()
                     const resp = await fetch('/api/print-interest', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken, imageUrl: printImage, options: { frame, printSize } }) })
