@@ -37,9 +37,8 @@ export default function HomePage() {
       // If publish requested, attach Firebase ID token if available
       if (publish) {
         try {
-          const client = getClientApp()
-          if (!client) throw new Error('Authentication not configured')
-          const user = client.auth.currentUser
+          const { auth } = getClientApp()
+          const user = auth.currentUser
           if (!user) throw new Error('Please sign in to publish to gallery')
           const token = await user.getIdToken()
           body.append('idToken', token)
@@ -177,9 +176,8 @@ export default function HomePage() {
               <div className="flex gap-2">
                 <Button onClick={async () => {
                   try {
-                    const client = getClientApp()
-                    if (!client) throw new Error('Authentication not configured')
-                    const user = client.auth.currentUser
+                    const { auth } = getClientApp()
+                    const user = auth.currentUser
                     if (!user) throw new Error('Please sign in to continue')
                     const idToken = await user.getIdToken()
                     const resp = await fetch('/api/print-interest', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken, imageUrl: printImage, options: { frame, printSize } }) })
