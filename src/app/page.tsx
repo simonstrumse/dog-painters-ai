@@ -37,8 +37,9 @@ export default function HomePage() {
       // If publish requested, attach Firebase ID token if available
       if (publish) {
         try {
-          const { auth } = getClientApp()
-          const user = auth.currentUser
+          const client = getClientApp()
+          if (!client) throw new Error('Authentication not configured')
+          const user = client.auth.currentUser
           if (!user) throw new Error('Please sign in to publish to gallery')
           const token = await user.getIdToken()
           body.append('idToken', token)
