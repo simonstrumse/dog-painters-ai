@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getClientApp } from '@/lib/firebaseClient'
 import { Button } from '@/components/ui/button'
 
@@ -12,16 +12,21 @@ type Item = {
 }
 
 export default function MyGalleryPage() {
-  const { auth } = getClientApp()
+  const client = useMemo(() => (typeof window !== 'undefined' ? getClientApp() : null), [])
+  const auth = client?.auth
   const [items, setItems] = useState<Item[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const user = auth.currentUser
+  const user = auth?.currentUser ?? null
 
   const fetchItems = async () => {
     setLoading(true)
     setError(null)
     try {
+      if (!auth) {
+        setError('Please sign in to view your gallery')
+        return
+      }
       const u = auth.currentUser
       if (!u) throw new Error('Please sign in to view your gallery')
       const idToken = await u.getIdToken()
@@ -37,10 +42,11 @@ export default function MyGalleryPage() {
   }
 
   useEffect(() => {
+    if (!auth) return
     const unsub = auth.onAuthStateChanged(() => fetchItems())
     return () => unsub()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [auth])
 
   if (!user) {
     return (
