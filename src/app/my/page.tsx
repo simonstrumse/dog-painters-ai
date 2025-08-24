@@ -12,16 +12,21 @@ type Item = {
 }
 
 export default function MyGalleryPage() {
-  const { auth } = getClientApp()
+  const client = getClientApp()
+  const auth = client?.auth
   const [items, setItems] = useState<Item[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const user = auth.currentUser
+  const user = auth?.currentUser ?? null
 
   const fetchItems = async () => {
     setLoading(true)
     setError(null)
     try {
+      if (!auth) {
+        setError('Authentication not available')
+        return
+      }
       const u = auth.currentUser
       if (!u) throw new Error('Please sign in to view your gallery')
       const idToken = await u.getIdToken()
@@ -37,10 +42,11 @@ export default function MyGalleryPage() {
   }
 
   useEffect(() => {
-    const unsub = auth.onAuthStateChanged(() => fetchItems())
+    if (!auth) return
+    const unsub = auth.onAuthStateChanged((_: any) => fetchItems())
     return () => unsub()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [auth])
 
   if (!user) {
     return (
