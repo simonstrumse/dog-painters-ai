@@ -6,6 +6,11 @@ import type { GeneratedImage, StyleSelection } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { getClientApp } from '@/lib/firebaseClient'
+import Hero from '@/components/Hero'
+import Modal from '@/components/ui/modal'
+import FramePreview from '@/components/FramePreview'
+import HowItWorks from '@/components/HowItWorks'
+import TrustBadges from '@/components/TrustBadges'
 
 export default function HomePage() {
   const [files, setFiles] = useState<File[]>([])
@@ -14,6 +19,10 @@ export default function HomePage() {
   const [results, setResults] = useState<GeneratedImage[]>([])
   const [size, setSize] = useState<'512x512' | '1024x1024'>('1024x1024')
   const [publish, setPublish] = useState(false)
+  const [printOpen, setPrintOpen] = useState(false)
+  const [printImage, setPrintImage] = useState<string | null>(null)
+  const [frame, setFrame] = useState<'black' | 'walnut' | 'white'>('black')
+  const [printSize, setPrintSize] = useState<'8x10' | '12x16' | '18x24'>('12x16')
 
   const canGenerate = useMemo(() => files.length > 0 && selections.length > 0 && !loading, [files, selections, loading])
 
@@ -53,13 +62,10 @@ export default function HomePage() {
   }
 
   return (
-    <main className="space-y-8">
-      <header className="flex flex-col gap-3 items-center text-center">
-        <h1 className="text-3xl font-bold">Dog Painters</h1>
-        <p className="text-gray-600 max-w-2xl">Upload your dog photos and transform them into AI-generated portraits in famous artists\' styles. Select one or many styles and generate high-quality images.</p>
-      </header>
+    <main className="space-y-10">
+      <Hero />
 
-      <section className="grid gap-6 lg:grid-cols-2">
+      <section id="create" className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-4">
           <UploadDropzone onFiles={(f) => setFiles((prev) => [...prev, ...f])} />
           {files.length > 0 && (
@@ -120,11 +126,17 @@ export default function HomePage() {
                         <img src={r.dataUrl} alt={`${r.artistKey}-${r.styleKey}`} className="w-full h-full object-cover" />
                         <div className="flex items-center justify-between p-2 text-sm">
                           <div className="truncate">{r.artistKey} • {r.styleKey}</div>
-                          <a
-                            download={`dog-${i}-${r.artistKey}-${r.styleKey}.png`}
-                            href={r.dataUrl}
-                            className="text-blue-600 hover:underline"
-                          >Download</a>
+                          <div className="flex items-center gap-2">
+                            <button
+                              className="text-gray-700 hover:underline"
+                              onClick={() => { setPrintImage(r.dataUrl); setPrintOpen(true) }}
+                            >Print</button>
+                            <a
+                              download={`dog-${i}-${r.artistKey}-${r.styleKey}.png`}
+                              href={r.dataUrl}
+                              className="text-blue-700 hover:underline"
+                            >Download</a>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -135,6 +147,54 @@ export default function HomePage() {
           })}
         </section>
       )}
+
+      <HowItWorks />
+      <TrustBadges />
+
+      <Modal open={printOpen} onClose={() => setPrintOpen(false)} title="Order a Framed Print">
+        {printImage && (
+          <div className="grid gap-4 md:grid-cols-2">
+            <FramePreview imageUrl={printImage} frame={frame} />
+            <div className="space-y-3">
+              <div>
+                <div className="text-sm font-medium mb-1">Frame</div>
+                <div className="flex gap-2">
+                  {(['black','walnut','white'] as const).map((c) => (
+                    <button key={c} onClick={() => setFrame(c)} className={`px-3 py-1 rounded border ${frame===c?'border-blue-600':''}`}>{c}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div className="text-sm font-medium mb-1">Size</div>
+                <select value={printSize} onChange={(e) => setPrintSize(e.target.value as any)} className="border rounded px-2 py-1">
+                  <option value="8x10">8×10 in</option>
+                  <option value="12x16">12×16 in</option>
+                  <option value="18x24">18×24 in</option>
+                </select>
+              </div>
+              <div className="text-sm text-gray-600">Estimated price: {printSize==='8x10'?'$49':printSize==='12x16'?'$79':'$129'}</div>
+              <div className="flex gap-2">
+                <Button onClick={async () => {
+                  try {
+                    const { auth } = getClientApp()
+                    const user = auth.currentUser
+                    if (!user) throw new Error('Please sign in to continue')
+                    const idToken = await user.getIdToken()
+                    const resp = await fetch('/api/print-interest', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken, imageUrl: printImage, options: { frame, printSize } }) })
+                    if (!resp.ok) throw new Error(await resp.text())
+                    alert('Thanks! We saved your print request and will notify you when checkout is ready.')
+                    setPrintOpen(false)
+                  } catch (e: any) {
+                    alert(e?.message || 'Failed to submit print interest')
+                  }
+                }}>Request Print</Button>
+                <Button variant="outline" onClick={() => setPrintOpen(false)}>Cancel</Button>
+              </div>
+              <div className="text-xs text-gray-500">We’ll follow up by email when your print is ready to ship.</div>
+            </div>
+          </div>
+        )}
+      </Modal>
     </main>
   )
 }
