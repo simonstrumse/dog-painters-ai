@@ -1,69 +1,189 @@
-Dog Painters – AI Dog Portraits
+# Dog Painters AI – AI Dog Portraits 🎨🐕
 
-Overview
-- Upload one or multiple photos of your dog and generate AI-stylized portraits in famous artist sub-styles.
-- Built with Next.js (App Router), React, Tailwind.
-- OpenAI Images API (gpt-image-1 via images/edits) for image-to-image stylization.
-- Optional Supabase Storage for hosting generated images.
+> **v1.0 - Production Ready!** ✨
 
-Getting Started
-1) Install deps
+Upload photos of your dog and generate AI-stylized portraits in famous artist styles using OpenAI's powerful image generation API.
+
+## 🚀 Live Demo
+
+**Production App**: https://dog-painters-jluo74bw5-simonstrumses-projects.vercel.app
+
+## ✨ Features
+
+- 🖼️ **Upload multiple dog photos** for batch processing
+- 🎨 **20+ Artist styles** with 80+ sub-styles (Picasso, Van Gogh, Monet, Warhol, etc.)
+- 🤖 **AI-powered transformations** using OpenAI Images API (gpt-image-1)
+- 🔐 **Firebase Authentication** (Google + Email/Password)
+- 📱 **Mobile responsive** design with Tailwind CSS
+- 💾 **Firebase Storage** for generated images
+- 🖥️ **Real-time progress** tracking during generation
+- 📋 **Personal gallery** for authenticated users
+- ⬇️ **HD downloads** of generated portraits
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js 14 (App Router), React, TypeScript
+- **Styling**: Tailwind CSS, shadcn/ui components
+- **Backend**: Next.js API routes
+- **Authentication**: Firebase Auth
+- **Database**: Firestore
+- **Storage**: Firebase Storage
+- **AI**: OpenAI Images API
+- **Deployment**: Vercel
+
+## 🚨 Requirements
+
+**⚠️ Important: You need a verified OpenAI API account with billing enabled to use this app.**
+
+- OpenAI API access with image generation capabilities
+- Verified OpenAI account (required for image APIs)
+- Firebase project with Authentication, Firestore, and Storage enabled
+- Vercel deployment (or similar hosting)
+
+## 🏃‍♂️ Quick Start
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/simonstrumse/dog-painters-ai.git
+   cd dog-painters-ai
+   ```
+
+2. **Install dependencies**
+   ```bash
    npm install
+   ```
 
-2) Configure env
+3. **Set up environment variables**
+   ```bash
    cp .env.example .env
-   - Set OPENAI_API_KEY
-   - Optionally set NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (or NEXT_PUBLIC_SUPABASE_ANON_KEY) and SUPABASE_BUCKET
+   ```
+   
+   **Required Environment Variables:**
+   ```env
+   # OpenAI API (REQUIRED - must have verified billing account)
+   OPENAI_API_KEY=sk-proj-...
+   
+   # Firebase Client Config
+   NEXT_PUBLIC_FIREBASE_API_KEY=...
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=...
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=...
+   NEXT_PUBLIC_FIREBASE_APP_ID=...
+   
+   # Firebase Admin (Server-side)
+   FIREBASE_SERVICE_ACCOUNT={"type":"service_account",...}
+   FIREBASE_STORAGE_BUCKET=...
+   ```
 
-3) Run dev server
+4. **Run development server**
+   ```bash
    npm run dev
+   ```
 
-Build & Deploy (Vercel)
-- Add the following env vars in Vercel Project Settings → Environment Variables:
-  - OPENAI_API_KEY
-  - NEXT_PUBLIC_SUPABASE_URL (optional)
-  - SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY (optional)
-  - SUPABASE_BUCKET (optional, default: dog-painters)
-- Deploy via Git integration or `vercel` CLI.
+## 🎨 Dog Art Style Library
 
-Firebase Setup
-- Create a Firebase project and enable:
-  - Authentication: Google (and/or Email) provider
-  - Firestore: production mode
-  - Storage: default bucket
-- Create a Web App in Firebase console; copy client config into env:
-  - `NEXT_PUBLIC_FIREBASE_API_KEY`, `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`, `NEXT_PUBLIC_FIREBASE_PROJECT_ID`, `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`, `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`, `NEXT_PUBLIC_FIREBASE_APP_ID`
-- Create a service account (Firebase Admin SDK), generate a JSON key, and set env:
-  - `FIREBASE_SERVICE_ACCOUNT` = raw JSON contents (stringified)
-  - `FIREBASE_STORAGE_BUCKET` = your bucket, e.g. `your-project-id.appspot.com`
+The app includes a comprehensive library of **20+ artists** with **80+ sub-styles**:
 
-Recommended Security Rules (adjust for your needs)
-- Firestore: allow read on `gallery`, restrict write to authenticated users.
-  service cloud.firestore {
-    match /databases/{database}/documents {
-      match /gallery/{docId} {
-        allow read: if true;
-        allow write: if request.auth != null;
-      }
+- **Pablo Picasso**: Blue Period, Rose Period, Analytical Cubism, Synthetic Cubism, Line Sketches
+- **Vincent van Gogh**: Starry Night, Sunflowers, Arles Portraits, Early Dutch, Japanese-Inspired
+- **Salvador Dalí**: Classic Surrealism, Paranoiac-Critical, Religious Phase, Animal Hybrids
+- **Andy Warhol**: Marilyn Silkscreens, Commercial Flat, Sketches
+- **Claude Monet**: Water Lilies, Haystacks, Urban Impressionism
+- **And many more!** See `src/lib/styles.ts` for the complete library.
+
+## 🏗️ Architecture
+
+```
+├── src/
+│   ├── app/                 # Next.js App Router
+│   │   ├── api/            # API routes
+│   │   │   ├── generate/   # Main image generation
+│   │   │   └── my-gallery/ # User gallery
+│   │   ├── gallery/        # Public gallery page
+│   │   └── my/             # User's personal gallery
+│   ├── components/         # React components
+│   │   ├── ui/            # shadcn/ui components
+│   │   ├── AuthButtons.tsx # Authentication
+│   │   ├── StylePicker.tsx # Artist style selection
+│   │   └── UploadDropzone.tsx # File upload
+│   ├── lib/               # Utilities
+│   │   ├── firebaseClient.ts  # Client Firebase config
+│   │   ├── firebaseAdmin.ts   # Server Firebase config
+│   │   ├── firebaseStorage.ts # Storage utilities
+│   │   └── styles.ts          # Complete style library
+│   └── types.ts           # TypeScript definitions
+├── firebase.json          # Firebase configuration
+└── firestore.indexes.json # Required Firestore indexes
+```
+
+## 🔧 Firebase Setup
+
+1. **Create Firebase Project**
+   ```bash
+   firebase projects:create your-project-name
+   ```
+
+2. **Enable Services**
+   - Authentication (Google + Email providers)
+   - Firestore Database (production mode)  
+   - Storage (default bucket)
+
+3. **Create Web App & Service Account**
+   ```bash
+   firebase apps:create web "Your App Name"
+   gcloud iam service-accounts create firebase-admin
+   gcloud iam service-accounts keys create firebase-key.json --iam-account=firebase-admin@your-project.iam.gserviceaccount.com
+   ```
+
+## 🚀 Deployment
+
+**Vercel (Recommended)**
+```bash
+vercel --prod
+# Add all environment variables via Vercel CLI or dashboard
+```
+
+**Environment Variables Required:**
+- All Firebase config variables (see `.env.example`)
+- `OPENAI_API_KEY` (with verified billing account)
+
+**Add Authorized Domains:**
+Add your Vercel domain to Firebase Auth authorized domains in the Firebase Console.
+
+## 🔒 Security Rules
+
+**Firestore Rules:**
+```javascript
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /gallery/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
     }
   }
-- Storage: files are made public by the server after upload. You can keep default rules restricting write to server only (via admin). Client does not upload generated images directly.
+}
+```
 
-Notes
-- Generation can take ~30–60 seconds. The UI shows a loading message.
-- You can select multiple sub-styles across artists. The API will produce all combinations per uploaded image.
-- Results are returned as base64 data URLs for immediate preview and download. When Supabase is configured, results are also uploaded to a public bucket and a `publicUrl` is returned.
+## 📝 Usage Notes
 
-Dog Art Style Library
-- See src/lib/styles.ts for the modular library and prompt mappings.
-- Add new artists or sub-styles by extending the array; the UI renders dynamically.
+- Generation takes ~30–60 seconds with real-time progress tracking
+- Select multiple sub-styles across artists for variety
+- Results include base64 previews + Firebase Storage URLs
+- HD downloads available for all generated images
+- Personal gallery requires authentication
 
-Security & Production
-- The API route runs on Node.js runtime and calls OpenAI Images Edits endpoint.
-- Validate and limit input in production (e.g., file size, allowed MIME types, concurrency limits).
-- Consider adding authentication (Supabase Auth) to restrict usage and add a gallery; store job records and metadata in your DB.
+## 🔮 Future Enhancements
 
-Stretch Ideas
-- Style bundles: pre-define selection sets on the client.
-- Public gallery: save records with original hash, selection set, generated URLs.
-- Batch mode: allow multiple dogs and queue jobs in a background worker or long-running function.
+- **Style bundles**: Pre-defined style combinations
+- **Public gallery**: Community sharing features  
+- **Batch processing**: Multiple dogs in one session
+- **Custom styles**: User-defined style training
+
+## 📞 Support
+
+For issues or feature requests, please open an issue on [GitHub](https://github.com/simonstrumse/dog-painters-ai/issues).
+
+---
+
+**Built with ❤️ using Claude Code and the power of AI** 🤖✨
