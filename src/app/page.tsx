@@ -26,8 +26,18 @@ export default function HomePage() {
   const [printImage, setPrintImage] = useState<string | null>(null)
   const [frame, setFrame] = useState<'black' | 'walnut' | 'white'>('black')
   const [printSize, setPrintSize] = useState<'8x10' | '12x16' | '18x24'>('12x16')
+  const [generationStatus, setGenerationStatus] = useState<{
+    used: number
+    remaining: number
+    dailyLimit: number
+    resetTime: string
+  } | null>(null)
 
-  const canGenerate = useMemo(() => files.length > 0 && selections.length > 0 && !loading, [files, selections, loading])
+  const canGenerate = useMemo(() => {
+    const hasFilesAndSelections = files.length > 0 && selections.length > 0 && !loading
+    const hasGenerationsLeft = !generationStatus || generationStatus.remaining > 0
+    return hasFilesAndSelections && hasGenerationsLeft
+  }, [files, selections, loading, generationStatus])
 
   // Prevent accidental tab closure during generation
   useEffect(() => {
@@ -47,6 +57,46 @@ export default function HomePage() {
       window.removeEventListener('beforeunload', handleBeforeUnload)
     }
   }, [loading])
+
+  // Fetch generation status
+  const fetchGenerationStatus = async () => {
+    try {
+      const client = getClientApp()
+      if (!client?.auth) return
+      const user = client.auth.currentUser
+      if (!user) return
+      
+      const token = await user.getIdToken()
+      const resp = await fetch('/api/generation-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken: token })
+      })
+      
+      if (resp.ok) {
+        const status = await resp.json()
+        setGenerationStatus(status)
+      }
+    } catch (e) {
+      console.error('Failed to fetch generation status:', e)
+    }
+  }
+
+  // Fetch generation status when user signs in or component mounts
+  useEffect(() => {
+    const client = getClientApp()
+    if (!client?.auth) return
+    
+    const unsubscribe = client.auth.onAuthStateChanged((user) => {
+      if (user) {
+        fetchGenerationStatus()
+      } else {
+        setGenerationStatus(null)
+      }
+    })
+    
+    return () => unsubscribe()
+  }, [])
 
   const onGenerate = async () => {
     setLoading(true)
@@ -98,6 +148,9 @@ export default function HomePage() {
       const json = await resp.json()
       setResults(json.results as GeneratedImage[])
       setLoadingProgress(100)
+      
+      // Update generation status after successful generation
+      await fetchGenerationStatus()
       
       // Auto-scroll to results after generation
       setTimeout(() => {
@@ -163,13 +216,45 @@ export default function HomePage() {
               Free users share their creations with our community. 
               <span className="font-medium">Paying customers will have opt-out available.</span>
             </div>
-            <div className="text-xs text-blue-600">
-              ⚠️ Daily limit: 3 generations per user
-            </div>
+            {generationStatus ? (
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-xs">
+                  <span className={generationStatus.remaining > 0 ? 'text-green-600' : 'text-red-600'}>
+                    {generationStatus.remaining > 0 ? '✅' : '⚠️'} 
+                    {generationStatus.remaining} generations remaining today
+                  </span>
+                  <span className="text-gray-500">
+                    {generationStatus.used}/{generationStatus.dailyLimit} used
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-1.5">
+                  <div 
+                    className={`h-1.5 rounded-full transition-all ${
+                      generationStatus.remaining > 1 ? 'bg-green-500' : 
+                      generationStatus.remaining === 1 ? 'bg-yellow-500' : 'bg-red-500'
+                    }`}
+                    style={{ width: `${(generationStatus.used / generationStatus.dailyLimit) * 100}%` }}
+                  />
+                </div>
+                <div className="text-xs text-gray-500">
+                  Resets at {new Date(generationStatus.resetTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} 
+                  {new Date(generationStatus.resetTime).toDateString() !== new Date().toDateString() ? ' tomorrow' : ' today'}
+                </div>
+              </div>
+            ) : (
+              <div className="text-xs text-blue-600">
+                ⚠️ Daily limit: 3 generations per user
+              </div>
+            )}
           </div>
 
           <Button onClick={onGenerate} disabled={!canGenerate}>
-            {loading ? 'Generating…' : 'Generate Portraits'}
+            {loading 
+              ? 'Generating…' 
+              : generationStatus && generationStatus.remaining === 0 
+                ? 'Daily Limit Reached' 
+                : 'Generate Portraits'
+            }
           </Button>
           
           {loading && (
