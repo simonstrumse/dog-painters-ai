@@ -11,17 +11,14 @@ type Props = {
   onChange: (v: StyleSelection[]) => void
 }
 
-type SelectionMode = 'style' | 'reference'
-
 export default function StylePicker({ value, onChange }: Props) {
   const [expandedArtist, setExpandedArtist] = useState<string | null>(null)
-  const [selectionMode, setSelectionMode] = useState<SelectionMode>('style')
+  const [paintingInputs, setPaintingInputs] = useState<{[key: string]: string}>({})
   
   const addStyleSelection = (artistKey: string, styleKey: string) => {
     const newSelection: StyleSelection = {
       artistKey,
-      styleKey,
-      dogName: ''
+      styleKey
     }
     onChange([...value, newSelection])
   }
@@ -29,20 +26,13 @@ export default function StylePicker({ value, onChange }: Props) {
   const addReferenceSelection = (artistKey: string, customReference: string) => {
     const newSelection: StyleSelection = {
       artistKey,
-      customReference,
-      dogName: ''
+      customReference
     }
     onChange([...value, newSelection])
   }
 
   const removeSelection = (index: number) => {
     onChange(value.filter((_, i) => i !== index))
-  }
-
-  const updateDogName = (index: number, dogName: string) => {
-    const updated = [...value]
-    updated[index] = { ...updated[index], dogName: dogName || undefined }
-    onChange(updated)
   }
 
   const selectedSet = useMemo(() => 
@@ -53,77 +43,39 @@ export default function StylePicker({ value, onChange }: Props) {
   return (
     <div className="space-y-6">
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold">Create Artistic Portraits</h3>
+        <h3 className="text-lg font-semibold">Select Artists & Styles</h3>
         <p className="text-sm text-gray-600">
-          Choose an artist, then select either a style period OR reference a specific painting. Name your dog for artistic titles!
+          Choose an artist and their style, or reference a specific painting instead.
         </p>
-      </div>
-
-      {/* Selection Mode Toggle */}
-      <div className="flex gap-2 p-1 bg-gray-100 rounded-lg">
-        <button
-          onClick={() => setSelectionMode('style')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            selectionMode === 'style' 
-              ? 'bg-white text-blue-700 shadow-sm' 
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
-        >
-          <Palette className="h-4 w-4" />
-          Style Periods
-        </button>
-        <button
-          onClick={() => setSelectionMode('reference')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            selectionMode === 'reference' 
-              ? 'bg-white text-blue-700 shadow-sm' 
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
-        >
-          <Image className="h-4 w-4" />
-          Specific Paintings
-        </button>
       </div>
 
       {/* Selected Styles */}
       {value.length > 0 && (
         <div className="space-y-3">
-          <h4 className="font-medium text-gray-700">Your Selections ({value.length})</h4>
-          <div className="space-y-3">
+          <h4 className="font-medium text-gray-700">Selected ({value.length})</h4>
+          <div className="space-y-2">
             {value.map((selection, index) => {
               const artist = DOG_STYLE_LIBRARY.find(a => a.key === selection.artistKey)
               const style = artist?.styles.find(s => s.key === selection.styleKey)
               const isReference = !!selection.customReference
               
               return (
-                <div key={index} className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm">{artist?.name}</span>
-                      <span className="text-gray-400">•</span>
-                      <span className="text-sm text-gray-600">
-                        {isReference ? `"${selection.customReference}"` : style?.name}
-                      </span>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeSelection(index)}
-                      className="h-6 w-6 p-0 text-gray-400 hover:text-red-500"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
+                <div key={index} className="flex items-center justify-between p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-sm">{artist?.name}</span>
+                    <span className="text-gray-400">•</span>
+                    <span className="text-sm text-gray-600">
+                      {isReference ? `"${selection.customReference}"` : style?.name}
+                    </span>
                   </div>
-                  
-                  <div className="space-y-2">
-                    <input
-                      type="text"
-                      placeholder="Dog's name (for artistic title, e.g., 'LE FLUKE')"
-                      value={selection.dogName || ''}
-                      onChange={(e) => updateDogName(index, e.target.value)}
-                      className="w-full text-sm px-3 py-2 border rounded-md bg-white"
-                    />
-                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeSelection(index)}
+                    className="h-6 w-6 p-0 text-gray-400 hover:text-red-500"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
                 </div>
               )
             })}
@@ -133,7 +85,7 @@ export default function StylePicker({ value, onChange }: Props) {
 
       {/* Artist Selection */}
       <div className="space-y-3">
-        <h4 className="font-medium text-gray-700">Choose Artists</h4>
+        <h4 className="font-medium text-gray-700">Choose Artists & Styles</h4>
         <div className="grid gap-3">
           {DOG_STYLE_LIBRARY.map((artist) => {
             const isExpanded = expandedArtist === artist.key
@@ -166,9 +118,54 @@ export default function StylePicker({ value, onChange }: Props) {
                 
                 {isExpanded && (
                   <CardContent className="pt-0">
-                    {selectionMode === 'style' ? (
-                      <div className="space-y-3">
-                        <h5 className="text-sm font-medium text-gray-700">Style Periods</h5>
+                    <div className="space-y-4">
+                      {/* Painting Reference Input */}
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-700">
+                          Or reference a specific painting:
+                        </label>
+                        <input
+                          type="text"
+                          placeholder={`e.g., ${artist.examples?.[0] || 'famous work'}`}
+                          value={paintingInputs[artist.key] || ''}
+                          onChange={(e) => setPaintingInputs(prev => ({...prev, [artist.key]: e.target.value}))}
+                          className="w-full px-3 py-2 border rounded-md text-sm"
+                        />
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={!paintingInputs[artist.key]?.trim()}
+                            onClick={() => {
+                              if (paintingInputs[artist.key]?.trim()) {
+                                addReferenceSelection(artist.key, paintingInputs[artist.key].trim())
+                                setPaintingInputs(prev => ({...prev, [artist.key]: ''}))
+                              }
+                            }}
+                          >
+                            <Plus className="h-4 w-4 mr-1" />
+                            Add Painting Reference
+                          </Button>
+                        </div>
+                        {artist.examples && (
+                          <div className="flex flex-wrap gap-1">
+                            <span className="text-xs text-gray-500">Examples:</span>
+                            {artist.examples.slice(0, 3).map((example, i) => (
+                              <button
+                                key={i}
+                                onClick={() => setPaintingInputs(prev => ({...prev, [artist.key]: example}))}
+                                className="text-xs px-2 py-0.5 bg-white border rounded hover:bg-gray-50 text-blue-600"
+                              >
+                                {example}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Style Periods */}
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-700">Style periods:</label>
                         <div className="grid gap-2">
                           {artist.styles.map((style) => {
                             const isSelected = selectedSet.has(`${artist.key}:${style.key}`)
@@ -193,43 +190,7 @@ export default function StylePicker({ value, onChange }: Props) {
                           })}
                         </div>
                       </div>
-                    ) : (
-                      <div className="space-y-3">
-                        <h5 className="text-sm font-medium text-gray-700">Reference a Specific Painting</h5>
-                        <div className="space-y-3">
-                          <input
-                            type="text"
-                            placeholder={`Enter a ${artist.name} painting (e.g., ${artist.examples?.[0] || 'famous work'})`}
-                            className="w-full px-3 py-2 border rounded-md text-sm"
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                const input = e.target as HTMLInputElement
-                                if (input.value.trim()) {
-                                  addReferenceSelection(artist.key, input.value.trim())
-                                  input.value = ''
-                                }
-                              }
-                            }}
-                          />
-                          {artist.examples && (
-                            <div className="space-y-2">
-                              <span className="text-xs text-gray-500">Famous {artist.name} works:</span>
-                              <div className="flex flex-wrap gap-2">
-                                {artist.examples.map((example, i) => (
-                                  <button
-                                    key={i}
-                                    onClick={() => addReferenceSelection(artist.key, example)}
-                                    className="text-sm px-3 py-1.5 bg-white border rounded-md hover:bg-blue-50 hover:border-blue-300 text-gray-700"
-                                  >
-                                    {example}
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                    </div>
                   </CardContent>
                 )}
               </Card>

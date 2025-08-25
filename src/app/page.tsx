@@ -15,6 +15,7 @@ import TrustBadges from '@/components/TrustBadges'
 export default function HomePage() {
   const [files, setFiles] = useState<File[]>([])
   const [selections, setSelections] = useState<StyleSelection[]>([])
+  const [dogName, setDogName] = useState('')
   const [loading, setLoading] = useState(false)
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [estimatedTimeLeft, setEstimatedTimeLeft] = useState(0)
@@ -67,8 +68,14 @@ export default function HomePage() {
     }, 1000)
     
     try {
+      // Add dog name to all selections
+      const selectionsWithDogName = selections.map(sel => ({
+        ...sel,
+        dogName: dogName || undefined
+      }))
+      
       const body = new FormData()
-      body.append('selections', JSON.stringify(selections))
+      body.append('selections', JSON.stringify(selectionsWithDogName))
       body.append('size', size)
       body.append('publish', String(publish))
       // If publish requested, attach Firebase ID token if available
@@ -128,6 +135,18 @@ export default function HomePage() {
               ))}
             </div>
           )}
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Dog's name (optional)</label>
+            <input
+              type="text"
+              placeholder="e.g., Tassen (for artistic titles like 'Le Tassen')"
+              value={dogName}
+              onChange={(e) => setDogName(e.target.value)}
+              className="w-full px-3 py-2 border rounded text-sm"
+            />
+            <p className="text-xs text-gray-500">This will create artistic titles integrated into the paintings</p>
+          </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
             <label className="text-sm font-medium">Output size</label>
