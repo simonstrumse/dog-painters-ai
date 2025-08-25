@@ -14,7 +14,9 @@ type Props = {
 export default function StylePicker({ value, onChange }: Props) {
   const [expandedArtist, setExpandedArtist] = useState<string | null>(null)
   const [paintingInputs, setPaintingInputs] = useState<{[key: string]: string}>({})
-  
+  const [sortBy, setSortBy] = useState<'random' | 'alphabetical' | 'chronological' | 'popularity'>('random')
+  const [activeCategories, setActiveCategories] = useState<string[]>([])
+
   const addStyleSelection = (artistKey: string, styleKey: string) => {
     const newSelection: StyleSelection = {
       artistKey,
@@ -39,6 +41,51 @@ export default function StylePicker({ value, onChange }: Props) {
     new Set(value.map(v => v.styleKey ? `${v.artistKey}:${v.styleKey}` : `${v.artistKey}:${v.customReference}`)), 
     [value]
   )
+
+  // All categories discovered from the library
+  const allCategories = useMemo(() => {
+    const set = new Set<string>()
+    for (const a of DOG_STYLE_LIBRARY) {
+      (a.categories || []).forEach((c) => set.add(c))
+    }
+    return Array.from(set).sort((a,b) => a.localeCompare(b))
+  }, [])
+
+  // A persistent randomized order for default sort
+  const randomizedKeys = useMemo(() => {
+    return [...DOG_STYLE_LIBRARY.map(a => a.key)].sort(() => Math.random() - 0.5)
+  }, [])
+
+  const artistsList = useMemo(() => {
+    // Filter by categories (if any active)
+    const filtered = DOG_STYLE_LIBRARY.filter(a => {
+      if (activeCategories.length === 0) return true
+      const cats = a.categories || []
+      return cats.some(c => activeCategories.includes(c))
+    })
+
+    if (sortBy === 'random') {
+      const order = new Map(randomizedKeys.map((k, i) => [k, i]))
+      return [...filtered].sort((a, b) => (order.get(a.key)! - order.get(b.key)!))
+    }
+
+    if (sortBy === 'alphabetical') {
+      return [...filtered].sort((a, b) => a.name.localeCompare(b.name))
+    }
+    if (sortBy === 'chronological') {
+      const year = (x?: number) => (typeof x === 'number' ? x : Number.POSITIVE_INFINITY)
+      return [...filtered].sort((a, b) => year(a.birthYear) - year(b.birthYear))
+    }
+    if (sortBy === 'popularity') {
+      const score = (x?: number) => (typeof x === 'number' ? x : 0)
+      return [...filtered].sort((a, b) => score(b.popularity) - score(a.popularity))
+    }
+    return filtered
+  }, [sortBy, activeCategories, randomizedKeys])
+
+  const toggleCategory = (cat: string) => {
+    setActiveCategories((prev) => prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat])
+  }
 
   return (
     <div className="space-y-6">
@@ -83,11 +130,47 @@ export default function StylePicker({ value, onChange }: Props) {
         </div>
       )}
 
+      {/* Sort & Filter Controls */}
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-3">
+          <label className="text-sm text-gray-700">Sort by:</label>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as any)}
+            className="text-sm border rounded px-2 py-1"
+          >
+            <option value="random">Random</option>
+            <option value="alphabetical">Alphabetical</option>
+            <option value="chronological">Chronological</option>
+            <option value="popularity">Popularity</option>
+          </select>
+        </div>
+        {allCategories.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {allCategories.map((cat) => {
+              const active = activeCategories.includes(cat)
+              return (
+                <button
+                  key={cat}
+                  onClick={() => toggleCategory(cat)}
+                  className={`text-xs px-2 py-1 rounded border ${active ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
+                >
+                  {cat}
+                </button>
+              )
+            })}
+            {activeCategories.length > 0 && (
+              <button onClick={() => setActiveCategories([])} className="text-xs px-2 py-1 rounded border bg-white text-gray-700 hover:bg-gray-50">Clear</button>
+            )}
+          </div>
+        )}
+      </div>
+
       {/* Artist Selection */}
       <div className="space-y-3">
         <h4 className="font-medium text-gray-700">Choose Artists & Styles</h4>
         <div className="grid gap-3">
-          {DOG_STYLE_LIBRARY.map((artist) => {
+          {artistsList.map((artist) => {
             const isExpanded = expandedArtist === artist.key
             const hasSelections = value.some(v => v.artistKey === artist.key)
             

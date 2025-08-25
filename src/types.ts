@@ -9,6 +9,11 @@ export type Artist = {
   name: string
   styles: SubStyle[]
   examples?: string[] // Example famous paintings for reference suggestions
+  // Optional metadata for sorting/filtering
+  birthYear?: number
+  deathYear?: number
+  popularity?: number // higher = more popular
+  categories?: string[] // e.g., ["Renaissance", "Painting"]
 }
 
 export type StyleSelection = {
@@ -31,4 +36,3 @@ export type GeneratedImage = {
   styleKey: string
   dataUrl: string
 }
-

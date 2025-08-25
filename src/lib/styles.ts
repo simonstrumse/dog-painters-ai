@@ -223,6 +223,79 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
   },
 ]
 
+// Extend the library with additional artists and illustrators
+DOG_STYLE_LIBRARY.push(
+  {
+    key: 'davinci',
+    name: 'Leonardo da Vinci',
+    birthYear: 1452,
+    deathYear: 1519,
+    popularity: 98,
+    categories: ['High Renaissance', 'Painting'],
+    styles: [
+      { key: 'sfumato', name: 'Sfumato Portrait', prompt: 'as Leonardo da Vinci sfumato: soft smoky transitions, subtle chiaroscuro, serene expression' },
+      { key: 'anatomical', name: 'Anatomical Study', prompt: 'as Leonardo anatomical study: sepia ink, precise linework, scientific curiosity' },
+      { key: 'renaissance_landscape', name: 'Renaissance Landscape', prompt: 'as Leonardo backgrounds: atmospheric perspective, cool bluish distance, delicate detail' },
+    ],
+  },
+  {
+    key: 'botticelli',
+    name: 'Sandro Botticelli',
+    birthYear: 1445,
+    deathYear: 1510,
+    popularity: 89,
+    categories: ['Early Renaissance', 'Painting'],
+    styles: [
+      { key: 'mythic', name: 'Mythic Allegory', prompt: 'as Botticelli mythic allegory: graceful figures, flowing lines, decorative patterning' },
+      { key: 'madonna', name: 'Madonna and Child', prompt: 'as Botticelli: delicate faces, linear elegance, pastel palette' },
+      { key: 'tempera', name: 'Tempera Panel', prompt: 'as Botticelli tempera: flat gilded ornament, precise outlines, Florentine style' },
+    ],
+  },
+  {
+    key: 'giotto',
+    name: 'Giotto',
+    birthYear: 1267,
+    deathYear: 1337,
+    popularity: 75,
+    categories: ['Proto-Renaissance', 'Painting'],
+    styles: [
+      { key: 'fresco', name: 'Fresco Panels', prompt: 'as Giotto fresco: simple monumental forms, clear halos, early perspective' },
+      { key: 'icons', name: 'Iconic Scenes', prompt: 'as Giotto: gold accents, solemn sacred scenes, medieval style' },
+    ],
+  },
+  // Illustration and children’s books
+  {
+    key: 'dr_seuss',
+    name: 'Dr. Seuss',
+    popularity: 88,
+    categories: ["Children's Books", 'Illustration'],
+    styles: [
+      { key: 'whimsical_ink', name: 'Whimsical Ink', prompt: 'in the style of Dr. Seuss: whimsical curvy ink lines, playful characters, limited bright palette' },
+      { key: 'rhymes', name: 'Rhyming Worlds', prompt: 'as Dr. Seuss rhyming worlds: fantastical contraptions, candy colors, lighthearted mischief' },
+    ],
+  },
+  {
+    key: 'eric_carle',
+    name: 'Eric Carle',
+    popularity: 80,
+    categories: ["Children's Books", 'Collage', 'Illustration'],
+    styles: [
+      { key: 'tissue_collage', name: 'Tissue Collage', prompt: 'as Eric Carle: hand-painted tissue paper collage, bold primary colors, cutout shapes' },
+      { key: 'simple_animals', name: 'Simple Animals', prompt: 'as Eric Carle: friendly animal figures, textured layered color, white backdrops' },
+    ],
+  },
+  {
+    key: 'beatrix_potter',
+    name: 'Beatrix Potter',
+    popularity: 77,
+    categories: ["Children's Books", 'Watercolor', 'Illustration'],
+    styles: [
+      { key: 'watercolor_animals', name: 'Watercolor Animals', prompt: 'as Beatrix Potter: delicate watercolors, cozy woodland scenes, gentle storytelling' },
+      { key: 'storybook', name: 'Storybook Vignettes', prompt: 'as Beatrix Potter: oval vignettes, soft outlines, Victorian charm' },
+    ],
+  },
+)
+
 export function findStyle(selection: StyleSelection): { artistName: string; styleName: string; prompt: string } | null {
   const artist = DOG_STYLE_LIBRARY.find((a) => a.key === selection.artistKey)
   if (!artist) return null
@@ -283,4 +356,3 @@ export function buildPrompt(selection: StyleSelection) {
 
   return basePrompt
 }
-
