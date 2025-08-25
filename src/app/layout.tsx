@@ -12,12 +12,14 @@ export const metadata: Metadata = {
   description: 'Upload your dog photos and generate portraits in famous art styles using AI.',
 }
 
+export const viewport = 'width=device-width, initial-scale=1'
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`h-full ${playfair.variable} ${inter.variable}`}>
       <body className="min-h-full antialiased bg-[#f8f5ef] text-gray-900">
         <NavBar />
-        <div className="container py-6">{children}</div>
+        <div className="container py-4 sm:py-6">{children}</div>
         <footer className="mt-16 border-t">
           <div className="container py-8 text-sm text-gray-600 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
             <div>© {new Date().getFullYear()} Dog Painters • AI Dog Portraits</div>

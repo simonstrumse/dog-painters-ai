@@ -33,19 +33,19 @@ export default function StylePicker({ value, onChange }: Props) {
             <CardTitle className="text-lg">{artist.name}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
               {artist.styles.map((s) => {
                 const id = `${artist.key}_${s.key}`
                 const isChecked = checkedSet.has(`${artist.key}:${s.key}`)
                 return (
-                  <label key={id} className={`flex items-start gap-3 p-3 rounded-md border cursor-pointer ${isChecked ? 'bg-blue-50 border-blue-300' : 'hover:bg-gray-50'}`}>
+                  <label key={id} className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${isChecked ? 'bg-blue-50 border-blue-300' : 'hover:bg-gray-50'}`}>
                     <Checkbox
                       checked={isChecked}
                       onChange={(e) => setChecked(artist.key, s.key, (e.target as HTMLInputElement).checked)}
                     />
-                    <div>
-                      <div className="font-medium">{s.name}</div>
-                      <div className="text-sm text-gray-600 line-clamp-2">{s.prompt}</div>
+                    <div className="min-w-0 flex-1">
+                      <div className="font-medium text-sm sm:text-base">{s.name}</div>
+                      <div className="text-xs sm:text-sm text-gray-600 line-clamp-2 mt-1">{s.prompt}</div>
                     </div>
                   </label>
                 )

@@ -17,7 +17,7 @@ export default function HomePage() {
   const [selections, setSelections] = useState<StyleSelection[]>([])
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState<GeneratedImage[]>([])
-  const [size, setSize] = useState<'512x512' | '1024x1024'>('1024x1024')
+  const [size, setSize] = useState<'1024x1024' | '1024x1536'>('1024x1536')
   const [publish, setPublish] = useState(false)
   const [printOpen, setPrintOpen] = useState(false)
   const [printImage, setPrintImage] = useState<string | null>(null)
@@ -66,25 +66,25 @@ export default function HomePage() {
     <main className="space-y-10">
       <Hero />
 
-      <section id="create" className="grid gap-6 lg:grid-cols-2">
+      <section id="create" className="grid gap-6 lg:grid-cols-2 xl:gap-8">
         <div className="space-y-4">
           <UploadDropzone onFiles={(f) => setFiles((prev) => [...prev, ...f])} />
           {files.length > 0 && (
-            <div className="flex flex-wrap gap-3">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-3">
               {files.map((f, i) => (
-                <div key={i} className="w-28 h-28 rounded-md overflow-hidden border relative">
+                <div key={i} className="w-full sm:w-28 h-28 rounded-md overflow-hidden border relative">
                   <img src={URL.createObjectURL(f)} alt={`upload-${i}`} className="w-full h-full object-cover" />
-                  <button className="absolute top-1 right-1 bg-white/80 text-xs px-1 rounded" onClick={() => setFiles((prev) => prev.filter((_, idx) => idx !== i))}>×</button>
+                  <button className="absolute top-1 right-1 bg-white/80 hover:bg-white text-xs px-2 py-1 rounded shadow-sm" onClick={() => setFiles((prev) => prev.filter((_, idx) => idx !== i))}>×</button>
                 </div>
               ))}
             </div>
           )}
 
-          <div className="flex items-center gap-3">
-            <label className="text-sm">Output size</label>
-            <select value={size} onChange={(e) => setSize(e.target.value as any)} className="border rounded px-2 py-1">
-              <option value="512x512">512 × 512</option>
-              <option value="1024x1024">1024 × 1024</option>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+            <label className="text-sm font-medium">Output size</label>
+            <select value={size} onChange={(e) => setSize(e.target.value as any)} className="border rounded px-3 py-2 text-sm">
+              <option value="1024x1024">1024 × 1024 (Square)</option>
+              <option value="1024x1536">1024 × 1536 (Portrait)</option>
             </select>
           </div>
 
@@ -115,27 +115,27 @@ export default function HomePage() {
             return (
               <div key={i} className="space-y-3">
                 <div className="font-medium">Original #{i + 1}</div>
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid md:grid-cols-3 gap-4 md:gap-6">
                   <div className="md:col-span-1">
-                    <div className="border rounded-md overflow-hidden">
+                    <div className="border rounded-lg overflow-hidden bg-white shadow-sm">
                       <img src={URL.createObjectURL(f)} alt={`original-${i}`} className="w-full h-full object-cover" />
                     </div>
                   </div>
-                  <div className="md:col-span-2 grid sm:grid-cols-2 gap-4">
+                  <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {perImage.map((r, idx) => (
-                      <div key={idx} className="border rounded-md overflow-hidden">
+                      <div key={idx} className="border rounded-lg overflow-hidden bg-white shadow-sm">
                         <img src={r.dataUrl} alt={`${r.artistKey}-${r.styleKey}`} className="w-full h-full object-cover" />
-                        <div className="flex items-center justify-between p-2 text-sm">
-                          <div className="truncate">{r.artistKey} • {r.styleKey}</div>
-                          <div className="flex items-center gap-2">
+                        <div className="p-3 space-y-2">
+                          <div className="text-sm font-medium truncate">{r.artistKey} • {r.styleKey}</div>
+                          <div className="flex flex-col sm:flex-row gap-2">
                             <button
-                              className="text-gray-700 hover:underline"
+                              className="flex-1 text-sm px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 font-medium"
                               onClick={() => { setPrintImage(r.dataUrl); setPrintOpen(true) }}
                             >Print</button>
                             <a
                               download={`dog-${i}-${r.artistKey}-${r.styleKey}.png`}
                               href={r.dataUrl}
-                              className="text-blue-700 hover:underline"
+                              className="flex-1 text-sm px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-medium text-center"
                             >Download</a>
                           </div>
                         </div>
@@ -154,27 +154,27 @@ export default function HomePage() {
 
       <Modal open={printOpen} onClose={() => setPrintOpen(false)} title="Order a Framed Print">
         {printImage && (
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2">
             <FramePreview imageUrl={printImage} frame={frame} />
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div>
-                <div className="text-sm font-medium mb-1">Frame</div>
-                <div className="flex gap-2">
+                <div className="text-sm font-medium mb-2">Frame</div>
+                <div className="grid grid-cols-3 gap-2">
                   {(['black','walnut','white'] as const).map((c) => (
-                    <button key={c} onClick={() => setFrame(c)} className={`px-3 py-1 rounded border ${frame===c?'border-blue-600':''}`}>{c}</button>
+                    <button key={c} onClick={() => setFrame(c)} className={`px-4 py-2 rounded border text-sm font-medium capitalize ${frame===c?'border-blue-600 bg-blue-50 text-blue-700':'border-gray-300 hover:border-gray-400'}`}>{c}</button>
                   ))}
                 </div>
               </div>
               <div>
-                <div className="text-sm font-medium mb-1">Size</div>
-                <select value={printSize} onChange={(e) => setPrintSize(e.target.value as any)} className="border rounded px-2 py-1">
+                <div className="text-sm font-medium mb-2">Size</div>
+                <select value={printSize} onChange={(e) => setPrintSize(e.target.value as any)} className="w-full border rounded px-3 py-2 text-sm">
                   <option value="8x10">8×10 in</option>
                   <option value="12x16">12×16 in</option>
                   <option value="18x24">18×24 in</option>
                 </select>
               </div>
-              <div className="text-sm text-gray-600">Estimated price: {printSize==='8x10'?'$49':printSize==='12x16'?'$79':'$129'}</div>
-              <div className="flex gap-2">
+              <div className="text-sm text-gray-600 font-medium">Estimated price: {printSize==='8x10'?'$49':printSize==='12x16'?'$79':'$129'}</div>
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Button onClick={async () => {
                   try {
                     const client = getClientApp()
