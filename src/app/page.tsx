@@ -21,7 +21,7 @@ export default function HomePage() {
   const [estimatedTimeLeft, setEstimatedTimeLeft] = useState(0)
   const [results, setResults] = useState<GeneratedImage[]>([])
   const [size, setSize] = useState<'1024x1024' | '1024x1536'>('1024x1536')
-  const [publish, setPublish] = useState(false)
+  const [publish, setPublish] = useState(true) // Always publish for free users
   const [printOpen, setPrintOpen] = useState(false)
   const [printImage, setPrintImage] = useState<string | null>(null)
   const [frame, setFrame] = useState<'black' | 'walnut' | 'white'>('black')
@@ -78,18 +78,16 @@ export default function HomePage() {
       body.append('selections', JSON.stringify(selectionsWithDogName))
       body.append('size', size)
       body.append('publish', String(publish))
-      // If publish requested, attach Firebase ID token if available
-      if (publish) {
-        try {
-          const client = getClientApp()
-          if (!client?.auth) throw new Error('Authentication not available')
-          const user = client.auth.currentUser
-          if (!user) throw new Error('Please sign in to publish to gallery')
-          const token = await user.getIdToken()
-          body.append('idToken', token)
-        } catch (e: any) {
-          throw new Error(e?.message || 'Authentication required for publishing')
-        }
+      // Authentication is now required for all generations
+      try {
+        const client = getClientApp()
+        if (!client?.auth) throw new Error('Authentication not available')
+        const user = client.auth.currentUser
+        if (!user) throw new Error('Please sign in to generate portraits')
+        const token = await user.getIdToken()
+        body.append('idToken', token)
+      } catch (e: any) {
+        throw new Error(e?.message || 'Authentication required')
       }
       for (const f of files) body.append('images', f)
       const resp = await fetch('/api/generate', { method: 'POST', body })
@@ -156,10 +154,19 @@ export default function HomePage() {
             </select>
           </div>
 
-          <label className="flex items-center gap-2 text-sm">
-            <Checkbox checked={publish} onChange={(e) => setPublish((e.target as HTMLInputElement).checked)} />
-            Publish results to public gallery
-          </label>
+          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg space-y-2">
+            <div className="flex items-center gap-2 text-sm">
+              <Checkbox checked={publish} disabled />
+              <span className="font-medium">Publish to public gallery (required)</span>
+            </div>
+            <div className="text-xs text-blue-700">
+              Free users share their creations with our community. 
+              <span className="font-medium">Paying customers will have opt-out available.</span>
+            </div>
+            <div className="text-xs text-blue-600">
+              ⚠️ Daily limit: 3 generations per user
+            </div>
+          </div>
 
           <Button onClick={onGenerate} disabled={!canGenerate}>
             {loading ? 'Generating…' : 'Generate Portraits'}

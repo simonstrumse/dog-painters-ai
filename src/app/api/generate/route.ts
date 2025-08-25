@@ -63,34 +63,48 @@ export async function POST(req: NextRequest) {
     let index = 0
 
     const admin = getAdminServices()
-    let uid: string | null = null
-    if (publish) {
-      if (!admin) {
-        return NextResponse.json({ error: 'Firebase admin not configured' }, { status: 500 })
-      }
-      if (!idToken) {
-        return NextResponse.json({ error: 'Missing idToken for publishing' }, { status: 401 })
-      }
-      try {
-        const decoded = await admin.auth.verifyIdToken(idToken)
-        uid = decoded.uid
-      } catch (e) {
-        return NextResponse.json({ error: 'Invalid idToken' }, { status: 401 })
-      }
+    if (!admin) {
+      return NextResponse.json({ error: 'Firebase admin not configured' }, { status: 500 })
+    }
+    if (!idToken) {
+      return NextResponse.json({ error: 'Authentication required. Please sign in to generate portraits.' }, { status: 401 })
+    }
+    
+    let uid: string
+    try {
+      const decoded = await admin.auth.verifyIdToken(idToken)
+      uid = decoded.uid
+    } catch (e) {
+      return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 })
+    }
+
+    // Check daily generation limit (3 per day for free users)
+    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD format
+    const generationsToday = await admin.db
+      .collection('user_generations')
+      .where('uid', '==', uid)
+      .where('date', '==', today)
+      .get()
+    
+    const totalGenerationsToday = generationsToday.docs.reduce((sum, doc) => sum + (doc.data().count || 0), 0)
+    const requestedGenerations = files.length * selections.length
+    
+    if (totalGenerationsToday + requestedGenerations > 3) {
+      return NextResponse.json({ 
+        error: `Daily generation limit exceeded. You have ${3 - totalGenerationsToday} generations remaining today.` 
+      }, { status: 429 })
     }
     for (const file of files) {
       const imageBlob = await fileToBlob(file)
       
       // Upload original image to storage for gallery display
       let originalImageUrl: string | null = null
-      if (publish && admin) {
-        try {
-          const originalBuffer = await file.arrayBuffer()
-          const originalPath = generateStoragePath('originals')
-          originalImageUrl = await uploadImageToFirebase(originalPath, Buffer.from(originalBuffer), file.type || 'image/jpeg')
-        } catch (e) {
-          console.error('Failed to upload original image:', e)
-        }
+      try {
+        const originalBuffer = await file.arrayBuffer()
+        const originalPath = generateStoragePath('originals')
+        originalImageUrl = await uploadImageToFirebase(originalPath, Buffer.from(originalBuffer), file.type || 'image/jpeg')
+      } catch (e) {
+        console.error('Failed to upload original image:', e)
       }
       
       for (const sel of selections) {
@@ -122,8 +136,8 @@ export async function POST(req: NextRequest) {
         const path = generateStoragePath('generated')
         const publicUrl = await uploadImageToFirebase(path, buffer, 'image/png')
 
-        // If publishing, write to Firestore
-        if (publish && admin && publicUrl) {
+        // Always publish to gallery for free users
+        if (publicUrl) {
           try {
             await admin.db.collection('gallery').add({
               uid,
@@ -150,6 +164,20 @@ export async function POST(req: NextRequest) {
         })
       }
       index += 1
+    }
+
+    // Track generation usage for rate limiting
+    try {
+      const today = new Date().toISOString().split('T')[0]
+      const docRef = admin.db.collection('user_generations').doc(`${uid}_${today}`)
+      await docRef.set({
+        uid,
+        date: today,
+        count: (totalGenerationsToday || 0) + requestedGenerations,
+        lastUpdated: new Date()
+      }, { merge: true })
+    } catch (e) {
+      console.error('Failed to track generation count:', e)
     }
 
     return NextResponse.json({
