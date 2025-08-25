@@ -50,40 +50,70 @@ export default function Hero() {
           </div>
           <div className="text-sm text-gray-600">No design skills needed. Keep your dog's unique markings — just add art.</div>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 self-center">
-          {loading ? (
-            // Loading placeholders
-            Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="aspect-square rounded-lg border bg-gray-100 animate-pulse shadow-sm" />
-            ))
-          ) : generations.length > 0 ? (
-            // Live generations
-            generations.slice(0, 6).map((gen, i) => (
-              <div key={gen.id} className="aspect-square rounded-lg border overflow-hidden shadow-sm group relative">
-                <img 
-                  src={gen.imageUrl} 
-                  alt={`${gen.artistKey} style`}
-                  className="w-full h-full object-cover transition-transform group-hover:scale-105" 
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-                <div className="absolute bottom-1 left-1 right-1 bg-white/90 text-xs px-2 py-1 rounded text-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  {gen.artistKey} • {gen.styleKey}
+        <div className="space-y-3">
+          <div className="text-xs text-gray-500 text-center">Recent transformations</div>
+          <div className="grid gap-3">
+            {loading ? (
+              // Loading placeholders
+              Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="w-16 h-16 rounded-lg border bg-gray-100 animate-pulse shadow-sm" />
+                  <div className="text-gray-400">→</div>
+                  <div className="w-16 h-16 rounded-lg border bg-gray-100 animate-pulse shadow-sm" />
                 </div>
-              </div>
-            ))
-          ) : (
-            // Fallback to placeholder images if no generations available
-            [
-              'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=600&auto=format&fit=crop',
-              'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=600&auto=format&fit=crop',
-              'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=600&auto=format&fit=crop',
-              'https://images.unsplash.com/photo-1542060748-10c28b62716d?q=80&w=600&auto=format&fit=crop',
-              'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=600&auto=format&fit=crop',
-              'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=600&auto=format&fit=crop'
-            ].map((url, i) => (
-              <div key={i} className="aspect-square rounded-lg border shadow-sm" style={{backgroundImage: `url(${url})`, backgroundSize: 'cover', backgroundPosition: 'center'}} />
-            ))
-          )}
+              ))
+            ) : generations.length > 0 ? (
+              // Live before/after pairs
+              generations.slice(0, 3).map((gen, i) => (
+                <div key={gen.id} className="flex items-center gap-3 group">
+                  {/* Original (before) */}
+                  <div className="w-16 h-16 rounded-lg border overflow-hidden shadow-sm">
+                    <img 
+                      src={gen.originalImageUrl} 
+                      alt="Original dog photo"
+                      className="w-full h-full object-cover" 
+                    />
+                  </div>
+                  
+                  {/* Arrow */}
+                  <div className="text-gray-400 group-hover:text-blue-500 transition-colors text-lg">→</div>
+                  
+                  {/* Generated (after) */}
+                  <div className="w-16 h-16 rounded-lg border overflow-hidden shadow-sm relative">
+                    <img 
+                      src={gen.imageUrl} 
+                      alt={`${gen.artistKey} style`}
+                      className="w-full h-full object-cover" 
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                  </div>
+                  
+                  {/* Style label */}
+                  <div className="text-xs text-gray-600 min-w-0 flex-1">
+                    <div className="font-medium truncate">{gen.artistKey}</div>
+                    <div className="text-gray-400 truncate">{gen.styleKey}</div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              // Fallback to example transformations
+              [
+                { before: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=200&auto=format&fit=crop', artist: 'Van Gogh', style: 'Starry Night' },
+                { before: 'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1542060748-10c28b62716d?q=80&w=200&auto=format&fit=crop', artist: 'Picasso', style: 'Blue Period' },
+                { before: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=200&auto=format&fit=crop', artist: 'Monet', style: 'Water Lilies' }
+              ].map((example, i) => (
+                <div key={i} className="flex items-center gap-3 group">
+                  <div className="w-16 h-16 rounded-lg border shadow-sm" style={{backgroundImage: `url(${example.before})`, backgroundSize: 'cover', backgroundPosition: 'center'}} />
+                  <div className="text-gray-400 group-hover:text-blue-500 transition-colors text-lg">→</div>
+                  <div className="w-16 h-16 rounded-lg border shadow-sm" style={{backgroundImage: `url(${example.after})`, backgroundSize: 'cover', backgroundPosition: 'center'}} />
+                  <div className="text-xs text-gray-600 min-w-0 flex-1">
+                    <div className="font-medium">{example.artist}</div>
+                    <div className="text-gray-400">{example.style}</div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </section>
