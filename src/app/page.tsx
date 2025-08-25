@@ -11,6 +11,7 @@ import Modal from '@/components/ui/modal'
 import FramePreview from '@/components/FramePreview'
 import HowItWorks from '@/components/HowItWorks'
 import TrustBadges from '@/components/TrustBadges'
+import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 
 export default function HomePage() {
   const [files, setFiles] = useState<File[]>([])
@@ -291,11 +292,30 @@ export default function HomePage() {
                     <div className="text-sm font-medium text-gray-700">Original #{i + 1}</div>
                     <div className="grid gap-3">
                       {perImage.map((r, idx) => (
-                        <div key={idx} className="border rounded-lg overflow-hidden bg-white shadow-sm">
-                          <img src={r.dataUrl} alt={`${r.artistKey}-${r.styleKey}`} className="w-full h-auto object-cover" />
-                          <div className="p-3 space-y-2">
-                            <div className="text-sm font-medium">{r.artistKey} • {r.styleKey}</div>
-                            <div className="flex flex-col sm:flex-row gap-2">
+                        <div key={idx} className="space-y-2">
+                          {/* Elegant frame with mat */}
+                          <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg">
+                            <div className="p-3 bg-white rounded-sm shadow-inner">
+                              <div className="aspect-[2/3] overflow-hidden rounded-sm">
+                                <img 
+                                  src={r.dataUrl} 
+                                  alt={`${r.artistKey}-${r.styleKey}`} 
+                                  className="w-full h-full object-contain" 
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          {/* Gallery-style plaque */}
+                          <div className="bg-white border shadow-sm rounded-lg p-3 mx-2">
+                            <div className="text-center space-y-1">
+                              <div className="font-serif text-sm font-medium text-gray-900">
+                                {formatArtistName(r.artistKey)}
+                              </div>
+                              <div className="text-xs text-gray-600 italic">
+                                {formatStyleName(r.styleKey)}
+                              </div>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-2 mt-3 pt-2 border-t">
                               <button
                                 className="flex-1 text-sm px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 font-medium"
                                 onClick={() => { setPrintImage(r.dataUrl); setPrintOpen(true) }}
