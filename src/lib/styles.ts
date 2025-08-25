@@ -5,6 +5,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
   {
     key: 'picasso',
     name: 'Pablo Picasso',
+    examples: ['Guernica', 'Les Demoiselles d\'Avignon', 'La Chèvre', 'The Old Guitarist', 'Girl with a Mandolin'],
     styles: [
       {
         key: 'blue_period',
@@ -63,6 +64,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
   {
     key: 'vangogh',
     name: 'Vincent van Gogh',
+    examples: ['Starry Night', 'Sunflowers', 'The Potato Eaters', 'Self-Portrait', 'The Bedroom'],
     styles: [
       { key: 'starry_night', name: 'Starry Night', prompt: 'as Van Gogh Starry Night: swirling skies, luminous cosmic light, impasto brushstrokes' },
       { key: 'sunflowers', name: 'Sunflowers/Still Lifes', prompt: 'as Van Gogh sunflowers/still life: bright thick brushstrokes, glowing bursts of color' },
@@ -94,6 +96,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
   {
     key: 'monet',
     name: 'Claude Monet',
+    examples: ['Water Lilies', 'Impression Sunrise', 'Rouen Cathedral', 'Haystacks', 'Japanese Bridge'],
     styles: [
       { key: 'water_lilies', name: 'Water Lilies', prompt: 'as Monet water lilies: hazy pastel reflections, atmospheric softness' },
       { key: 'haystacks_cathedral', name: 'Haystacks / Rouen Cathedral', prompt: 'as Monet light studies: changing daytimes, shimmering color, soft edges' },
@@ -231,6 +234,15 @@ export function findStyle(selection: StyleSelection): { artistName: string; styl
 export function buildPrompt(selection: StyleSelection) {
   const found = findStyle(selection)
   if (!found) return ''
+  
+  // Build the base style prompt
+  let stylePrompt = found.prompt
+  
+  // Add custom painting reference if provided
+  if (selection.customReference?.trim()) {
+    stylePrompt += `, specifically inspired by "${selection.customReference}"`
+  }
+  
   // Identity-preserving directive and content policy-safe phrasing
   return [
     'Create an artistic dog portrait based on the provided photo.',
@@ -240,7 +252,7 @@ export function buildPrompt(selection: StyleSelection) {
     'Keep 10-15% padding around the dog on all sides.',
     'Maintain clean background to avoid edge clutter.',
     'Avoid adding text or watermarks.',
-    found.prompt,
+    stylePrompt,
   ].join(' ')
 }
 

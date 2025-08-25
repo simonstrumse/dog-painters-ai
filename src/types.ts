@@ -8,11 +8,13 @@ export type Artist = {
   key: string
   name: string
   styles: SubStyle[]
+  examples?: string[] // Example famous paintings for reference suggestions
 }
 
 export type StyleSelection = {
   artistKey: string
   styleKey: string
+  customReference?: string // Optional custom painting reference
 }
 
 export type GenerationRequest = {
