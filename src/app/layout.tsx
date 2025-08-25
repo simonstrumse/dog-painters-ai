@@ -17,7 +17,7 @@ export const viewport = 'width=device-width, initial-scale=1'
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`h-full ${playfair.variable} ${inter.variable}`}>
-      <body className="min-h-full antialiased bg-[#f8f5ef] text-gray-900">
+      <body className="min-h-full antialiased bg-gradient-to-br from-stone-100 via-neutral-50 to-stone-200 text-gray-900" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
         <NavBar />
         <div className="container py-4 sm:py-6">{children}</div>
         <footer className="mt-16 border-t">

@@ -38,11 +38,11 @@ export default async function GalleryPage() {
             {/* Elegant frame with mat */}
             <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg">
               <div className="p-3 bg-white rounded-sm shadow-inner">
-                <div className="aspect-[3/4] overflow-hidden rounded-sm">
+                <div className="aspect-[2/3] overflow-hidden rounded-sm">
                   <img 
                     src={it.imageUrl} 
                     alt={`${it.artistKey}-${it.styleKey}`} 
-                    className="w-full h-full object-cover" 
+                    className="w-full h-full object-contain" 
                   />
                 </div>
               </div>
