@@ -32,13 +32,27 @@ export default async function GalleryPage() {
     <main className="space-y-6">
       <h1 className="text-3xl font-bold">Public Gallery</h1>
       {items.length === 0 && <div className="text-gray-600">No items yet. Generate and publish to see results here.</div>}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((it) => (
-          <div key={it.id} className="border rounded-md overflow-hidden">
-            <img src={it.imageUrl} alt={`${it.artistKey}-${it.styleKey}`} className="w-full h-80 object-cover" />
-            <div className="p-2 text-sm flex items-center justify-between">
-              <div className="truncate">{it.artistKey} • {it.styleKey}</div>
-              <div className="text-gray-500">{it.createdAt.toLocaleDateString()}</div>
+          <div key={it.id} className="space-y-2">
+            {/* Elegant frame with mat */}
+            <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg">
+              <div className="p-3 bg-white rounded-sm shadow-inner">
+                <div className="aspect-[3/4] overflow-hidden rounded-sm">
+                  <img 
+                    src={it.imageUrl} 
+                    alt={`${it.artistKey}-${it.styleKey}`} 
+                    className="w-full h-full object-cover" 
+                  />
+                </div>
+              </div>
+            </div>
+            {/* Caption below frame */}
+            <div className="text-center text-sm">
+              <div className="font-medium text-gray-900 capitalize">
+                {it.artistKey.replace(/([A-Z])/g, ' $1').trim()} • {it.styleKey.replace(/_/g, ' ')}
+              </div>
+              <div className="text-gray-500 text-xs">{it.createdAt.toLocaleDateString()}</div>
             </div>
           </div>
         ))}
