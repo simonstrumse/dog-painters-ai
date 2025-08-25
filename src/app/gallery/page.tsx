@@ -1,4 +1,5 @@
 import { getAdminServices } from '@/lib/firebaseAdmin'
+import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 
 export const dynamic = 'force-dynamic'
 
@@ -47,12 +48,19 @@ export default async function GalleryPage() {
                 </div>
               </div>
             </div>
-            {/* Caption below frame */}
-            <div className="text-center text-sm">
-              <div className="font-medium text-gray-900 capitalize">
-                {it.artistKey.replace(/([A-Z])/g, ' $1').trim()} • {it.styleKey.replace(/_/g, ' ')}
+            {/* Gallery-style plaque */}
+            <div className="bg-white border shadow-sm rounded-lg p-3 mx-2">
+              <div className="text-center space-y-1">
+                <div className="font-serif text-sm font-medium text-gray-900">
+                  {formatArtistName(it.artistKey)}
+                </div>
+                <div className="text-xs text-gray-600 italic">
+                  {formatStyleName(it.styleKey)}
+                </div>
+                <div className="text-xs text-gray-500 border-t pt-1 mt-2">
+                  {it.createdAt.toLocaleDateString()}
+                </div>
               </div>
-              <div className="text-gray-500 text-xs">{it.createdAt.toLocaleDateString()}</div>
             </div>
           </div>
         ))}

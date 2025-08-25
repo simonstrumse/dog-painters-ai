@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { getClientApp } from '@/lib/firebaseClient'
 import { Button } from '@/components/ui/button'
+import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 
 type Item = {
   id: string
@@ -66,12 +67,34 @@ export default function MyGalleryPage() {
       {loading && <div className="text-gray-600">Loading…</div>}
       {error && <div className="text-red-600 text-sm">{error}</div>}
       {!loading && items.length === 0 && <div className="text-gray-600">No items yet. Publish some results to see them here.</div>}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((it) => (
-          <div key={it.id} className="border rounded-md overflow-hidden">
-            <img src={it.imageUrl} alt={`${it.artistKey}-${it.styleKey}`} className="w-full h-80 object-cover" />
-            <div className="p-2 text-sm flex items-center justify-between">
-              <div className="truncate">{it.artistKey} • {it.styleKey}</div>
+          <div key={it.id} className="space-y-2">
+            {/* Image without frame for personal gallery */}
+            <div className="border-2 border-gray-300 rounded-lg shadow-md overflow-hidden bg-white">
+              <div className="aspect-[2/3] overflow-hidden">
+                <img 
+                  src={it.imageUrl} 
+                  alt={`${it.artistKey}-${it.styleKey}`} 
+                  className="w-full h-full object-contain" 
+                />
+              </div>
+            </div>
+            {/* Gallery-style plaque */}
+            <div className="bg-white border shadow-sm rounded-lg p-3 mx-2">
+              <div className="text-center space-y-1">
+                <div className="font-serif text-sm font-medium text-gray-900">
+                  {formatArtistName(it.artistKey)}
+                </div>
+                <div className="text-xs text-gray-600 italic">
+                  {formatStyleName(it.styleKey)}
+                </div>
+                {it.createdAt && (
+                  <div className="text-xs text-gray-500 border-t pt-1 mt-2">
+                    {new Date(it.createdAt).toLocaleDateString()}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         ))}
