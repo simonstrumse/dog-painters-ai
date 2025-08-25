@@ -51,7 +51,7 @@ export default function Hero() {
           </div>
           <div className="text-sm text-gray-600">No design skills needed. Keep your dog's unique markings — just add art.</div>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-4 pl-4 md:pl-6">
           <div className="flex items-center justify-between gap-4">
             <div className="text-xs uppercase tracking-wide text-gray-500">Recent Transformations</div>
             <div className="flex items-center gap-3">
@@ -78,11 +78,11 @@ export default function Hero() {
               generations.slice(0, 3).map((gen) => (
                 <div key={gen.id} className="flex items-center gap-4 group">
                   {/* Original (before) */}
-                  <div className="w-24 h-24 rounded-lg border overflow-hidden shadow-sm">
-                    <img 
-                      src={gen.originalImageUrl} 
+                  <div className="w-20 h-28 rounded-lg border bg-white p-1 shadow-sm flex items-center justify-center overflow-hidden">
+                    <img
+                      src={gen.originalImageUrl}
                       alt="Original dog photo"
-                      className="w-full h-full object-cover" 
+                      className="max-w-full max-h-full object-contain"
                     />
                   </div>
                   
@@ -90,11 +90,11 @@ export default function Hero() {
                   <div className="text-gray-400 group-hover:text-blue-500 transition-colors text-xl">→</div>
                   
                   {/* Generated (after) */}
-                  <div className="w-24 h-24 rounded-lg border overflow-hidden shadow-sm relative">
-                    <img 
-                      src={gen.imageUrl} 
+                  <div className="w-20 h-28 rounded-lg border bg-white p-1 shadow-sm relative flex items-center justify-center overflow-hidden">
+                    <img
+                      src={gen.imageUrl}
                       alt={`${formatArtistName(gen.artistKey)} — ${formatStyleName(gen.styleKey)}`}
-                      className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.02]" 
+                      className="max-w-full max-h-full object-contain transition-transform duration-200 group-hover:scale-[1.02]"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
                   </div>
@@ -113,13 +113,17 @@ export default function Hero() {
                 { before: 'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1542060748-10c28b62716d?q=80&w=200&auto=format&fit=crop', artist: 'Picasso', style: 'Blue Period' },
                 { before: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=200&auto=format&fit=crop', artist: 'Monet', style: 'Water Lilies' }
               ].map((example, i) => (
-                <div key={i} className="flex items-center gap-3 group">
-                  <div className="w-16 h-16 rounded-lg border shadow-sm" style={{backgroundImage: `url(${example.before})`, backgroundSize: 'cover', backgroundPosition: 'center'}} />
-                  <div className="text-gray-400 group-hover:text-blue-500 transition-colors text-lg">→</div>
-                  <div className="w-16 h-16 rounded-lg border shadow-sm" style={{backgroundImage: `url(${example.after})`, backgroundSize: 'cover', backgroundPosition: 'center'}} />
-                  <div className="text-xs text-gray-600 min-w-0 flex-1">
+                <div key={i} className="flex items-center gap-4 group">
+                  <div className="w-20 h-28 rounded-lg border bg-white p-1 shadow-sm flex items-center justify-center overflow-hidden">
+                    <img src={example.before} alt="Original example" className="max-w-full max-h-full object-contain" />
+                  </div>
+                  <div className="text-gray-400 group-hover:text-blue-500 transition-colors text-xl">→</div>
+                  <div className="w-20 h-28 rounded-lg border bg-white p-1 shadow-sm flex items-center justify-center overflow-hidden">
+                    <img src={example.after} alt="Transformed example" className="max-w-full max-h-full object-contain" />
+                  </div>
+                  <div className="text-sm text-gray-700 min-w-0 flex-1">
                     <div className="font-medium">{example.artist}</div>
-                    <div className="text-gray-400">{example.style}</div>
+                    <div className="text-gray-500">{example.style}</div>
                   </div>
                 </div>
               ))
