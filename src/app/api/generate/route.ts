@@ -128,7 +128,7 @@ export async function POST(req: NextRequest) {
             await admin.db.collection('gallery').add({
               uid,
               artistKey: sel.artistKey,
-              styleKey: sel.styleKey,
+              styleKey: sel.styleKey || 'custom_reference',
               imageUrl: publicUrl,
               originalImageUrl, // Store the original input image URL
               originalFileName: file.name,
@@ -143,7 +143,7 @@ export async function POST(req: NextRequest) {
         outputs.push({
           originalIndex: index,
           artistKey: sel.artistKey,
-          styleKey: sel.styleKey,
+          styleKey: sel.styleKey || 'custom_reference',
           b64: dataItem.b64_json,
           mime: 'image/png',
           publicUrl,

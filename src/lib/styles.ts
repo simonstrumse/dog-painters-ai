@@ -232,27 +232,55 @@ export function findStyle(selection: StyleSelection): { artistName: string; styl
 }
 
 export function buildPrompt(selection: StyleSelection) {
-  const found = findStyle(selection)
-  if (!found) return ''
-  
-  // Build the base style prompt
-  let stylePrompt = found.prompt
-  
-  // Add custom painting reference if provided
-  if (selection.customReference?.trim()) {
-    stylePrompt += `, specifically inspired by "${selection.customReference}"`
+  const artist = DOG_STYLE_LIBRARY.find(a => a.key === selection.artistKey)
+  if (!artist) return ''
+
+  let stylePrompt = ''
+  let titleInstruction = ''
+
+  if (selection.styleKey) {
+    // Style period mode
+    const style = artist.styles.find(s => s.key === selection.styleKey)
+    if (!style) return ''
+    stylePrompt = style.prompt
+  } else if (selection.customReference) {
+    // Specific painting reference mode
+    stylePrompt = `in the style of ${artist.name}, specifically inspired by "${selection.customReference}"`
+  } else {
+    return ''
   }
-  
+
+  // Add dog name title if provided
+  if (selection.dogName?.trim()) {
+    const dogNameUpper = selection.dogName.toUpperCase()
+    
+    // Style-appropriate title formatting inspired by different artists
+    if (selection.artistKey === 'picasso' && selection.customReference?.toLowerCase().includes('chèvre')) {
+      titleInstruction = `Hand-letter in bottom-right corner: "LE ${dogNameUpper}" in graphite lettering, matching the sketch style.`
+    } else if (selection.artistKey === 'hokusai') {
+      titleInstruction = `Include Japanese-style signature seal with "${dogNameUpper}" in bottom corner, traditional calligraphy style.`
+    } else if (selection.artistKey === 'warhol') {
+      titleInstruction = `Add pop-art style text "${dogNameUpper}" in bold commercial lettering, integrated into the composition.`
+    } else if (selection.artistKey === 'mucha') {
+      titleInstruction = `Incorporate Art Nouveau decorative text "${dogNameUpper}" within ornamental border elements.`
+    } else {
+      // Generic artistic title for other artists
+      titleInstruction = `Include artistic title "${dogNameUpper}" in style-appropriate lettering, subtly integrated into the composition.`
+    }
+  }
+
   // Identity-preserving directive and content policy-safe phrasing
-  return [
+  const basePrompt = [
     'Create an artistic dog portrait based on the provided photo.',
     'Preserve the exact dog breed and unique facial markings.',
     'Vertical composition, full dog entirely visible, head-to-toe inside frame, generous top/bottom margins, centered on clean background, no cropping.',
     'Ensure no part of the dog is cropped or cut off.',
     'Keep 10-15% padding around the dog on all sides.',
     'Maintain clean background to avoid edge clutter.',
-    'Avoid adding text or watermarks.',
     stylePrompt,
-  ].join(' ')
+    titleInstruction
+  ].filter(Boolean).join(' ')
+
+  return basePrompt
 }
 

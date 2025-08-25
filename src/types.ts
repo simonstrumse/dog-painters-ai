@@ -13,8 +13,10 @@ export type Artist = {
 
 export type StyleSelection = {
   artistKey: string
-  styleKey: string
-  customReference?: string // Optional custom painting reference
+  styleKey?: string // Predefined style period
+  customReference?: string // OR specific painting reference
+  dogName?: string // Dog's name for artistic title
+  composition?: 'portrait' | 'landscape' | 'square' // Composition style
 }
 
 export type GenerationRequest = {
