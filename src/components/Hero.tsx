@@ -74,15 +74,15 @@ export default function Hero() {
                 </div>
               ))
             ) : generations.length > 0 ? (
-              // Live before/after pairs (larger previews)
-              generations.slice(0, 3).map((gen) => (
-                <div key={gen.id} className="flex items-center gap-4 group">
+              // Live before/after pairs (show only two, larger tiles)
+              generations.slice(0, 2).map((gen) => (
+                <div key={gen.id} className="flex items-center gap-4">
                   {/* Original (before) */}
-                  <div className="w-20 h-28 rounded-lg border bg-white p-1 shadow-sm flex items-center justify-center overflow-hidden">
+                  <div className="w-24 h-24 rounded-lg overflow-hidden">
                     <img
                       src={gen.originalImageUrl}
                       alt="Original dog photo"
-                      className="max-w-full max-h-full object-contain"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                   
@@ -90,13 +90,12 @@ export default function Hero() {
                   <div className="text-gray-400 group-hover:text-blue-500 transition-colors text-xl">→</div>
                   
                   {/* Generated (after) */}
-                  <div className="w-20 h-28 rounded-lg border bg-white p-1 shadow-sm relative flex items-center justify-center overflow-hidden">
+                  <div className="w-24 h-24 rounded-lg overflow-hidden relative">
                     <img
                       src={gen.imageUrl}
                       alt={`${formatArtistName(gen.artistKey)} — ${formatStyleName(gen.styleKey)}`}
-                      className="max-w-full max-h-full object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+                      className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
                   </div>
                   
                   {/* Style label */}
@@ -111,15 +110,14 @@ export default function Hero() {
               [
                 { before: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=200&auto=format&fit=crop', artist: 'Van Gogh', style: 'Starry Night' },
                 { before: 'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1542060748-10c28b62716d?q=80&w=200&auto=format&fit=crop', artist: 'Picasso', style: 'Blue Period' },
-                { before: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=200&auto=format&fit=crop', artist: 'Monet', style: 'Water Lilies' }
-              ].map((example, i) => (
-                <div key={i} className="flex items-center gap-4 group">
-                  <div className="w-20 h-28 rounded-lg border bg-white p-1 shadow-sm flex items-center justify-center overflow-hidden">
-                    <img src={example.before} alt="Original example" className="max-w-full max-h-full object-contain" />
+              ].slice(0, 2).map((example, i) => (
+                <div key={i} className="flex items-center gap-4">
+                  <div className="w-24 h-24 rounded-lg overflow-hidden">
+                    <img src={example.before} alt="Original example" className="w-full h-full object-cover" />
                   </div>
-                  <div className="text-gray-400 group-hover:text-blue-500 transition-colors text-xl">→</div>
-                  <div className="w-20 h-28 rounded-lg border bg-white p-1 shadow-sm flex items-center justify-center overflow-hidden">
-                    <img src={example.after} alt="Transformed example" className="max-w-full max-h-full object-contain" />
+                  <div className="text-gray-400 text-xl">→</div>
+                  <div className="w-24 h-24 rounded-lg overflow-hidden">
+                    <img src={example.after} alt="Transformed example" className="w-full h-full object-cover" />
                   </div>
                   <div className="text-sm text-gray-700 min-w-0 flex-1">
                     <div className="font-medium">{example.artist}</div>
