@@ -1,12 +1,14 @@
 # Dog Painters AI – AI Dog Portraits 🎨🐕
 
-> **v1.0 - Production Ready!** ✨
+> **v2.0 - Enhanced Design & Stability!** ✨
 
-Upload photos of your dog and generate AI-stylized portraits in famous artist styles using OpenAI's powerful image generation API.
+Upload photos of your dog and generate AI-stylized portraits in famous artist styles using OpenAI's powerful image generation API. Now with improved design, enhanced error handling, and rock-solid production stability.
 
 ## 🚀 Live Demo
 
-**Production App**: https://dog-painters-jluo74bw5-simonstrumses-projects.vercel.app
+**Production App**: https://dog-painters-739kpxmea-simonstrumses-projects.vercel.app
+
+> 🆕 **What's New in v2.0**: Enhanced UI design patterns, bulletproof SSR support, improved authentication flow, and production-grade error handling.
 
 ## ✨ Features
 
@@ -19,6 +21,9 @@ Upload photos of your dog and generate AI-stylized portraits in famous artist st
 - 🖥️ **Real-time progress** tracking during generation
 - 📋 **Personal gallery** for authenticated users
 - ⬇️ **HD downloads** of generated portraits
+- 🛡️ **Enhanced error handling** with graceful fallbacks
+- 🏗️ **Server-side rendering** safe Firebase integration
+- ✨ **Improved design patterns** from museum branch integration
 
 ## 🛠️ Tech Stack
 
@@ -172,6 +177,22 @@ service cloud.firestore {
 - Results include base64 previews + Firebase Storage URLs
 - HD downloads available for all generated images
 - Personal gallery requires authentication
+
+## 📈 Version History
+
+### v2.0 - Enhanced Design & Stability (Current)
+- ✨ **Improved UI design patterns** from museum branch integration
+- 🛡️ **Enhanced error handling** with null-safe Firebase client
+- 🏗️ **Server-side rendering** safe Firebase integration
+- 🔧 **Production stability** improvements
+- 🚀 **Bulletproof deployment** process with Vercel
+
+### v1.0 - Production Ready
+- 🎯 **Core functionality** complete with 20+ artist styles
+- 🔥 **Firebase integration** (Auth, Firestore, Storage)
+- 🤖 **OpenAI Images API** integration
+- 📱 **Mobile responsive** design
+- 🚀 **Vercel deployment** setup
 
 ## 🔮 Future Enhancements
 
