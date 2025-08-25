@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react'
+import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 
 type Generation = {
   id: string
@@ -50,9 +51,19 @@ export default function Hero() {
           </div>
           <div className="text-sm text-gray-600">No design skills needed. Keep your dog's unique markings — just add art.</div>
         </div>
-        <div className="space-y-3">
-          <div className="text-xs text-gray-500 text-center">Recent transformations</div>
-          <div className="grid gap-3">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="text-xs uppercase tracking-wide text-gray-500">Recent Transformations</div>
+            <div className="flex items-center gap-3">
+              <nav className="text-xs text-gray-500 hidden sm:block">
+                <a href="/" className="hover:text-gray-700">Home</a>
+                <span className="mx-1">/</span>
+                <a href="/gallery" className="hover:text-gray-900 font-medium">Gallery</a>
+              </nav>
+              <a href="/gallery" className="inline-flex items-center rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-gray-50">View all</a>
+            </div>
+          </div>
+          <div className="grid gap-4">
             {loading ? (
               // Loading placeholders
               Array.from({ length: 3 }).map((_, i) => (
@@ -63,11 +74,11 @@ export default function Hero() {
                 </div>
               ))
             ) : generations.length > 0 ? (
-              // Live before/after pairs
-              generations.slice(0, 3).map((gen, i) => (
-                <div key={gen.id} className="flex items-center gap-3 group">
+              // Live before/after pairs (larger previews)
+              generations.slice(0, 3).map((gen) => (
+                <div key={gen.id} className="flex items-center gap-4 group">
                   {/* Original (before) */}
-                  <div className="w-16 h-16 rounded-lg border overflow-hidden shadow-sm">
+                  <div className="w-24 h-24 rounded-lg border overflow-hidden shadow-sm">
                     <img 
                       src={gen.originalImageUrl} 
                       alt="Original dog photo"
@@ -76,22 +87,22 @@ export default function Hero() {
                   </div>
                   
                   {/* Arrow */}
-                  <div className="text-gray-400 group-hover:text-blue-500 transition-colors text-lg">→</div>
+                  <div className="text-gray-400 group-hover:text-blue-500 transition-colors text-xl">→</div>
                   
                   {/* Generated (after) */}
-                  <div className="w-16 h-16 rounded-lg border overflow-hidden shadow-sm relative">
+                  <div className="w-24 h-24 rounded-lg border overflow-hidden shadow-sm relative">
                     <img 
                       src={gen.imageUrl} 
-                      alt={`${gen.artistKey} style`}
-                      className="w-full h-full object-cover" 
+                      alt={`${formatArtistName(gen.artistKey)} — ${formatStyleName(gen.styleKey)}`}
+                      className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.02]" 
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
                   </div>
                   
                   {/* Style label */}
-                  <div className="text-xs text-gray-600 min-w-0 flex-1">
-                    <div className="font-medium truncate">{gen.artistKey}</div>
-                    <div className="text-gray-400 truncate">{gen.styleKey}</div>
+                  <div className="text-sm text-gray-700 min-w-0 flex-1">
+                    <div className="font-medium truncate">{formatArtistName(gen.artistKey)}</div>
+                    <div className="text-gray-500 truncate">{formatStyleName(gen.styleKey)}</div>
                   </div>
                 </div>
               ))
@@ -119,4 +130,3 @@ export default function Hero() {
     </section>
   )
 }
-

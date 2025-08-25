@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAdminServices } from '@/lib/firebaseAdmin'
+import { MyGalleryRequestSchema } from '@/lib/validation'
 
 export async function POST(req: NextRequest) {
   try {
     const admin = getAdminServices()
     if (!admin) return NextResponse.json({ error: 'Firebase admin not configured' }, { status: 500 })
 
-    const { idToken, limit = 60 } = await req.json()
-    if (!idToken) return NextResponse.json({ error: 'Missing idToken' }, { status: 400 })
+    const parsed = MyGalleryRequestSchema.safeParse(await req.json())
+    if (!parsed.success) return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
+    const { idToken, limit = 60 } = parsed.data
     const decoded = await admin.auth.verifyIdToken(idToken)
     const uid = decoded.uid
 
@@ -25,4 +27,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unexpected error', details: e?.message }, { status: 500 })
   }
 }
-

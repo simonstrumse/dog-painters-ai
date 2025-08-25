@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAdminServices } from '@/lib/firebaseAdmin'
+import { DAILY_LIMIT, tomorrowMidnightUTCISO, todayKeyUTC } from '@/lib/config'
+import { IdTokenSchema } from '@/lib/validation'
+import { getTodayUsage } from '@/lib/usage'
 
 export async function POST(req: NextRequest) {
   try {
-    const { idToken } = await req.json()
+    const parsed = IdTokenSchema.safeParse(await req.json())
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
+    }
+    const { idToken } = parsed.data
     
     const admin = getAdminServices()
     if (!admin) {
@@ -21,31 +28,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 })
     }
 
-    // Get today's generation count
-    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD format
-    const generationsToday = await admin.db
-      .collection('user_generations')
-      .where('uid', '==', uid)
-      .where('date', '==', today)
-      .get()
-    
-    const totalGenerationsToday = generationsToday.docs.reduce((sum, doc) => sum + (doc.data().count || 0), 0)
-    const dailyLimit = 3
+    // Get today's generation count via single-doc pattern
+    const totalGenerationsToday = await getTodayUsage(uid)
+    const dailyLimit = DAILY_LIMIT
     const remaining = Math.max(0, dailyLimit - totalGenerationsToday)
-    
-    // Calculate reset time (midnight UTC of next day)
-    const now = new Date()
-    const tomorrow = new Date(now)
-    tomorrow.setUTCDate(tomorrow.getUTCDate() + 1)
-    tomorrow.setUTCHours(0, 0, 0, 0)
-    const resetTime = tomorrow.toISOString()
+    const resetTime = tomorrowMidnightUTCISO()
     
     return NextResponse.json({
       used: totalGenerationsToday,
       remaining,
       dailyLimit,
       resetTime,
-      date: today
+      date: todayKeyUTC()
     })
   } catch (e: any) {
     console.error('Generation status error', e)

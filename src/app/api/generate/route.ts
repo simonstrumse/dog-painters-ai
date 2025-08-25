@@ -3,6 +3,9 @@ import { buildPrompt } from '@/lib/styles'
 import { uploadImageToFirebase, generateStoragePath } from '@/lib/firebaseStorage'
 import { getAdminServices } from '@/lib/firebaseAdmin'
 import type { StyleSelection } from '@/types'
+import { DAILY_LIMIT, IMAGE_QUALITY, IMAGE_SIZES, MAX_FILE_SIZE_MB, OPENAI_IMAGES_EDITS_URL } from '@/lib/config'
+import { GenerateFormSchema } from '@/lib/validation'
+import { getTodayUsage, incrementTodayUsage } from '@/lib/usage'
 
 export const runtime = 'nodejs'
 export const preferredRegion = ['iad1', 'sfo1', 'fra1']
@@ -23,7 +26,19 @@ export async function POST(req: NextRequest) {
     if (!selectionsRaw) {
       return NextResponse.json({ error: 'Missing selections' }, { status: 400 })
     }
-    const selections: StyleSelection[] = JSON.parse(selectionsRaw)
+    let selections: StyleSelection[]
+    try {
+      const parsed = GenerateFormSchema.parse({
+        selections: JSON.parse(selectionsRaw),
+        size,
+        quality,
+        publish,
+        idToken,
+      })
+      selections = parsed.selections as StyleSelection[]
+    } catch {
+      return NextResponse.json({ error: 'Invalid form data' }, { status: 400 })
+    }
     const files: File[] = []
     for (const [key, value] of form.entries()) {
       if (key === 'images' && value instanceof File) {
@@ -34,8 +49,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No images uploaded' }, { status: 400 })
     }
 
-    // Validate file sizes (4MB limit per file for serverless functions)
-    const maxFileSize = 4 * 1024 * 1024 // 4MB
+    // Validate file sizes (configurable limit per file)
+    const maxFileSize = MAX_FILE_SIZE_MB * 1024 * 1024
     for (const file of files) {
       if (file.size > maxFileSize) {
         return NextResponse.json({ 
@@ -44,6 +59,12 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    if (!IMAGE_SIZES.has(size)) {
+      return NextResponse.json({ error: 'Unsupported image size' }, { status: 400 })
+    }
+    if (!IMAGE_QUALITY.has(quality)) {
+      return NextResponse.json({ error: 'Unsupported image quality' }, { status: 400 })
+    }
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY
     if (!OPENAI_API_KEY) {
       return NextResponse.json({ error: 'Missing OPENAI_API_KEY' }, { status: 500 })
@@ -78,20 +99,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 })
     }
 
-    // Check daily generation limit (3 per day for free users)
-    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD format
-    const generationsToday = await admin.db
-      .collection('user_generations')
-      .where('uid', '==', uid)
-      .where('date', '==', today)
-      .get()
-    
-    const totalGenerationsToday = generationsToday.docs.reduce((sum, doc) => sum + (doc.data().count || 0), 0)
+    // Check daily generation limit
+    const totalGenerationsToday = await getTodayUsage(uid)
     const requestedGenerations = files.length * selections.length
-    
-    if (totalGenerationsToday + requestedGenerations > 3) {
+    if (totalGenerationsToday + requestedGenerations > DAILY_LIMIT) {
       return NextResponse.json({ 
-        error: `Daily generation limit exceeded. You have ${3 - totalGenerationsToday} generations remaining today.` 
+        error: `Daily generation limit exceeded. You have ${Math.max(0, DAILY_LIMIT - totalGenerationsToday)} generations remaining today.` 
       }, { status: 429 })
     }
     for (const file of files) {
@@ -116,15 +129,15 @@ export async function POST(req: NextRequest) {
         // quality is supported in some SDKs; Edits API may ignore it safely
         body.append('image', imageBlob, (file as any).name || 'dog.jpg')
 
-        const resp = await fetch('https://api.openai.com/v1/images/edits', {
+        const resp = await fetch(OPENAI_IMAGES_EDITS_URL, {
           method: 'POST',
           headers: { Authorization: `Bearer ${OPENAI_API_KEY}` },
           body,
         })
         if (!resp.ok) {
-          const errText = await resp.text()
+          const errText = await resp.text().catch(() => '')
           console.error('OpenAI error', resp.status, errText)
-          return NextResponse.json({ error: 'OpenAI error', details: errText }, { status: 502 })
+          return NextResponse.json({ error: 'Upstream service error' }, { status: 502 })
         }
         const json = (await resp.json()) as any
         const dataItem = json.data?.[0]
@@ -166,16 +179,9 @@ export async function POST(req: NextRequest) {
       index += 1
     }
 
-    // Track generation usage for rate limiting
+    // Track generation usage atomically
     try {
-      const today = new Date().toISOString().split('T')[0]
-      const docRef = admin.db.collection('user_generations').doc(`${uid}_${today}`)
-      await docRef.set({
-        uid,
-        date: today,
-        count: (totalGenerationsToday || 0) + requestedGenerations,
-        lastUpdated: new Date()
-      }, { merge: true })
+      await incrementTodayUsage(uid, requestedGenerations)
     } catch (e) {
       console.error('Failed to track generation count:', e)
     }
@@ -191,6 +197,6 @@ export async function POST(req: NextRequest) {
     })
   } catch (e: any) {
     console.error('Generation error', e)
-    return NextResponse.json({ error: 'Unexpected error', details: e?.message }, { status: 500 })
+    return NextResponse.json({ error: 'Unexpected error' }, { status: 500 })
   }
 }

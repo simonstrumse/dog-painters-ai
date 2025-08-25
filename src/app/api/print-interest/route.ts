@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAdminServices } from '@/lib/firebaseAdmin'
+import { PrintInterestSchema } from '@/lib/validation'
 
 export async function POST(req: NextRequest) {
   try {
     const admin = getAdminServices()
     if (!admin) return NextResponse.json({ error: 'Firebase admin not configured' }, { status: 500 })
-    const body = await req.json()
-    const { idToken, imageUrl, options } = body || {}
-    if (!idToken) return NextResponse.json({ error: 'Missing idToken' }, { status: 401 })
-    if (!imageUrl) return NextResponse.json({ error: 'Missing imageUrl' }, { status: 400 })
+    const parsed = PrintInterestSchema.safeParse(await req.json())
+    if (!parsed.success) return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
+    const { idToken, imageUrl, options } = parsed.data
 
     const decoded = await admin.auth.verifyIdToken(idToken)
     const uid = decoded.uid
@@ -25,4 +25,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unexpected error', details: e?.message }, { status: 500 })
   }
 }
-
