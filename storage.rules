@@ -1,0 +1,31 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Generated images - public read, server-only write
+    match /generated/{allPaths=**} {
+      // Anyone can read generated images (for public gallery)
+      allow read: if true;
+      
+      // Only authenticated server requests can write
+      // This is handled by Admin SDK on server-side
+      allow write: if false; // Client-side writes disabled
+    }
+    
+    // Original images - public read, server-only write  
+    match /originals/{allPaths=**} {
+      // Anyone can read original images
+      allow read: if true;
+      
+      // Only authenticated server requests can write
+      // This is handled by Admin SDK on server-side
+      allow write: if false; // Client-side writes disabled
+    }
+    
+    // Deny all other access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,31 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Gallery collection - public read, authenticated write only for own content
+    match /gallery/{documentId} {
+      // Anyone can read public gallery items
+      allow read: if true;
+      
+      // Only authenticated users can create gallery items
+      // Only the creator can update/delete their own items
+      allow create: if request.auth != null 
+        && request.auth.uid == resource.data.uid;
+      allow update, delete: if request.auth != null 
+        && request.auth.uid == resource.data.uid;
+    }
+    
+    // User generations tracking - only accessible by the user themselves
+    match /user_generations/{documentId} {
+      // Users can only access their own generation tracking
+      allow read, write: if request.auth != null 
+        && request.auth.uid == resource.data.uid;
+    }
+    
+    // Deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
