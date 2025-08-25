@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   try {
     const form = await req.formData()
     const selectionsRaw = form.get('selections') as string | null
-    const size = (form.get('size') as string) || '1024x1024'
+    const size = (form.get('size') as string) || '1024x1536'
     const quality = (form.get('quality') as string) || 'standard'
     const publish = (form.get('publish') as string) === 'true'
     const idToken = (form.get('idToken') as string) || null

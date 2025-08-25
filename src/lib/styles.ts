@@ -235,7 +235,11 @@ export function buildPrompt(selection: StyleSelection) {
   return [
     'Create an artistic dog portrait based on the provided photo.',
     'Preserve the exact dog breed and unique facial markings.',
-    'Avoid adding text or watermarks. Portrait orientation preferred.',
+    'Vertical composition, full dog entirely visible, head-to-toe inside frame, generous top/bottom margins, centered on clean background, no cropping.',
+    'Ensure no part of the dog is cropped or cut off.',
+    'Keep 10-15% padding around the dog on all sides.',
+    'Maintain clean background to avoid edge clutter.',
+    'Avoid adding text or watermarks.',
     found.prompt,
   ].join(' ')
 }
