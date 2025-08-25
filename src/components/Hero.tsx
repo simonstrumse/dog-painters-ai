@@ -74,11 +74,11 @@ export default function Hero() {
                 </div>
               ))
             ) : generations.length > 0 ? (
-              // Live before/after pairs (show only two, larger tiles)
+              // Live before/after pairs (show only two, 2:3 portrait tiles)
               generations.slice(0, 2).map((gen) => (
                 <div key={gen.id} className="flex items-center gap-4">
                   {/* Original (before) */}
-                  <div className="w-24 h-24 rounded-lg overflow-hidden">
+                  <div className="h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
                     <img
                       src={gen.originalImageUrl}
                       alt="Original dog photo"
@@ -90,7 +90,7 @@ export default function Hero() {
                   <div className="text-gray-400 group-hover:text-blue-500 transition-colors text-xl">→</div>
                   
                   {/* Generated (after) */}
-                  <div className="w-24 h-24 rounded-lg overflow-hidden relative">
+                  <div className="h-24 md:h-28 rounded-lg overflow-hidden relative" style={{ aspectRatio: '2 / 3' }}>
                     <img
                       src={gen.imageUrl}
                       alt={`${formatArtistName(gen.artistKey)} — ${formatStyleName(gen.styleKey)}`}
@@ -112,11 +112,11 @@ export default function Hero() {
                 { before: 'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1542060748-10c28b62716d?q=80&w=200&auto=format&fit=crop', artist: 'Picasso', style: 'Blue Period' },
               ].slice(0, 2).map((example, i) => (
                 <div key={i} className="flex items-center gap-4">
-                  <div className="w-24 h-24 rounded-lg overflow-hidden">
+                  <div className="h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
                     <img src={example.before} alt="Original example" className="w-full h-full object-cover" />
                   </div>
                   <div className="text-gray-400 text-xl">→</div>
-                  <div className="w-24 h-24 rounded-lg overflow-hidden">
+                  <div className="h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
                     <img src={example.after} alt="Transformed example" className="w-full h-full object-cover" />
                   </div>
                   <div className="text-sm text-gray-700 min-w-0 flex-1">
