@@ -5,24 +5,68 @@ import { Button } from './ui/button'
 import { useEffect, useState } from 'react'
 
 export default function AuthButtons() {
-  const client = getClientApp()
-  const auth = client?.auth
-  const GoogleProvider = client?.GoogleProvider
-  const [user, setUser] = useState(auth?.currentUser ?? null)
+  const [client, setClient] = useState<any>(null)
+  const [user, setUser] = useState<any>(null)
   const [showEmail, setShowEmail] = useState(false)
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [err, setErr] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
-    if (!auth) return
-    return auth.onAuthStateChanged((u: any) => setUser(u))
-  }, [auth])
+    // Initialize Firebase client after component mounts
+    const initClient = () => {
+      try {
+        const clientApp = getClientApp()
+        setClient(clientApp)
+        if (clientApp?.auth) {
+          setUser(clientApp.auth.currentUser)
+          return clientApp.auth.onAuthStateChanged((u: any) => {
+            setUser(u)
+            setLoading(false)
+          })
+        } else {
+          setLoading(false)
+        }
+      } catch (error) {
+        console.error('Failed to initialize auth:', error)
+        setLoading(false)
+      }
+    }
+
+    const unsubscribe = initClient()
+    return () => {
+      if (unsubscribe) unsubscribe()
+    }
+  }, [])
+
+  if (loading) {
+    return <div className="text-sm text-gray-500">Loading...</div>
+  }
+
+  if (!client) {
+    return <div className="text-sm text-red-500">Auth unavailable</div>
+  }
 
   if (!user) {
     return (
       <div className="flex items-center gap-2">
-        <Button variant="outline" onClick={() => auth && GoogleProvider && signInWithPopup(auth, GoogleProvider)}>Google</Button>
+        <Button 
+          variant="outline" 
+          onClick={async () => {
+            try {
+              if (client?.auth && client?.GoogleProvider) {
+                await signInWithPopup(client.auth, client.GoogleProvider)
+              }
+            } catch (error) {
+              console.error('Google sign-in error:', error)
+              setErr('Failed to sign in with Google')
+            }
+          }}
+        >
+          Google
+        </Button>
         <Button variant="outline" onClick={() => setShowEmail((v) => !v)}>Email</Button>
         {showEmail && (
           <div className="absolute right-4 top-14 z-50 w-64 rounded-md border bg-white p-3 shadow">
@@ -39,11 +83,14 @@ export default function AuthButtons() {
                 onClick={async () => {
                   setErr(null)
                   try {
-                    if (!auth) throw new Error('Authentication not available')
-                    if (mode === 'signin') await signInWithEmailAndPassword(auth, email, password)
-                    else await createUserWithEmailAndPassword(auth, email, password)
+                    if (!client?.auth) throw new Error('Authentication not available')
+                    if (mode === 'signin') await signInWithEmailAndPassword(client.auth, email, password)
+                    else await createUserWithEmailAndPassword(client.auth, email, password)
                     setShowEmail(false)
+                    setEmail('')
+                    setPassword('')
                   } catch (e: any) {
+                    console.error('Email auth error:', e)
                     setErr(e?.message || 'Auth error')
                   }
                 }}
@@ -57,7 +104,20 @@ export default function AuthButtons() {
   return (
     <div className="flex items-center gap-2">
       <div className="text-sm text-gray-700">{user.displayName || user.email}</div>
-      <Button variant="outline" onClick={() => auth && signOut(auth)}>Sign out</Button>
+      <Button 
+        variant="outline" 
+        onClick={async () => {
+          try {
+            if (client?.auth) {
+              await signOut(client.auth)
+            }
+          } catch (error) {
+            console.error('Sign out error:', error)
+          }
+        }}
+      >
+        Sign out
+      </Button>
     </div>
   )
 }

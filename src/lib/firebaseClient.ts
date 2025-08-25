@@ -16,9 +16,26 @@ const config = {
 export function getClientApp() {
   if (typeof window === 'undefined') {
     // Return null on server-side to prevent Firebase initialization during SSR
-    return null as any
+    return null
   }
-  if (!getApps().length) initializeApp(config)
-  return { auth: getAuth(), db: getFirestore(), storage: getStorage(), GoogleProvider: new GoogleAuthProvider() }
+  
+  try {
+    let app
+    if (!getApps().length) {
+      app = initializeApp(config)
+    } else {
+      app = getApps()[0]
+    }
+    
+    const auth = getAuth(app)
+    const db = getFirestore(app)
+    const storage = getStorage(app)
+    const GoogleProvider = new GoogleAuthProvider()
+    
+    return { auth, db, storage, GoogleProvider }
+  } catch (error) {
+    console.error('Firebase initialization error:', error)
+    return null
+  }
 }
 
