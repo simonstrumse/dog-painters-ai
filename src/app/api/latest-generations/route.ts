@@ -11,27 +11,25 @@ export async function GET() {
       return NextResponse.json({ error: 'Firebase admin not configured' }, { status: 500 })
     }
 
-    // Get recent generations and filter for those with original images
+    // Get the 6 most recent generations with original images (using composite index)
     const snapshot = await admin.db
       .collection('gallery')
+      .where('originalImageUrl', '!=', null)
       .orderBy('createdAt', 'desc')
-      .limit(20)
+      .limit(6)
       .get()
 
-    const generations = snapshot.docs
-      .map(doc => {
-        const data = doc.data()
-        return {
-          id: doc.id,
-          imageUrl: data.imageUrl,
-          originalImageUrl: data.originalImageUrl,
-          artistKey: data.artistKey,
-          styleKey: data.styleKey,
-          createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt
-        }
-      })
-      .filter(gen => gen.originalImageUrl) // Filter for those with original images
-      .slice(0, 6) // Take only the first 6
+    const generations = snapshot.docs.map(doc => {
+      const data = doc.data()
+      return {
+        id: doc.id,
+        imageUrl: data.imageUrl,
+        originalImageUrl: data.originalImageUrl,
+        artistKey: data.artistKey,
+        styleKey: data.styleKey,
+        createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt
+      }
+    })
 
     return NextResponse.json({ generations })
   } catch (error) {
