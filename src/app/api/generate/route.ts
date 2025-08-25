@@ -34,6 +34,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No images uploaded' }, { status: 400 })
     }
 
+    // Validate file sizes (4MB limit per file for serverless functions)
+    const maxFileSize = 4 * 1024 * 1024 // 4MB
+    for (const file of files) {
+      if (file.size > maxFileSize) {
+        return NextResponse.json({ 
+          error: `Image "${file.name}" is too large (${Math.round(file.size / 1024 / 1024)}MB). Please upload images smaller than 4MB.` 
+        }, { status: 400 })
+      }
+    }
+
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY
     if (!OPENAI_API_KEY) {
       return NextResponse.json({ error: 'Missing OPENAI_API_KEY' }, { status: 500 })
