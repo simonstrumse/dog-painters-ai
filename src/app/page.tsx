@@ -55,6 +55,14 @@ export default function HomePage() {
       }
       const json = await resp.json()
       setResults(json.results as GeneratedImage[])
+      
+      // Auto-scroll to results after generation
+      setTimeout(() => {
+        const resultsElement = document.getElementById('results')
+        if (resultsElement) {
+          resultsElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100)
     } catch (e: any) {
       alert('Failed to generate: ' + (e?.message || 'Unknown error'))
     } finally {
@@ -99,6 +107,43 @@ export default function HomePage() {
           {loading && (
             <div className="text-sm text-gray-600">Hang tight! Generations can take ~30–60 seconds.</div>
           )}
+
+          {/* Results appear right below the generation button */}
+          {results.length > 0 && (
+            <div id="results" className="space-y-4 pt-4 border-t">
+              <h3 className="text-lg font-semibold">Your Generated Portraits</h3>
+              {files.map((f, i) => {
+                const perImage = results.filter((r) => r.originalIndex === i)
+                if (perImage.length === 0) return null
+                return (
+                  <div key={i} className="space-y-3">
+                    <div className="text-sm font-medium text-gray-700">Original #{i + 1}</div>
+                    <div className="grid gap-3">
+                      {perImage.map((r, idx) => (
+                        <div key={idx} className="border rounded-lg overflow-hidden bg-white shadow-sm">
+                          <img src={r.dataUrl} alt={`${r.artistKey}-${r.styleKey}`} className="w-full h-auto object-cover" />
+                          <div className="p-3 space-y-2">
+                            <div className="text-sm font-medium">{r.artistKey} • {r.styleKey}</div>
+                            <div className="flex flex-col sm:flex-row gap-2">
+                              <button
+                                className="flex-1 text-sm px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 font-medium"
+                                onClick={() => { setPrintImage(r.dataUrl); setPrintOpen(true) }}
+                              >Print</button>
+                              <a
+                                download={`dog-${i}-${r.artistKey}-${r.styleKey}.png`}
+                                href={r.dataUrl}
+                                className="flex-1 text-sm px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-medium text-center"
+                              >Download</a>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
 
         <div>
@@ -106,48 +151,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {results.length > 0 && (
-        <section className="space-y-6">
-          <h2 className="text-2xl font-semibold">Results</h2>
-          {files.map((f, i) => {
-            const perImage = results.filter((r) => r.originalIndex === i)
-            if (perImage.length === 0) return null
-            return (
-              <div key={i} className="space-y-3">
-                <div className="font-medium">Original #{i + 1}</div>
-                <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-                  <div className="md:col-span-1">
-                    <div className="border rounded-lg overflow-hidden bg-white shadow-sm">
-                      <img src={URL.createObjectURL(f)} alt={`original-${i}`} className="w-full h-full object-cover" />
-                    </div>
-                  </div>
-                  <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {perImage.map((r, idx) => (
-                      <div key={idx} className="border rounded-lg overflow-hidden bg-white shadow-sm">
-                        <img src={r.dataUrl} alt={`${r.artistKey}-${r.styleKey}`} className="w-full h-full object-cover" />
-                        <div className="p-3 space-y-2">
-                          <div className="text-sm font-medium truncate">{r.artistKey} • {r.styleKey}</div>
-                          <div className="flex flex-col sm:flex-row gap-2">
-                            <button
-                              className="flex-1 text-sm px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 font-medium"
-                              onClick={() => { setPrintImage(r.dataUrl); setPrintOpen(true) }}
-                            >Print</button>
-                            <a
-                              download={`dog-${i}-${r.artistKey}-${r.styleKey}.png`}
-                              href={r.dataUrl}
-                              className="flex-1 text-sm px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-medium text-center"
-                            >Download</a>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </section>
-      )}
 
       <HowItWorks />
       <TrustBadges />

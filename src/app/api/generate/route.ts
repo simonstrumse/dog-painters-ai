@@ -80,6 +80,19 @@ export async function POST(req: NextRequest) {
     }
     for (const file of files) {
       const imageBlob = await fileToBlob(file)
+      
+      // Upload original image to storage for gallery display
+      let originalImageUrl: string | null = null
+      if (publish && admin) {
+        try {
+          const originalBuffer = await file.arrayBuffer()
+          const originalPath = generateStoragePath('originals')
+          originalImageUrl = await uploadImageToFirebase(originalPath, Buffer.from(originalBuffer), file.type || 'image/jpeg')
+        } catch (e) {
+          console.error('Failed to upload original image:', e)
+        }
+      }
+      
       for (const sel of selections) {
         const prompt = buildPrompt(sel)
         const body = new FormData()
@@ -117,6 +130,8 @@ export async function POST(req: NextRequest) {
               artistKey: sel.artistKey,
               styleKey: sel.styleKey,
               imageUrl: publicUrl,
+              originalImageUrl, // Store the original input image URL
+              originalFileName: file.name,
               size,
               createdAt: new Date(),
             })
