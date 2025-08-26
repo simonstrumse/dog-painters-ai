@@ -86,12 +86,11 @@ export default async function GalleryPage({ searchParams }: { searchParams?: { s
       />
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Public Gallery</h1>
-        <div className="text-sm">
-          <label className="mr-2 text-gray-600">Sort by</label>
-          <select className="border rounded px-2 py-1" defaultValue={sort} onChange={(e) => { window.location.search = e.target.value === 'favorites' ? '?sort=favorites' : '' }}>
-            <option value="latest">Latest</option>
-            <option value="favorites">Most favorited</option>
-          </select>
+        <div className="text-sm text-gray-700">
+          <span className="mr-2 text-gray-600">Sort by</span>
+          <a href="/gallery" className={sort === 'latest' ? 'font-semibold underline' : 'hover:underline'}>Latest</a>
+          <span className="mx-2 text-gray-400">/</span>
+          <a href="/gallery?sort=favorites" className={sort === 'favorites' ? 'font-semibold underline' : 'hover:underline'}>Most favorited</a>
         </div>
       </div>
       {items.length === 0 && <div className="text-gray-600">No items yet. Generate and publish to see results here.</div>}
