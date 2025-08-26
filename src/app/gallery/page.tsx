@@ -35,7 +35,7 @@ export default async function GalleryPage() {
       {items.length === 0 && <div className="text-gray-600">No items yet. Generate and publish to see results here.</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((it) => (
-          <a href={`/gallery/${it.id}`} className="space-y-2 block group">
+          <a key={it.id} href={`/gallery/${it.id}`} className="space-y-2 block group">
             {/* Elegant frame with mat */}
             <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg">
               <div className="p-3 bg-white rounded-sm shadow-inner">
