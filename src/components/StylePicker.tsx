@@ -73,8 +73,13 @@ export default function StylePicker({ value, onChange }: Props) {
       return [...filtered].sort((a, b) => a.name.localeCompare(b.name))
     }
     if (sortBy === 'chronological') {
-      const year = (x?: number) => (typeof x === 'number' ? x : Number.POSITIVE_INFINITY)
-      return [...filtered].sort((a, b) => year(a.birthYear) - year(b.birthYear))
+      // Sort by birth year; fallback to death year; known-first
+      const getSortYear = (a: typeof filtered[number]) => {
+        if (typeof a.birthYear === 'number') return a.birthYear
+        if (typeof a.deathYear === 'number') return a.deathYear
+        return Number.POSITIVE_INFINITY
+      }
+      return [...filtered].sort((a, b) => getSortYear(a) - getSortYear(b))
     }
     if (sortBy === 'popularity') {
       const score = (x?: number) => (typeof x === 'number' ? x : 0)
