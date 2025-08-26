@@ -8,6 +8,10 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 const NavBar = dynamic(() => import('../components/NavBar'), { ssr: false })
 
 export const metadata: Metadata = {
+  // Default OG image can be overridden via env
+  // If not provided, falls back to /og/default.jpg
+  // Add a real file under public/og/default.jpg for production
+  // or set NEXT_PUBLIC_OG_DEFAULT to an absolute URL
   title: {
     default: 'Dog Painters – AI Dog Portraits',
     template: '%s | Dog Painters',
@@ -20,13 +24,13 @@ export const metadata: Metadata = {
     title: 'Dog Painters – AI Dog Portraits',
     description: 'Turn dog photos into museum‑quality portraits in iconic art styles using AI.',
     url: process.env.NEXT_PUBLIC_SITE_URL || undefined,
-    images: [{ url: '/og/default.jpg', width: 1200, height: 630, alt: 'Dog Painters – AI Dog Portraits' }],
+    images: [{ url: process.env.NEXT_PUBLIC_OG_DEFAULT || '/og/default.jpg', width: 1200, height: 630, alt: 'Dog Painters – AI Dog Portraits' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Dog Painters – AI Dog Portraits',
     description: 'Turn dog photos into museum‑quality portraits in iconic art styles using AI.',
-    images: ['/og/default.jpg'],
+    images: [process.env.NEXT_PUBLIC_OG_DEFAULT || '/og/default.jpg'],
   },
 }
 

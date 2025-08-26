@@ -12,12 +12,13 @@ What’s done
 - SEO: site-wide metadata, gallery index metadata, /my noindex
 
 Open TODOs
-- Upload public/og/default.jpg for homepage/gallery previews
-- Consider structured data (JSON‑LD) for gallery index (CollectionPage)
+- Add a branded image at `public/og/default.jpg` for homepage/gallery previews (temporary env override `NEXT_PUBLIC_OG_DEFAULT` supported)
 - Optional: CI check to assert /og/default.jpg exists
 - Optional: tune Hero <Image> sizes further by breakpoint
+
+Shipped now
+- Structured data (JSON‑LD) for gallery index (CollectionPage)
 
 Next candidates
 - “More like this” showing both Style and Artist sections simultaneously (style first), de‑duped (SHIPPED)
 - Add canonical URLs to more pages if added later (e.g., /pricing)
-

@@ -3,6 +3,8 @@ import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 
+const OG_DEFAULT = process.env.NEXT_PUBLIC_OG_DEFAULT || '/og/default.jpg'
+
 export const metadata: Metadata = {
   title: 'Public Gallery – Dog Painters',
   description: 'Explore recent AI‑generated dog portraits in iconic art styles from our community gallery.',
@@ -10,11 +12,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Public Gallery – Dog Painters',
     description: 'Explore recent AI‑generated dog portraits in iconic art styles from our community gallery.',
-    images: [{ url: '/og/default.jpg', width: 1200, height: 630 }],
+    images: [{ url: OG_DEFAULT, width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['/og/default.jpg'],
+    images: [OG_DEFAULT],
   },
 }
 
@@ -50,6 +52,31 @@ export default async function GalleryPage() {
   const items = await getItems()
   return (
     <main className="space-y-6">
+      <script
+        type="application/ld+json"
+        // Structured data for gallery index as a CollectionPage
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: 'Public Gallery – Dog Painters',
+            url: `${process.env.NEXT_PUBLIC_SITE_URL || ''}/gallery`,
+            hasPart: {
+              '@type': 'Collection',
+              name: 'AI‑generated Dog Portraits',
+              about: 'Community gallery of AI‑generated dog portraits in classic art styles',
+              collectionSize: items.length,
+              itemListElement: items.map((it, idx) => ({
+                '@type': 'ImageObject',
+                position: idx + 1,
+                contentUrl: it.imageUrl,
+                name: `${formatArtistName(it.artistKey)} — ${formatStyleName(it.styleKey)}`,
+                url: `${process.env.NEXT_PUBLIC_SITE_URL || ''}/gallery/${it.id}`,
+              })),
+            },
+          }),
+        }}
+      />
       <h1 className="text-3xl font-bold">Public Gallery</h1>
       {items.length === 0 && <div className="text-gray-600">No items yet. Generate and publish to see results here.</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
