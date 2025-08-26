@@ -66,12 +66,13 @@ export default function Hero() {
           </div>
           <div className="grid gap-4">
             {loading ? (
-              // Loading placeholders
-              Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <div className="w-16 h-16 rounded-lg border bg-gray-100 animate-pulse shadow-sm" />
-                  <div className="text-gray-400">→</div>
-                  <div className="w-16 h-16 rounded-lg border bg-gray-100 animate-pulse shadow-sm" />
+              // Loading placeholders (two rows, portrait-like tiles)
+              Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} className="flex items-center gap-4">
+                  <div className="h-24 md:h-28 rounded-lg overflow-hidden bg-gray-100 animate-pulse" style={{ aspectRatio: '2 / 3' }} />
+                  <div className="text-gray-300">→</div>
+                  <div className="h-24 md:h-28 rounded-lg overflow-hidden bg-gray-100 animate-pulse" style={{ aspectRatio: '2 / 3' }} />
+                  <div className="text-sm text-gray-400 flex-1">Loading…</div>
                 </div>
               ))
             ) : generations.length > 0 ? (
