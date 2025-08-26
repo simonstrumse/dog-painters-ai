@@ -15,7 +15,7 @@ import HowItWorks from '@/components/HowItWorks'
 import TrustBadges from '@/components/TrustBadges'
 import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 import OnboardingOverlay from '@/components/OnboardingOverlay'
-import AuthButtons from '@/components/AuthButtons'
+import SignInModal from '@/components/SignInModal'
 
 export default function HomePage() {
   const [files, setFiles] = useState<File[]>([])
@@ -96,6 +96,7 @@ export default function HomePage() {
     const unsubscribe = client.auth.onAuthStateChanged((user) => {
       if (user) {
         fetchGenerationStatus()
+        setLoginOpen(false)
       } else {
         setGenerationStatus(null)
       }
@@ -503,11 +504,8 @@ export default function HomePage() {
       </Modal>
 
       {/* Login prompt when attempting to generate while signed out */}
-      <Modal open={loginOpen} onClose={() => setLoginOpen(false)} title="Sign in to generate">
-        <div className="space-y-3">
-          <div className="text-sm text-gray-700">Please sign in to generate your dog paintings.</div>
-          <AuthButtons />
-        </div>
+      <Modal open={loginOpen} onClose={() => setLoginOpen(false)} title="Sign in to continue">
+        <SignInModal onSuccess={() => setLoginOpen(false)} />
       </Modal>
     </main>
   )
