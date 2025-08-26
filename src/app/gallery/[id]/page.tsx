@@ -23,6 +23,7 @@ async function getItem(id: string) {
     originalImageUrl: data.originalImageUrl as string | undefined,
     artistKey: data.artistKey as string,
     styleKey: data.styleKey as string,
+    size: data.size as string | undefined,
     createdAt: data.createdAt?.toDate?.() || new Date(),
     user,
   }
@@ -47,7 +48,7 @@ export default async function GalleryItemPage({ params }: { params: { id: string
       <div className="grid gap-6 md:grid-cols-12">
         <div className="md:col-span-8">
           <div className="bg-white rounded-lg border shadow-sm p-3">
-            <div className="aspect-[2/3] w-full max-h-[80vh] mx-auto overflow-hidden">
+            <div className="w-full max-h-[80vh] mx-auto overflow-hidden" style={{ aspectRatio: (() => { const s=item.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
               <img src={item.imageUrl} alt={`${item.artistKey}-${item.styleKey}`} className="w-full h-full object-contain" />
             </div>
           </div>
@@ -80,4 +81,3 @@ export default async function GalleryItemPage({ params }: { params: { id: string
     </main>
   )
 }
-

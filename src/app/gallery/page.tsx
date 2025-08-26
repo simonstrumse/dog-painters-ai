@@ -8,6 +8,7 @@ type Item = {
   imageUrl: string
   artistKey: string
   styleKey: string
+  size?: string
   createdAt: Date
 }
 
@@ -22,6 +23,7 @@ async function getItems(): Promise<Item[]> {
       imageUrl: v.imageUrl as string,
       artistKey: v.artistKey as string,
       styleKey: v.styleKey as string,
+      size: v.size as string | undefined,
       createdAt: v.createdAt?.toDate?.() || new Date(),
     }
   })
@@ -39,7 +41,7 @@ export default async function GalleryPage() {
             {/* Elegant frame with mat */}
             <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg">
               <div className="p-3 bg-white rounded-sm shadow-inner">
-                <div className="aspect-[2/3] overflow-hidden rounded-sm">
+                <div className="overflow-hidden rounded-sm" style={{ aspectRatio: (() => { const s=it.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
                   <img 
                     src={it.imageUrl} 
                     alt={`${it.artistKey}-${it.styleKey}`} 

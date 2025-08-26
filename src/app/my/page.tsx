@@ -9,6 +9,7 @@ type Item = {
   imageUrl: string
   artistKey: string
   styleKey: string
+  size?: string
   createdAt?: string
 }
 
@@ -72,7 +73,7 @@ export default function MyGalleryPage() {
           <div key={it.id} className="space-y-2">
             {/* Image without frame for personal gallery */}
             <div className="border-2 border-gray-300 rounded-lg shadow-md overflow-hidden bg-white">
-              <div className="aspect-[2/3] overflow-hidden">
+              <div className="overflow-hidden" style={{ aspectRatio: (() => { const s=it.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
                 <img 
                   src={it.imageUrl} 
                   alt={`${it.artistKey}-${it.styleKey}`} 
@@ -102,4 +103,3 @@ export default function MyGalleryPage() {
     </main>
   )
 }
-

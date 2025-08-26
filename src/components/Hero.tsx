@@ -8,6 +8,7 @@ type Generation = {
   originalImageUrl: string
   artistKey: string
   styleKey: string
+  size?: string
 }
 
 export default function Hero() {
@@ -75,10 +76,17 @@ export default function Hero() {
               ))
             ) : generations.length > 0 ? (
               // Live before/after pairs (show only two, 2:3 portrait tiles)
-              generations.slice(0, 2).map((gen) => (
+              generations.slice(0, 2).map((gen) => {
+                const ratio = (() => {
+                  const s = gen.size || '1024x1536'
+                  const [w, h] = s.split('x').map((n) => parseInt(n, 10))
+                  if (!w || !h) return '2 / 3'
+                  return `${w} / ${h}`
+                })()
+                return (
                 <div key={gen.id} className="flex items-center gap-4">
                   {/* Original (before) */}
-                  <div className="h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
+                  <div className="h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: ratio }}>
                     <img
                       src={gen.originalImageUrl}
                       alt="Original dog photo"
@@ -90,7 +98,7 @@ export default function Hero() {
                   <div className="text-gray-400 group-hover:text-blue-500 transition-colors text-xl">→</div>
                   
                   {/* Generated (after) */}
-                  <div className="h-24 md:h-28 rounded-lg overflow-hidden relative" style={{ aspectRatio: '2 / 3' }}>
+                  <div className="h-24 md:h-28 rounded-lg overflow-hidden relative" style={{ aspectRatio: ratio }}>
                     <img
                       src={gen.imageUrl}
                       alt={`${formatArtistName(gen.artistKey)} — ${formatStyleName(gen.styleKey)}`}
@@ -104,7 +112,7 @@ export default function Hero() {
                     <div className="text-gray-500 truncate">{formatStyleName(gen.styleKey)}</div>
                   </div>
                 </div>
-              ))
+              )})
             ) : (
               // Fallback to example transformations
               [

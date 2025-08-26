@@ -27,6 +27,7 @@ export async function GET() {
         originalImageUrl: data.originalImageUrl,
         artistKey: data.artistKey,
         styleKey: data.styleKey,
+        size: data.size,
         createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt
       }
     })

@@ -21,7 +21,7 @@ export default function HomePage() {
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [estimatedTimeLeft, setEstimatedTimeLeft] = useState(0)
   const [results, setResults] = useState<GeneratedImage[]>([])
-  const [size, setSize] = useState<'1024x1024' | '1024x1536'>('1024x1536')
+  const [size, setSize] = useState<'1024x1024' | '1024x1536' | '1536x1024'>('1024x1536')
   const [publish, setPublish] = useState(true) // Always publish for free users
   const [printOpen, setPrintOpen] = useState(false)
   const [printImage, setPrintImage] = useState<string | null>(null)
@@ -205,6 +205,7 @@ export default function HomePage() {
             <select value={size} onChange={(e) => setSize(e.target.value as any)} className="border rounded px-3 py-2 text-sm">
               <option value="1024x1024">1024 × 1024 (Square)</option>
               <option value="1024x1536">1024 × 1536 (Portrait)</option>
+              <option value="1536x1024">1536 × 1024 (Landscape)</option>
             </select>
           </div>
 
@@ -296,7 +297,7 @@ export default function HomePage() {
                           {/* Elegant frame with mat */}
                           <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg">
                             <div className="p-3 bg-white rounded-sm shadow-inner">
-                              <div className="aspect-[2/3] overflow-hidden rounded-sm">
+                              <div className="overflow-hidden rounded-sm" style={{ aspectRatio: (() => { const [w,h]=size.split('x').map(n=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
                                 <img 
                                   src={r.dataUrl} 
                                   alt={`${r.artistKey}-${r.styleKey}`} 
