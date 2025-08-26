@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { getClientApp } from '@/lib/firebaseClient'
 import { Button } from '@/components/ui/button'
 import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
@@ -73,11 +74,13 @@ export default function MyGalleryPage() {
           <div key={it.id} className="space-y-2">
             {/* Image without frame for personal gallery */}
             <div className="border-2 border-gray-300 rounded-lg shadow-md overflow-hidden bg-white">
-              <div className="overflow-hidden" style={{ aspectRatio: (() => { const s=it.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
-                <img 
+              <div className="relative overflow-hidden" style={{ aspectRatio: (() => { const s=it.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
+                <Image 
                   src={it.imageUrl} 
                   alt={`${it.artistKey}-${it.styleKey}`} 
-                  className="w-full h-full object-contain" 
+                  fill
+                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                  className="object-contain" 
                 />
               </div>
             </div>

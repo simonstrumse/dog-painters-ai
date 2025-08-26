@@ -1,5 +1,21 @@
 import { getAdminServices } from '@/lib/firebaseAdmin'
 import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
+import Image from 'next/image'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Public Gallery – Dog Painters',
+  description: 'Explore recent AI‑generated dog portraits in iconic art styles from our community gallery.',
+  openGraph: {
+    title: 'Public Gallery – Dog Painters',
+    description: 'Explore recent AI‑generated dog portraits in iconic art styles from our community gallery.',
+    images: [{ url: '/og/default.jpg', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/og/default.jpg'],
+  },
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -41,11 +57,13 @@ export default async function GalleryPage() {
             {/* Elegant frame with mat */}
             <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg">
               <div className="p-3 bg-white rounded-sm shadow-inner">
-                <div className="overflow-hidden rounded-sm" style={{ aspectRatio: (() => { const s=it.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
-                  <img 
+                <div className="relative overflow-hidden rounded-sm" style={{ aspectRatio: (() => { const s=it.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
+                  <Image 
                     src={it.imageUrl} 
                     alt={`${it.artistKey}-${it.styleKey}`} 
-                    className="w-full h-full object-contain transition-transform duration-200 group-hover:scale-[1.01]" 
+                    fill
+                    sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                    className="object-contain transition-transform duration-200 group-hover:scale-[1.01]" 
                   />
                 </div>
               </div>

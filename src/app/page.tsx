@@ -4,6 +4,7 @@ import UploadDropzone from '@/components/UploadDropzone'
 import StylePicker from '@/components/StylePicker'
 import type { GeneratedImage, StyleSelection } from '@/types'
 import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 import { Checkbox } from '@/components/ui/checkbox'
 import { getClientApp } from '@/lib/firebaseClient'
 import Hero from '@/components/Hero'
@@ -297,11 +298,13 @@ export default function HomePage() {
                           {/* Elegant frame with mat */}
                           <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg">
                             <div className="p-3 bg-white rounded-sm shadow-inner">
-                              <div className="overflow-hidden rounded-sm" style={{ aspectRatio: (() => { const [w,h]=size.split('x').map(n=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
-                                <img 
+                              <div className="relative overflow-hidden rounded-sm" style={{ aspectRatio: (() => { const [w,h]=size.split('x').map(n=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
+                                <Image 
                                   src={r.dataUrl} 
                                   alt={`${r.artistKey}-${r.styleKey}`} 
-                                  className="w-full h-full object-contain" 
+                                  fill
+                                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                                  className="object-contain" 
                                 />
                               </div>
                             </div>

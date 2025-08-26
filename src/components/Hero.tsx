@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 
 type Generation = {
@@ -38,7 +39,7 @@ export default function Hero() {
         <div className="absolute -top-16 -right-16 h-64 w-64 rounded-full bg-amber-100" />
         <div className="absolute -bottom-20 -left-10 h-72 w-72 rounded-full bg-blue-50" />
       </div>
-      <div className="relative grid gap-8 p-8 md:grid-cols-2 md:p-12">
+      <div className="relative grid gap-6 px-4 py-8 sm:px-6 md:grid-cols-2 md:px-12 md:py-12">
         <div className="space-y-5">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
             Museum‑Quality Dog Portraits
@@ -52,7 +53,7 @@ export default function Hero() {
           </div>
           <div className="text-sm text-gray-600">No design skills needed. Keep your dog's unique markings — just add art.</div>
         </div>
-        <div className="space-y-4 pl-4 md:pl-6">
+        <div className="space-y-4 pl-2 sm:pl-4 md:pl-6">
           <div className="flex items-center justify-between gap-4">
             <div className="text-xs uppercase tracking-wide text-gray-500">Recent Transformations</div>
             <div className="flex items-center gap-3">
@@ -87,11 +88,13 @@ export default function Hero() {
                 return (
                 <div key={gen.id} className="flex items-center gap-4">
                   {/* Original (before) */}
-                  <div className="h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: ratio }}>
-                    <img
+                  <div className="relative h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: ratio }}>
+                    <Image
                       src={gen.originalImageUrl}
                       alt="Original dog photo"
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="(max-width: 640px) 40vw, (max-width: 768px) 35vw, 25vw"
+                      className="object-cover"
                     />
                   </div>
                   
@@ -99,11 +102,13 @@ export default function Hero() {
                   <div className="text-gray-400 group-hover:text-blue-500 transition-colors text-xl">→</div>
                   
                   {/* Generated (after) */}
-                  <div className="h-24 md:h-28 rounded-lg overflow-hidden relative" style={{ aspectRatio: ratio }}>
-                    <img
+                  <div className="relative h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: ratio }}>
+                    <Image
                       src={gen.imageUrl}
                       alt={`${formatArtistName(gen.artistKey)} — ${formatStyleName(gen.styleKey)}`}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="(max-width: 640px) 40vw, (max-width: 768px) 35vw, 25vw"
+                      className="object-cover"
                     />
                   </div>
                   
@@ -121,12 +126,12 @@ export default function Hero() {
                 { before: 'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1542060748-10c28b62716d?q=80&w=200&auto=format&fit=crop', artist: 'Picasso', style: 'Blue Period' },
               ].slice(0, 2).map((example, i) => (
                 <div key={i} className="flex items-center gap-4">
-                  <div className="h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
-                    <img src={example.before} alt="Original example" className="w-full h-full object-cover" />
+                  <div className="relative h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
+                    <Image src={example.before} alt="Original example" fill sizes="(max-width: 640px) 40vw, 25vw" className="object-cover" />
                   </div>
                   <div className="text-gray-400 text-xl">→</div>
-                  <div className="h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
-                    <img src={example.after} alt="Transformed example" className="w-full h-full object-cover" />
+                  <div className="relative h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
+                    <Image src={example.after} alt="Transformed example" fill sizes="(max-width: 640px) 40vw, 25vw" className="object-cover" />
                   </div>
                   <div className="text-sm text-gray-700 min-w-0 flex-1">
                     <div className="font-medium">{example.artist}</div>

@@ -2,6 +2,7 @@ import { getAdminServices } from '@/lib/firebaseAdmin'
 import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 import { ShareButton } from '@/components/ShareButton'
 import type { Metadata } from 'next'
+import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
 
@@ -55,12 +56,26 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-async function getRelatedItems(artistKey: string, excludeId: string) {
+async function getRelatedByArtist(artistKey: string, excludeId: string) {
   const admin = getAdminServices()
   if (!admin) return []
   const snap = await admin.db
     .collection('gallery')
     .where('artistKey', '==', artistKey)
+    .orderBy('createdAt', 'desc')
+    .limit(8)
+    .get()
+  return snap.docs
+    .filter((d) => d.id !== excludeId)
+    .map((d) => ({ id: d.id, ...(d.data() as any) }))
+}
+
+async function getRelatedByStyle(styleKey: string, excludeId: string) {
+  const admin = getAdminServices()
+  if (!admin) return []
+  const snap = await admin.db
+    .collection('gallery')
+    .where('styleKey', '==', styleKey)
     .orderBy('createdAt', 'desc')
     .limit(8)
     .get()
@@ -75,7 +90,8 @@ export default async function GalleryItemPage({ params }: { params: { id: string
     return <main className="py-24 text-center text-gray-600">Not found</main>
   }
   const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL || ''}/gallery/${item.id}`
-  const related = await getRelatedItems(item.artistKey, item.id)
+  const relatedByStyle = await getRelatedByStyle(item.styleKey, item.id)
+  const relatedByArtist = relatedByStyle.length > 0 ? [] : await getRelatedByArtist(item.artistKey, item.id)
   return (
     <main className="space-y-6">
       <nav className="text-sm text-gray-500">
@@ -89,8 +105,8 @@ export default async function GalleryItemPage({ params }: { params: { id: string
       <div className="grid gap-6 md:grid-cols-12">
         <div className="md:col-span-8">
           <div className="bg-white rounded-lg border shadow-sm p-3">
-            <div className="w-full max-h-[80vh] mx-auto overflow-hidden" style={{ aspectRatio: (() => { const s=item.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
-              <img src={item.imageUrl} alt={`${item.artistKey}-${item.styleKey}`} className="w-full h-full object-contain" />
+            <div className="relative w-full max-h-[80vh] mx-auto overflow-hidden" style={{ aspectRatio: (() => { const s=item.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
+              <Image src={item.imageUrl} alt={`${item.artistKey}-${item.styleKey}`} fill sizes="100vw" className="object-contain" />
             </div>
           </div>
         </div>
@@ -120,14 +136,28 @@ export default async function GalleryItemPage({ params }: { params: { id: string
         </aside>
       </div>
 
-      {related.length > 0 && (
+      {relatedByStyle.length > 0 && (
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold">More like this</h2>
+          <h2 className="text-lg font-semibold">More in {formatStyleName(item.styleKey)}</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
-            {related.map((r: any) => (
+            {relatedByStyle.map((r: any) => (
               <a key={r.id} href={`/gallery/${r.id}`} className="block border rounded-lg overflow-hidden bg-white hover:shadow-sm">
-                <div className="overflow-hidden" style={{ aspectRatio: (() => { const s=r.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
-                  <img src={r.imageUrl} alt="related" className="w-full h-full object-contain" />
+                <div className="relative overflow-hidden" style={{ aspectRatio: (() => { const s=r.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
+                  <Image src={r.imageUrl} alt="related" fill sizes="(max-width: 640px) 45vw, 15vw" className="object-contain" />
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+      {relatedByStyle.length === 0 && relatedByArtist.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold">More by {formatArtistName(item.artistKey)}</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+            {relatedByArtist.map((r: any) => (
+              <a key={r.id} href={`/gallery/${r.id}`} className="block border rounded-lg overflow-hidden bg-white hover:shadow-sm">
+                <div className="relative overflow-hidden" style={{ aspectRatio: (() => { const s=r.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
+                  <Image src={r.imageUrl} alt="related" fill sizes="(max-width: 640px) 45vw, 15vw" className="object-contain" />
                 </div>
               </a>
             ))}

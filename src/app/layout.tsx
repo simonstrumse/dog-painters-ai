@@ -8,8 +8,26 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 const NavBar = dynamic(() => import('../components/NavBar'), { ssr: false })
 
 export const metadata: Metadata = {
-  title: 'Dog Painters – AI Dog Portraits',
-  description: 'Upload your dog photos and generate portraits in famous art styles using AI.',
+  title: {
+    default: 'Dog Painters – AI Dog Portraits',
+    template: '%s | Dog Painters',
+  },
+  description: 'Turn dog photos into museum‑quality portraits in iconic art styles using AI. Share to our public gallery and order framed prints.',
+  keywords: ['dog portraits', 'AI art', 'AI dog', 'dog pictures', 'pet portraits', 'art styles', 'museum quality', 'gallery', 'generate images', 'Leonardo da Vinci', 'Van Gogh', 'Picasso', 'Hokusai', 'Klimt', 'Matisse', 'Monet', 'Munch', 'Warhol', 'Lichtenstein'],
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'),
+  openGraph: {
+    type: 'website',
+    title: 'Dog Painters – AI Dog Portraits',
+    description: 'Turn dog photos into museum‑quality portraits in iconic art styles using AI.',
+    url: process.env.NEXT_PUBLIC_SITE_URL || undefined,
+    images: [{ url: '/og/default.jpg', width: 1200, height: 630, alt: 'Dog Painters – AI Dog Portraits' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Dog Painters – AI Dog Portraits',
+    description: 'Turn dog photos into museum‑quality portraits in iconic art styles using AI.',
+    images: ['/og/default.jpg'],
+  },
 }
 
 export const viewport = 'width=device-width, initial-scale=1'
