@@ -14,6 +14,13 @@ const nextConfig = {
     deviceSizes: [360, 640, 768, 1024, 1280, 1536],
     imageSizes: [96, 128, 160, 192, 256, 384],
     formats: ['image/avif', 'image/webp'],
+    // Also declare explicit domains for compatibility
+    domains: [
+      'storage.googleapis.com',
+      'firebasestorage.googleapis.com',
+      'images.unsplash.com',
+      'lh3.googleusercontent.com',
+    ],
     remotePatterns: [
       {
         protocol: 'https',

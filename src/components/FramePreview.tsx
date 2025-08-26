@@ -13,7 +13,7 @@ export default function FramePreview({ imageUrl, frame }: Props) {
     <div className={`p-3 ${frameClass} rounded-md`}> {/* frame */}
       <div className="bg-white p-3"> {/* mat */}
         <div className="relative aspect-square overflow-hidden">
-          <Image src={imageUrl} alt="Framed preview" fill sizes="(max-width: 768px) 60vw, 30vw" className="object-contain" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={80} />
+          <Image src={imageUrl.replace(/%2F/g, '/')} alt="Framed preview" fill sizes="(max-width: 768px) 60vw, 30vw" className="object-contain" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={80} />
         </div>
       </div>
     </div>

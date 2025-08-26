@@ -317,7 +317,7 @@ export default function HomePage() {
                             <div className="p-3 bg-white rounded-sm shadow-inner">
                               <div className="relative overflow-hidden rounded-sm" style={{ aspectRatio: (() => { const [w,h]=size.split('x').map(n=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
                                 <Image 
-                                  src={r.dataUrl} 
+                                  src={r.dataUrl.replace(/%2F/g, '/')} 
                                   alt={`${r.artistKey}-${r.styleKey}`} 
                                   fill
                                   sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"

@@ -88,7 +88,7 @@ export default async function GalleryPage() {
               <div className="p-3 bg-white rounded-sm shadow-inner">
                 <div className="relative overflow-hidden rounded-sm" style={{ aspectRatio: (() => { const s=it.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
                   <Image 
-                    src={it.imageUrl} 
+                    src={it.imageUrl.replace(/%2F/g, '/')} 
                     alt={`${it.artistKey}-${it.styleKey}`} 
                     fill
                     sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"

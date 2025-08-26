@@ -24,7 +24,9 @@ export async function uploadImageToFirebase(path: string, data: ArrayBuffer, con
     await fileRef.makePublic()
     
     // Return the public URL
-    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${encodeURIComponent(path)}`
+    // Prefer unencoded slashes for better compatibility with image CDNs/optimizers
+    const safePath = encodeURI(path)
+    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${safePath}`
     return publicUrl
   } catch (error) {
     console.error('Firebase Storage upload error', error)
