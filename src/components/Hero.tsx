@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { BLUR_DATA_URL } from '@/lib/blurData'
 import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 
 type Generation = {
@@ -78,7 +79,7 @@ export default function Hero() {
               ))
             ) : generations.length > 0 ? (
               // Live before/after pairs (show only two, 2:3 portrait tiles)
-              generations.slice(0, 2).map((gen) => {
+              generations.slice(0, 2).map((gen, idx) => {
                 const ratio = (() => {
                   const s = gen.size || '1024x1536'
                   const [w, h] = s.split('x').map((n) => parseInt(n, 10))
@@ -95,6 +96,10 @@ export default function Hero() {
                       fill
                       sizes="(max-width: 640px) 40vw, (max-width: 768px) 35vw, 25vw"
                       className="object-cover"
+                      placeholder="blur"
+                      blurDataURL={BLUR_DATA_URL}
+                      quality={80}
+                      priority={idx === 0}
                     />
                   </div>
                   
@@ -109,6 +114,10 @@ export default function Hero() {
                       fill
                       sizes="(max-width: 640px) 40vw, (max-width: 768px) 35vw, 25vw"
                       className="object-cover"
+                      placeholder="blur"
+                      blurDataURL={BLUR_DATA_URL}
+                      quality={80}
+                      priority={idx === 0}
                     />
                   </div>
                   
@@ -127,11 +136,11 @@ export default function Hero() {
               ].slice(0, 2).map((example, i) => (
                 <div key={i} className="flex items-center gap-4">
                   <div className="relative h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
-                    <Image src={example.before} alt="Original example" fill sizes="(max-width: 640px) 40vw, 25vw" className="object-cover" />
+                    <Image src={example.before} alt="Original example" fill sizes="(max-width: 640px) 40vw, 25vw" className="object-cover" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={80} />
                   </div>
                   <div className="text-gray-400 text-xl">→</div>
                   <div className="relative h-24 md:h-28 rounded-lg overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
-                    <Image src={example.after} alt="Transformed example" fill sizes="(max-width: 640px) 40vw, 25vw" className="object-cover" />
+                    <Image src={example.after} alt="Transformed example" fill sizes="(max-width: 640px) 40vw, 25vw" className="object-cover" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={80} />
                   </div>
                   <div className="text-sm text-gray-700 min-w-0 flex-1">
                     <div className="font-medium">{example.artist}</div>

@@ -5,6 +5,7 @@ import StylePicker from '@/components/StylePicker'
 import type { GeneratedImage, StyleSelection } from '@/types'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
+import { BLUR_DATA_URL } from '@/lib/blurData'
 import { Checkbox } from '@/components/ui/checkbox'
 import { getClientApp } from '@/lib/firebaseClient'
 import Hero from '@/components/Hero'
@@ -321,6 +322,9 @@ export default function HomePage() {
                                   fill
                                   sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
                                   className="object-contain" 
+                                  placeholder="blur"
+                                  blurDataURL={BLUR_DATA_URL}
+                                  quality={80}
                                 />
                               </div>
                             </div>

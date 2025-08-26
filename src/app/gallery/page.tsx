@@ -2,6 +2,7 @@ import { getAdminServices } from '@/lib/firebaseAdmin'
 import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import { BLUR_DATA_URL } from '@/lib/blurData'
 
 const OG_DEFAULT = process.env.NEXT_PUBLIC_OG_DEFAULT || '/og/default.jpg'
 
@@ -92,6 +93,9 @@ export default async function GalleryPage() {
                     fill
                     sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
                     className="object-contain transition-transform duration-200 group-hover:scale-[1.01]" 
+                    placeholder="blur"
+                    blurDataURL={BLUR_DATA_URL}
+                    quality={80}
                   />
                 </div>
               </div>

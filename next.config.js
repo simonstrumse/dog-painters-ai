@@ -5,10 +5,14 @@ const nextConfig = {
     typedRoutes: true
   },
   images: {
-    // Disable Next.js image optimization to avoid remote fetch failures
-    // and behave like plain <img>. This keeps recent UX/SEO changes
-    // while ensuring external Firebase/Unsplash URLs load reliably.
-    unoptimized: true,
+    // Opt-in optimization: set NEXT_ENABLE_IMAGE_OPTIMIZATION="true"
+    // By default we keep it unoptimized to avoid 404s on /_next/image in
+    // static hosting setups. Flip the flag once your host supports the
+    // Next.js Image Optimization route.
+    unoptimized: process.env.NEXT_ENABLE_IMAGE_OPTIMIZATION === 'true' ? false : true,
+    // Tailor generated breakpoints to our layout
+    deviceSizes: [360, 640, 768, 1024, 1280, 1536],
+    imageSizes: [96, 128, 160, 192, 256, 384],
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
@@ -24,6 +28,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
+      // Optional: common Googleusercontent domain used by some buckets
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
         pathname: '/**',
       },
     ],
