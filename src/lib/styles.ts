@@ -8,7 +8,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1881,
     deathYear: 1973,
     popularity: 97,
-    categories: ['Modernism', 'Cubism', 'Painting'],
+    categories: ['Cubism / Surrealism'],
     examples: ['Guernica', 'Les Demoiselles d\'Avignon', 'La Chèvre', 'The Old Guitarist', 'Girl with a Mandolin'],
     styles: [
       {
@@ -49,7 +49,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1863,
     deathYear: 1944,
     popularity: 82,
-    categories: ['Expressionism', 'Symbolism', 'Painting'],
+    categories: ['Expressionism / Modernism'],
     styles: [
       { key: 'scream', name: 'The Scream / Anxiety', prompt: 'in the style of Munch\'s The Scream: swirling skies, distorted figures, existential dread, intense expressionism' },
       { key: 'symbolist', name: 'Symbolist Phase', prompt: 'as Munch\'s symbolist phase: ghostly, spiritual, emotional atmosphere, muted palette, ethereal' },
@@ -64,7 +64,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1904,
     deathYear: 1989,
     popularity: 92,
-    categories: ['Surrealism', 'Painting'],
+    categories: ['Cubism / Surrealism'],
     styles: [
       { key: 'classic_surrealism', name: 'Classic Surrealism', prompt: 'as Dalí classic surrealism: barren landscapes, melting objects, long shadows, dream logic' },
       { key: 'paranoiac', name: 'Paranoiac-Critical Method', prompt: 'as Dalí paranoiac-critical: double images, hidden shapes in landscapes, uncanny illusions' },
@@ -79,7 +79,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1853,
     deathYear: 1890,
     popularity: 99,
-    categories: ['Post-Impressionism', 'Painting'],
+    categories: ['Impressionism & Post-Impressionism'],
     examples: ['Starry Night', 'Sunflowers', 'The Potato Eaters', 'Self-Portrait', 'The Bedroom'],
     styles: [
       { key: 'starry_night', name: 'Starry Night', prompt: 'as Van Gogh Starry Night: swirling skies, luminous cosmic light, impasto brushstrokes' },
@@ -95,7 +95,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1869,
     deathYear: 1954,
     popularity: 85,
-    categories: ['Fauvism', 'Modernism', 'Painting'],
+    categories: ['Expressionism / Modernism'],
     styles: [
       { key: 'fauvism', name: 'Fauvism', prompt: 'as Matisse fauvism: flat, vibrant unnatural colors, bold outlines, joyful design' },
       { key: 'interiors', name: 'Decorative Interiors', prompt: 'as Matisse The Red Room: patterned richly colored interiors, decorative rhythm' },
@@ -109,7 +109,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1862,
     deathYear: 1918,
     popularity: 84,
-    categories: ['Symbolism', 'Vienna Secession', 'Painting'],
+    categories: ['Art Nouveau / Symbolism'],
     styles: [
       { key: 'golden', name: 'Golden Phase', prompt: 'as Klimt golden phase: mosaic-like gold leaf patterns, ornamental aura, decorative abstraction' },
       { key: 'portraits', name: 'Portraits', prompt: 'as Klimt portraits: elongated forms, stylized patterned backgrounds, sensual elegance' },
@@ -123,7 +123,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1840,
     deathYear: 1926,
     popularity: 95,
-    categories: ['Impressionism', 'Painting'],
+    categories: ['Impressionism & Post-Impressionism'],
     examples: ['Water Lilies', 'Impression Sunrise', 'Rouen Cathedral', 'Haystacks', 'Japanese Bridge'],
     styles: [
       { key: 'water_lilies', name: 'Water Lilies', prompt: 'as Monet water lilies: hazy pastel reflections, atmospheric softness' },
@@ -138,7 +138,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1909,
     deathYear: 1992,
     popularity: 70,
-    categories: ['Expressionism', 'Modernism', 'Painting'],
+    categories: ['Figurative Expressionism / Abstract Expressionism'],
     styles: [
       { key: 'screaming_popes', name: 'Screaming Popes', prompt: 'as Francis Bacon screaming popes: grotesque distortions, existential terror, smeared paint' },
       { key: 'triptychs', name: 'Triptychs', prompt: 'as Bacon triptychs: fragmented subject across panels, stark space, psychological intensity' },
@@ -152,7 +152,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1860,
     deathYear: 1939,
     popularity: 78,
-    categories: ['Art Nouveau', 'Poster', 'Graphic'],
+    categories: ['Art Nouveau / Symbolism'],
     styles: [
       { key: 'posters', name: 'Posters', prompt: 'as Mucha posters: flowing lines, elegant pastel gradients, decorative framing' },
       { key: 'seasonal', name: 'Seasonal Panels', prompt: 'as Mucha seasonal panels: nature motifs tied to seasons, ornate panels' },
@@ -166,7 +166,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1760,
     deathYear: 1849,
     popularity: 88,
-    categories: ['Ukiyo-e', 'Printmaking', 'Japanese Art'],
+    categories: ['Ukiyo-e (Edo)'],
     styles: [
       { key: 'great_wave', name: 'The Great Wave', prompt: 'as Hokusai The Great Wave: bold stylized wave-like fur patterns, dynamic foam shapes' },
       { key: 'mount_fuji', name: 'Mount Fuji Series', prompt: 'as Hokusai Mount Fuji series: symbolic backdrops, crisp woodblock flat colors' },
@@ -180,7 +180,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1928,
     deathYear: 1987,
     popularity: 90,
-    categories: ['Pop Art', 'Painting', 'Printmaking'],
+    categories: ['Pop Art'],
     styles: [
       { key: 'marilyn', name: 'Marilyn-style Silkscreens', prompt: 'as Warhol Marilyn silkscreens: repeated portraits in neon colors, pop-art halftone' },
       { key: 'silkscreen_imperfections', name: 'Silkscreen Imperfections', prompt: 'as Warhol silkscreen: halftone, imperfect overlays, off-register colors' },
@@ -194,7 +194,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1960,
     deathYear: 1988,
     popularity: 86,
-    categories: ['Neo-Expressionism', 'Painting'],
+    categories: ['Street / Neo-Expressionism'],
     styles: [
       { key: 'neo_expressionist', name: 'Neo-expressionist graffiti', prompt: 'as Basquiat: raw lines, crowns, chaotic energy, graffiti scrawl' },
       { key: 'text_symbols', name: 'Text & Symbols', prompt: 'as Basquiat: overlays with words, anatomy motifs, symbolic icons' },
@@ -208,7 +208,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1571,
     deathYear: 1610,
     popularity: 83,
-    categories: ['Baroque', 'Painting'],
+    categories: ['Baroque'],
     styles: [
       { key: 'chiaroscuro', name: 'Chiaroscuro', prompt: 'as Caravaggio chiaroscuro: extreme light/dark realism, dramatic spotlit portrait' },
       { key: 'religious', name: 'Religious Dramatic Scenes', prompt: 'as Caravaggio: religious dramatic scene, spotlight composition, deep shadows' },
@@ -221,7 +221,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1606,
     deathYear: 1669,
     popularity: 87,
-    categories: ['Baroque', 'Painting'],
+    categories: ['Baroque'],
     styles: [
       { key: 'portrait_chiaroscuro', name: 'Portrait Chiaroscuro', prompt: 'as Rembrandt: soulful eyes in soft golden light, rich chiaroscuro' },
       { key: 'self_portrait', name: 'Self-Portrait style', prompt: 'as Rembrandt self-portrait style: expressive brushwork, textured emotion, warm browns' },
@@ -234,7 +234,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1450,
     deathYear: 1516,
     popularity: 79,
-    categories: ['Early Netherlandish', 'Painting'],
+    categories: ['Early–High Renaissance & Northern Renaissance'],
     styles: [
       { key: 'hellscapes', name: 'Fantastical Hellscapes', prompt: 'as Bosch: grotesque creatures and fantastical hellscape, surreal allegory' },
       { key: 'hybrid_animals', name: 'Hybrid Animals', prompt: 'as Bosch: mythic dog-bird-fish hybrid animals, medieval surrealism' },
@@ -247,7 +247,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1872,
     deathYear: 1944,
     popularity: 80,
-    categories: ['De Stijl', 'Abstract', 'Painting'],
+    categories: ['Expressionism / Modernism'],
     styles: [
       { key: 'geometric', name: 'Geometric Abstraction', prompt: 'as Mondrian: grid abstraction, primary colors, black lines, white ground' },
       { key: 'early_naturalism', name: 'Early Naturalism', prompt: 'as early Mondrian: softer representational style before abstraction' },
@@ -259,7 +259,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1912,
     deathYear: 1956,
     popularity: 83,
-    categories: ['Abstract Expressionism', 'Painting'],
+    categories: ['Figurative Expressionism / Abstract Expressionism'],
     styles: [
       { key: 'drip', name: 'Drip Technique', prompt: 'as Pollock: chaotic layers of drip paint, energetic all-over composition' },
       { key: 'action', name: 'Action Painting', prompt: 'as Pollock action painting: gestural immersive composition, dynamic splatters' },
@@ -271,7 +271,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1893,
     deathYear: 1983,
     popularity: 78,
-    categories: ['Surrealism', 'Painting'],
+    categories: ['Cubism / Surrealism'],
     styles: [
       { key: 'biomorphic', name: 'Biomorphic Abstraction', prompt: 'as Miró: playful biomorphic shapes, surreal symbols, vivid primaries' },
       { key: 'childlike', name: 'Childlike Primitivism', prompt: 'as Miró: whimsical simplified figures, naive energy' },
@@ -283,7 +283,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1923,
     deathYear: 1997,
     popularity: 82,
-    categories: ['Pop Art', 'Comics'],
+    categories: ['Pop Art'],
     styles: [
       { key: 'comic_pop', name: 'Comic Pop', prompt: 'as Lichtenstein comic pop: Ben-Day dots, speech caption, dramatic expressions' },
       { key: 'whaam', name: 'Whaam!-style', prompt: 'as Lichtenstein Whaam!: bold dynamic comic panels, graphic onomatopoeia' },
@@ -295,7 +295,7 @@ export const DOG_STYLE_LIBRARY: Artist[] = [
     birthYear: 1958,
     deathYear: 1990,
     popularity: 76,
-    categories: ['Pop Art', 'Street Art'],
+    categories: ['Street / Neo-Expressionism'],
     styles: [
       { key: 'outlined_figures', name: 'Outlined Figures', prompt: 'as Keith Haring: bright cartoon-like bold outlines, simplified dog figure' },
       { key: 'motion_lines', name: 'Motion Lines', prompt: 'as Haring: dogs with radiating energy, motion lines, pop boldness' },
@@ -311,7 +311,7 @@ DOG_STYLE_LIBRARY.push(
     birthYear: 1452,
     deathYear: 1519,
     popularity: 98,
-    categories: ['High Renaissance', 'Painting'],
+    categories: ['Early–High Renaissance & Northern Renaissance'],
     styles: [
       { key: 'sfumato', name: 'Sfumato Portrait', prompt: 'as Leonardo da Vinci sfumato: soft smoky transitions, subtle chiaroscuro, serene expression' },
       { key: 'anatomical', name: 'Anatomical Study', prompt: 'as Leonardo anatomical study: sepia ink, precise linework, scientific curiosity' },
@@ -324,7 +324,7 @@ DOG_STYLE_LIBRARY.push(
     birthYear: 1445,
     deathYear: 1510,
     popularity: 89,
-    categories: ['Early Renaissance', 'Painting'],
+    categories: ['Early–High Renaissance & Northern Renaissance'],
     styles: [
       { key: 'mythic', name: 'Mythic Allegory', prompt: 'as Botticelli mythic allegory: graceful figures, flowing lines, decorative patterning' },
       { key: 'madonna', name: 'Madonna and Child', prompt: 'as Botticelli: delicate faces, linear elegance, pastel palette' },
@@ -337,7 +337,7 @@ DOG_STYLE_LIBRARY.push(
     birthYear: 1267,
     deathYear: 1337,
     popularity: 75,
-    categories: ['Proto-Renaissance', 'Painting'],
+    categories: ['Medieval / Proto-Renaissance'],
     styles: [
       { key: 'fresco', name: 'Fresco Panels', prompt: 'as Giotto fresco: simple monumental forms, clear halos, early perspective' },
       { key: 'icons', name: 'Iconic Scenes', prompt: 'as Giotto: gold accents, solemn sacred scenes, medieval style' },
@@ -348,7 +348,7 @@ DOG_STYLE_LIBRARY.push(
     key: 'dr_seuss',
     name: 'Dr. Seuss',
     popularity: 88,
-    categories: ["Children's Books", 'Illustration'],
+    categories: ['Illustration / Children’s Books'],
     styles: [
       { key: 'whimsical_ink', name: 'Whimsical Ink', prompt: 'in the style of Dr. Seuss: whimsical curvy ink lines, playful characters, limited bright palette' },
       { key: 'rhymes', name: 'Rhyming Worlds', prompt: 'as Dr. Seuss rhyming worlds: fantastical contraptions, candy colors, lighthearted mischief' },
@@ -358,7 +358,7 @@ DOG_STYLE_LIBRARY.push(
     key: 'eric_carle',
     name: 'Eric Carle',
     popularity: 80,
-    categories: ["Children's Books", 'Collage', 'Illustration'],
+    categories: ['Illustration / Children’s Books'],
     styles: [
       { key: 'tissue_collage', name: 'Tissue Collage', prompt: 'as Eric Carle: hand-painted tissue paper collage, bold primary colors, cutout shapes' },
       { key: 'simple_animals', name: 'Simple Animals', prompt: 'as Eric Carle: friendly animal figures, textured layered color, white backdrops' },
@@ -368,7 +368,7 @@ DOG_STYLE_LIBRARY.push(
     key: 'beatrix_potter',
     name: 'Beatrix Potter',
     popularity: 77,
-    categories: ["Children's Books", 'Watercolor', 'Illustration'],
+    categories: ['Illustration / Children’s Books'],
     styles: [
       { key: 'watercolor_animals', name: 'Watercolor Animals', prompt: 'as Beatrix Potter: delicate watercolors, cozy woodland scenes, gentle storytelling' },
       { key: 'storybook', name: 'Storybook Vignettes', prompt: 'as Beatrix Potter: oval vignettes, soft outlines, Victorian charm' },
