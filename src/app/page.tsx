@@ -190,7 +190,90 @@ export default function HomePage() {
           }),
         }}
       />
+      {/* Service schema for LLM-friendly extraction */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Service',
+            name: 'Custom Dog Paintings',
+            serviceType: 'Pet portrait in classic art styles',
+            provider: {
+              '@type': 'Organization',
+              name: 'Dog Paintings',
+              url: process.env.NEXT_PUBLIC_SITE_URL || undefined,
+            },
+            areaServed: 'Worldwide',
+          }),
+        }}
+      />
       <Hero />
+
+      {/* Product-focused value props for clear extraction */}
+      <section className="rounded-xl border bg-white p-6 md:p-10">
+        <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>Why Dog Paintings</h2>
+        <ul className="grid gap-4 md:grid-cols-2 text-gray-700">
+          <li><strong>Museum-inspired styles:</strong> Portraits inspired by masters like Van Gogh, Hokusai, and Klimt.</li>
+          <li><strong>Keep your dog’s markings:</strong> We retain unique features and expressions in every portrait.</li>
+          <li><strong>Ready for display:</strong> Download high‑resolution files and request framed prints.</li>
+          <li><strong>Fast turnaround:</strong> Create and publish to the gallery in just minutes.</li>
+        </ul>
+      </section>
+
+      {/* FAQ: visible content + JSON-LD for FAQPage */}
+      <section className="rounded-xl border bg-white p-6 md:p-10">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6" style={{ fontFamily: 'var(--font-display)' }}>Frequently Asked Questions</h2>
+        <div className="space-y-5 text-gray-800">
+          <div>
+            <div className="font-semibold">What is Dog Paintings?</div>
+            <p>Dog Paintings transforms your dog photos into museum‑quality portraits inspired by history’s most famous painters.</p>
+          </div>
+          <div>
+            <div className="font-semibold">How long does it take?</div>
+            <p>Most portraits are ready within minutes. You can publish to the gallery and request a framed print when you’re happy.</p>
+          </div>
+          <div>
+            <div className="font-semibold">Do my uploads keep their details?</div>
+            <p>Yes. We preserve your dog’s distinctive markings and expressions for a faithful final portrait.</p>
+          </div>
+        </div>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              mainEntity: [
+                {
+                  '@type': 'Question',
+                  name: 'What is Dog Paintings?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Dog Paintings transforms dog photos into museum‑quality portraits inspired by history’s most famous painters.'
+                  }
+                },
+                {
+                  '@type': 'Question',
+                  name: 'How long does it take?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Most portraits are ready within minutes. You can publish to the gallery and request a framed print when you’re happy.'
+                  }
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Do my uploads keep their details?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Yes. Distinctive markings and expressions are preserved for a faithful final portrait.'
+                  }
+                }
+              ]
+            }),
+          }}
+        />
+      </section>
 
       <section id="create" className="grid gap-6 lg:grid-cols-2 xl:gap-8">
         <div className="space-y-4">

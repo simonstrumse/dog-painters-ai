@@ -41,6 +41,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`h-full ${playfair.variable} ${inter.variable}`}>
       <body className="min-h-full antialiased bg-gradient-to-br from-stone-100 via-neutral-50 to-stone-200 text-gray-900" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
         <NavBar />
+        {/* Organization schema for stronger entity signals */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Dog Paintings',
+              url: process.env.NEXT_PUBLIC_SITE_URL || undefined,
+            }),
+          }}
+        />
         <div className="container py-4 sm:py-6">{children}</div>
         <footer className="mt-16 border-t">
           <div className="container py-8 text-sm text-gray-600 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
