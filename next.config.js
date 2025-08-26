@@ -5,6 +5,10 @@ const nextConfig = {
     typedRoutes: true
   },
   images: {
+    // Disable Next.js image optimization to avoid remote fetch failures
+    // and behave like plain <img>. This keeps recent UX/SEO changes
+    // while ensuring external Firebase/Unsplash URLs load reliably.
+    unoptimized: true,
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
