@@ -180,7 +180,7 @@ export default function HomePage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'WebSite',
-            name: 'Dog Painters',
+            name: 'Dog Paintings',
             url: process.env.NEXT_PUBLIC_SITE_URL || undefined,
             potentialAction: {
               '@type': 'SearchAction',

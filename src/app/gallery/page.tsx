@@ -7,12 +7,12 @@ import { BLUR_DATA_URL } from '@/lib/blurData'
 const OG_DEFAULT = process.env.NEXT_PUBLIC_OG_DEFAULT || '/og/default.jpg'
 
 export const metadata: Metadata = {
-  title: 'Public Gallery – Dog Painters',
-  description: 'Explore recent AI‑generated dog portraits in iconic art styles from our community gallery.',
+  title: 'Public Gallery – Dog Paintings',
+  description: 'Explore recent dog portraits in iconic art styles from our community gallery.',
   alternates: { canonical: `${process.env.NEXT_PUBLIC_SITE_URL || ''}/gallery` },
   openGraph: {
-    title: 'Public Gallery – Dog Painters',
-    description: 'Explore recent AI‑generated dog portraits in iconic art styles from our community gallery.',
+    title: 'Public Gallery – Dog Paintings',
+    description: 'Explore recent dog portraits in iconic art styles from our community gallery.',
     images: [{ url: OG_DEFAULT, width: 1200, height: 630 }],
   },
   twitter: {
@@ -60,12 +60,12 @@ export default async function GalleryPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'CollectionPage',
-            name: 'Public Gallery – Dog Painters',
+            name: 'Public Gallery – Dog Paintings',
             url: `${process.env.NEXT_PUBLIC_SITE_URL || ''}/gallery`,
             hasPart: {
               '@type': 'Collection',
-              name: 'AI‑generated Dog Portraits',
-              about: 'Community gallery of AI‑generated dog portraits in classic art styles',
+              name: 'Dog Portraits',
+              about: 'Community gallery of dog portraits in classic art styles',
               collectionSize: items.length,
               itemListElement: items.map((it, idx) => ({
                 '@type': 'ImageObject',

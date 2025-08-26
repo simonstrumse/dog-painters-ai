@@ -14,8 +14,8 @@ export default function HowItWorks() {
     },
     {
       icon: Brush,
-      title: 'Generate',
-      desc: 'We transform your photos into museum-inspired portraits using AI.'
+      title: 'Create',
+      desc: 'We transform your photos into museum-inspired portraits.'
     },
     {
       icon: Share2,
@@ -41,4 +41,3 @@ export default function HowItWorks() {
     </section>
   )
 }
-
