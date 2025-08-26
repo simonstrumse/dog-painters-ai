@@ -3,6 +3,7 @@ import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 import { ShareButton } from '@/components/ShareButton'
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import FavoriteHeart from '@/components/FavoriteHeart'
 import { BLUR_DATA_URL } from '@/lib/blurData'
 
 export const dynamic = 'force-dynamic'
@@ -128,6 +129,7 @@ export default async function GalleryItemPage({ params }: { params: { id: string
             <h1 className="text-xl font-serif font-semibold">{formatArtistName(item.artistKey)}</h1>
             <div className="text-gray-600 italic">{formatStyleName(item.styleKey)}</div>
             <div className="text-sm text-gray-500">{item.createdAt.toLocaleString()}</div>
+            <div className="pt-2"><FavoriteHeart imageId={item.id} /></div>
           </div>
           <div className="bg-white border rounded-lg p-4 space-y-3">
             <div className="font-medium">Share</div>

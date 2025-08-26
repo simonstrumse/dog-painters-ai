@@ -14,6 +14,8 @@ import FramePreview from '@/components/FramePreview'
 import HowItWorks from '@/components/HowItWorks'
 import TrustBadges from '@/components/TrustBadges'
 import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
+import OnboardingOverlay from '@/components/OnboardingOverlay'
+import AuthButtons from '@/components/AuthButtons'
 
 export default function HomePage() {
   const [files, setFiles] = useState<File[]>([])
@@ -26,6 +28,7 @@ export default function HomePage() {
   const [size, setSize] = useState<'1024x1024' | '1024x1536' | '1536x1024'>('1024x1536')
   const [publish, setPublish] = useState(true) // Always publish for free users
   const [printOpen, setPrintOpen] = useState(false)
+  const [loginOpen, setLoginOpen] = useState(false)
   const [printImage, setPrintImage] = useState<string | null>(null)
   const [frame, setFrame] = useState<'black' | 'walnut' | 'white'>('black')
   const [printSize, setPrintSize] = useState<'8x10' | '12x16' | '18x24'>('12x16')
@@ -131,17 +134,14 @@ export default function HomePage() {
       body.append('selections', JSON.stringify(selectionsWithDogName))
       body.append('size', size)
       body.append('publish', String(publish))
-      // Authentication is now required for all generations
-      try {
-        const client = getClientApp()
-        if (!client?.auth) throw new Error('Authentication not available')
-        const user = client.auth.currentUser
-        if (!user) throw new Error('Please sign in to generate portraits')
-        const token = await user.getIdToken()
-        body.append('idToken', token)
-      } catch (e: any) {
-        throw new Error(e?.message || 'Authentication required')
+      // Authentication is required; if missing, open login modal instead of error
+      const client = getClientApp()
+      if (!client?.auth || !client.auth.currentUser) {
+        setLoginOpen(true)
+        return
       }
+      const token = await client.auth.currentUser.getIdToken()
+      body.append('idToken', token)
       for (const f of files) body.append('images', f)
       const resp = await fetch('/api/generate', { method: 'POST', body })
       if (!resp.ok) {
@@ -163,7 +163,7 @@ export default function HomePage() {
         }
       }, 100)
     } catch (e: any) {
-      alert('Failed to generate: ' + (e?.message || 'Unknown error'))
+      console.error('Generate failed:', e)
     } finally {
       clearInterval(progressInterval)
       setLoading(false)
@@ -208,6 +208,7 @@ export default function HomePage() {
           }),
         }}
       />
+      <OnboardingOverlay />
       <Hero />
 
       
@@ -499,6 +500,14 @@ export default function HomePage() {
             </div>
           </div>
         )}
+      </Modal>
+
+      {/* Login prompt when attempting to generate while signed out */}
+      <Modal open={loginOpen} onClose={() => setLoginOpen(false)} title="Sign in to generate">
+        <div className="space-y-3">
+          <div className="text-sm text-gray-700">Please sign in to generate your dog paintings.</div>
+          <AuthButtons />
+        </div>
       </Modal>
     </main>
   )

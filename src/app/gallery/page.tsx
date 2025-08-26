@@ -3,6 +3,7 @@ import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import { BLUR_DATA_URL } from '@/lib/blurData'
+import FavoriteHeart from '@/components/FavoriteHeart'
 
 const OG_DEFAULT = process.env.NEXT_PUBLIC_OG_DEFAULT || '/og/default.jpg'
 
@@ -30,12 +31,15 @@ type Item = {
   styleKey: string
   size?: string
   createdAt: Date
+  favoritesCount?: number
 }
 
-async function getItems(): Promise<Item[]> {
+async function getItems(sort: 'latest' | 'favorites' = 'latest'): Promise<Item[]> {
   const admin = getAdminServices()
   if (!admin) return []
-  const snap = await admin.db.collection('gallery').orderBy('createdAt', 'desc').limit(60).get()
+  const col = admin.db.collection('gallery')
+  const query = sort === 'favorites' ? col.orderBy('favoritesCount', 'desc').limit(60) : col.orderBy('createdAt', 'desc').limit(60)
+  const snap = await query.get()
   return snap.docs.map((d) => {
     const v = d.data() as any
     return {
@@ -45,12 +49,14 @@ async function getItems(): Promise<Item[]> {
       styleKey: v.styleKey as string,
       size: v.size as string | undefined,
       createdAt: v.createdAt?.toDate?.() || new Date(),
+      favoritesCount: v.favoritesCount || 0,
     }
   })
 }
 
-export default async function GalleryPage() {
-  const items = await getItems()
+export default async function GalleryPage({ searchParams }: { searchParams?: { sort?: string } }) {
+  const sort = searchParams?.sort === 'favorites' ? 'favorites' : 'latest'
+  const items = await getItems(sort)
   return (
     <main className="space-y-6">
       <script
@@ -78,7 +84,16 @@ export default async function GalleryPage() {
           }),
         }}
       />
-      <h1 className="text-3xl font-bold">Public Gallery</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Public Gallery</h1>
+        <div className="text-sm">
+          <label className="mr-2 text-gray-600">Sort by</label>
+          <select className="border rounded px-2 py-1" defaultValue={sort} onChange={(e) => { window.location.search = e.target.value === 'favorites' ? '?sort=favorites' : '' }}>
+            <option value="latest">Latest</option>
+            <option value="favorites">Most favorited</option>
+          </select>
+        </div>
+      </div>
       {items.length === 0 && <div className="text-gray-600">No items yet. Generate and publish to see results here.</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((it) => (
@@ -111,6 +126,9 @@ export default async function GalleryPage() {
                 </div>
                 <div className="text-xs text-gray-500 border-t pt-1 mt-2">
                   {it.createdAt.toLocaleDateString()}
+                </div>
+                <div className="pt-2">
+                  <FavoriteHeart imageId={it.id} initialCount={(it as any).favoritesCount || 0} />
                 </div>
               </div>
             </div>

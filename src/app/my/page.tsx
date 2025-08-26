@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { getClientApp } from '@/lib/firebaseClient'
 import { Button } from '@/components/ui/button'
 import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
+import FavoriteHeart from '@/components/FavoriteHeart'
 
 type Item = {
   id: string
@@ -18,6 +19,8 @@ export default function MyGalleryPage() {
   const client = getClientApp()
   const auth = client?.auth
   const [items, setItems] = useState<Item[]>([])
+  const [favoritesOnly, setFavoritesOnly] = useState(false)
+  const [myFavorites, setMyFavorites] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const user = auth?.currentUser ?? null
@@ -36,11 +39,32 @@ export default function MyGalleryPage() {
       const resp = await fetch('/api/my-gallery', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken }) })
       if (!resp.ok) throw new Error(await resp.text())
       const json = await resp.json()
-      setItems(json.items as Item[])
+      const all = json.items as Item[]
+      let filtered = all
+      if (favoritesOnly) {
+        const favIds = await fetchMyFavorites()
+        filtered = all.filter((it) => favIds.has(it.id))
+      }
+      setItems(filtered)
     } catch (e: any) {
       setError(e?.message || 'Failed to load')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchMyFavorites = async (): Promise<Set<string>> => {
+    try {
+      if (!auth?.currentUser) return new Set()
+      const idToken = await auth.currentUser.getIdToken()
+      const resp = await fetch('/api/my-favorites', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken }) })
+      if (!resp.ok) return new Set()
+      const json = await resp.json()
+      const ids = new Set<string>((json.imageIds as string[]) || [])
+      setMyFavorites(ids)
+      return ids
+    } catch {
+      return new Set()
     }
   }
 
@@ -64,7 +88,13 @@ export default function MyGalleryPage() {
     <main className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">My Gallery</h1>
-        <Button variant="outline" onClick={fetchItems}>Refresh</Button>
+        <div className="flex items-center gap-3">
+          <label className="text-sm text-gray-700 flex items-center gap-2">
+            <input type="checkbox" checked={favoritesOnly} onChange={async (e) => { setFavoritesOnly(e.target.checked); await fetchItems() }} />
+            Favorites only
+          </label>
+          <Button variant="outline" onClick={fetchItems}>Refresh</Button>
+        </div>
       </div>
       {loading && <div className="text-gray-600">Loading…</div>}
       {error && <div className="text-red-600 text-sm">{error}</div>}
@@ -98,6 +128,9 @@ export default function MyGalleryPage() {
                     {new Date(it.createdAt).toLocaleDateString()}
                   </div>
                 )}
+                <div className="pt-2">
+                  <FavoriteHeart imageId={it.id} />
+                </div>
               </div>
             </div>
           </div>
