@@ -173,6 +173,22 @@ export default function HomePage() {
 
   return (
     <main className="space-y-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'Dog Painters',
+            url: process.env.NEXT_PUBLIC_SITE_URL || undefined,
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: `${process.env.NEXT_PUBLIC_SITE_URL || ''}/gallery?q={search_term_string}`,
+              'query-input': 'required name=search_term_string',
+            },
+          }),
+        }}
+      />
       <Hero />
 
       <section id="create" className="grid gap-6 lg:grid-cols-2 xl:gap-8">

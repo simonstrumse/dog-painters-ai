@@ -94,6 +94,18 @@ export default async function GalleryItemPage({ params }: { params: { id: string
   const relatedByArtist = relatedByStyle.length > 0 ? [] : await getRelatedByArtist(item.artistKey, item.id)
   return (
     <main className="space-y-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ImageObject',
+            contentUrl: item.imageUrl,
+            name: `${formatArtistName(item.artistKey)} — ${formatStyleName(item.styleKey)}`,
+            datePublished: item.createdAt.toISOString(),
+          }),
+        }}
+      />
       <nav className="text-sm text-gray-500">
         <a href="/" className="hover:text-gray-700">Home</a>
         <span className="mx-1">/</span>

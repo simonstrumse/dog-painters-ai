@@ -6,6 +6,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Public Gallery – Dog Painters',
   description: 'Explore recent AI‑generated dog portraits in iconic art styles from our community gallery.',
+  alternates: { canonical: `${process.env.NEXT_PUBLIC_SITE_URL || ''}/gallery` },
   openGraph: {
     title: 'Public Gallery – Dog Painters',
     description: 'Explore recent AI‑generated dog portraits in iconic art styles from our community gallery.',
