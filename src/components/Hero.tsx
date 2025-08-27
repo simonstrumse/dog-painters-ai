@@ -38,76 +38,87 @@ export default function Hero() {
   }, [])
 
   return (
-    <div className="bg-white">
-      <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
-        <div className="rounded-2xl bg-white p-8 shadow-sm border border-gray-100">
-          <div className="text-center space-y-6">
-            <div className="space-y-3">
-              <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-600">
-                <Sparkles className="h-4 w-4" />
-                AI Art Generation
-              </div>
-              
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
-                Transform Your Dog Into Art
-              </h1>
-              
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Create beautiful portraits of your pet in the styles of famous artists
-              </p>
+    <div className="bg-gradient-to-br from-green-50 via-white to-green-50/30">
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        
+        {/* Main Hero Section */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700 mb-6">
+            <Sparkles className="h-4 w-4" />
+            AI Portrait Studio
+          </div>
+          
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+            Transform Your Dog Into{' '}
+            <span className="bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
+              Masterpiece Art
+            </span>
+          </h1>
+          
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            Professional AI-powered portraits in the styles of history's greatest artists. 
+            Perfect for gifts, home décor, and celebrating your beloved pet.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <a href="#create">
+              <Button size="lg" className="w-full sm:w-auto min-w-[200px]">
+                <ImageIcon className="mr-2 h-5 w-5" />
+                Create Portrait Now
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </a>
+            <a href="/gallery">
+              <Button variant="outline" size="lg" className="w-full sm:w-auto min-w-[200px]">
+                Browse Gallery
+              </Button>
+            </a>
+          </div>
+          
+          {/* Trust Indicators */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 border-t border-gray-200">
+            <div className="text-center">
+              <div className="text-3xl font-bold bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">50K+</div>
+              <div className="text-sm text-gray-600 font-medium">Happy Pet Parents</div>
             </div>
-            
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <a href="#create">
-                <Button size="lg" className="w-full sm:w-auto">
-                  <ImageIcon className="mr-2 h-5 w-5" />
-                  Start Creating
-                </Button>
-              </a>
-              <a href="/gallery">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                  View Gallery
-                </Button>
-              </a>
+            <div className="text-center">
+              <div className="text-3xl font-bold bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">20+</div>
+              <div className="text-sm text-gray-600 font-medium">Art Styles</div>
             </div>
-            
-            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-gray-100">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">50K+</div>
-                <div className="text-sm text-gray-500">Created</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">20+</div>
-                <div className="text-sm text-gray-500">Styles</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">Free</div>
-                <div className="text-sm text-gray-500">To Start</div>
-              </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">4.9★</div>
+              <div className="text-sm text-gray-600 font-medium">Average Rating</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">Free</div>
+              <div className="text-sm text-gray-600 font-medium">To Get Started</div>
             </div>
           </div>
         </div>
 
-        <div className="mt-12">
-          <div className="text-center mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Recent Transformations</h2>
-            <div className="inline-flex items-center gap-2 text-sm text-gray-500">
-              <div className="h-2 w-2 rounded-full bg-green-500"></div>
-              Live examples
+        {/* Recent Transformations */}
+        <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-12">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Recent Transformations</h2>
+            <div className="inline-flex items-center gap-2 text-green-600 font-medium">
+              <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
+              Live from our community
             </div>
           </div>
           
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <div className="space-y-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="grid gap-6 lg:gap-8">
               {loading ? (
                 Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="flex items-center gap-4 p-4 rounded-lg border border-gray-100">
-                    <div className="h-12 w-12 animate-pulse rounded-lg bg-gray-200" />
-                    <ArrowRight className="h-4 w-4 text-gray-400" />
-                    <div className="h-12 w-12 animate-pulse rounded-lg bg-gray-200" />
-                    <div className="flex-1">
-                      <div className="h-4 w-20 animate-pulse rounded bg-gray-200" />
-                      <div className="mt-1 h-3 w-16 animate-pulse rounded bg-gray-200" />
+                  <div key={i} className="bg-green-50/50 rounded-2xl p-6 border border-green-100">
+                    <div className="flex items-center gap-6">
+                      <div className="h-16 w-16 animate-pulse rounded-2xl bg-green-200" />
+                      <ArrowRight className="h-6 w-6 text-green-400" />
+                      <div className="h-16 w-16 animate-pulse rounded-2xl bg-green-200" />
+                      <div className="flex-1">
+                        <div className="h-5 w-24 animate-pulse rounded bg-green-200 mb-2" />
+                        <div className="h-4 w-20 animate-pulse rounded bg-green-200" />
+                      </div>
                     </div>
                   </div>
                 ))
@@ -120,33 +131,35 @@ export default function Hero() {
                     return `${w} / ${h}`
                   })()
                   return (
-                    <div key={gen.id} className="flex items-center gap-4 p-4 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
-                      <div className="relative h-12 w-12 overflow-hidden rounded-lg" style={{ aspectRatio: ratio }}>
-                        <Image
-                          src={gen.originalImageUrl}
-                          alt="Original"
-                          fill
-                          className="object-cover"
-                          placeholder="blur"
-                          blurDataURL={BLUR_DATA_URL}
-                          quality={80}
-                        />
-                      </div>
-                      <ArrowRight className="h-4 w-4 text-blue-500" />
-                      <div className="relative h-12 w-12 overflow-hidden rounded-lg" style={{ aspectRatio: ratio }}>
-                        <Image
-                          src={gen.imageUrl}
-                          alt={`${formatArtistName(gen.artistKey)} style`}
-                          fill
-                          className="object-cover"
-                          placeholder="blur"
-                          blurDataURL={BLUR_DATA_URL}
-                          quality={80}
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-gray-900 truncate">{formatArtistName(gen.artistKey)}</div>
-                        <div className="text-sm text-gray-500 truncate">{formatStyleName(gen.styleKey)}</div>
+                    <div key={gen.id} className="bg-gradient-to-r from-green-50 to-white rounded-2xl p-6 border border-green-100 hover:border-green-300 transition-all duration-300 hover:shadow-lg">
+                      <div className="flex items-center gap-6">
+                        <div className="relative h-16 w-16 overflow-hidden rounded-2xl ring-2 ring-green-200" style={{ aspectRatio: ratio }}>
+                          <Image
+                            src={gen.originalImageUrl}
+                            alt="Original"
+                            fill
+                            className="object-cover"
+                            placeholder="blur"
+                            blurDataURL={BLUR_DATA_URL}
+                            quality={90}
+                          />
+                        </div>
+                        <ArrowRight className="h-6 w-6 text-green-500" />
+                        <div className="relative h-16 w-16 overflow-hidden rounded-2xl ring-2 ring-green-300" style={{ aspectRatio: ratio }}>
+                          <Image
+                            src={gen.imageUrl}
+                            alt={`${formatArtistName(gen.artistKey)} style`}
+                            fill
+                            className="object-cover"
+                            placeholder="blur"
+                            blurDataURL={BLUR_DATA_URL}
+                            quality={90}
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold text-gray-900 text-lg truncate">{formatArtistName(gen.artistKey)}</div>
+                          <div className="text-green-600 font-medium truncate">{formatStyleName(gen.styleKey)}</div>
+                        </div>
                       </div>
                     </div>
                   )
@@ -157,17 +170,19 @@ export default function Hero() {
                   { before: 'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1542060748-10c28b62716d?q=80&w=200&auto=format&fit=crop', artist: 'Picasso', style: 'Blue Period' },
                   { before: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=200&auto=format&fit=crop', artist: 'Monet', style: 'Water Lilies' },
                 ].map((example, i) => (
-                  <div key={i} className="flex items-center gap-4 p-4 rounded-lg border border-gray-100">
-                    <div className="relative h-12 w-12 overflow-hidden rounded-lg">
-                      <Image src={example.before} alt="Original example" fill className="object-cover" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={80} />
-                    </div>
-                    <ArrowRight className="h-4 w-4 text-blue-500" />
-                    <div className="relative h-12 w-12 overflow-hidden rounded-lg">
-                      <Image src={example.after} alt="Transformed example" fill className="object-cover" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={80} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-gray-900">{example.artist}</div>
-                      <div className="text-sm text-gray-500">{example.style}</div>
+                  <div key={i} className="bg-gradient-to-r from-green-50 to-white rounded-2xl p-6 border border-green-100">
+                    <div className="flex items-center gap-6">
+                      <div className="relative h-16 w-16 overflow-hidden rounded-2xl ring-2 ring-green-200">
+                        <Image src={example.before} alt="Original example" fill className="object-cover" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={90} />
+                      </div>
+                      <ArrowRight className="h-6 w-6 text-green-500" />
+                      <div className="relative h-16 w-16 overflow-hidden rounded-2xl ring-2 ring-green-300">
+                        <Image src={example.after} alt="Transformed example" fill className="object-cover" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={90} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-gray-900 text-lg">{example.artist}</div>
+                        <div className="text-green-600 font-medium">{example.style}</div>
+                      </div>
                     </div>
                   </div>
                 ))
