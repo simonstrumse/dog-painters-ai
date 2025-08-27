@@ -214,95 +214,118 @@ export default function HomePage() {
 
       
 
-      <section id="create" className="bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-        <div className="space-y-4">
+      <section id="create" className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/50 to-purple-50/50"></div>
+        <div className="relative z-10 mx-auto max-w-7xl mobile-tight sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 sm:mb-4" style={{ fontFamily: 'var(--font-display)' }}>
+              Create Your <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Masterpiece</span>
+            </h2>
+            <p className="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto">
+              Upload your dog's photo and select art styles to create stunning AI-generated portraits
+            </p>
+          </div>
+          
+          <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
+            <div className="glass rounded-3xl p-6 sm:p-8 shadow-glass space-y-6">
           <UploadDropzone onFiles={(f) => setFiles((prev) => [...prev, ...f])} />
           {files.length > 0 && (
-            <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {files.map((f, i) => (
-                <div key={i} className="w-full sm:w-28 h-28 rounded-md overflow-hidden border relative">
-                  <img src={URL.createObjectURL(f)} alt={`upload-${i}`} className="w-full h-full object-cover" />
-                  <Button variant="outline" size="sm" className="absolute top-1 right-1 bg-white/80 hover:bg-white text-xs px-1 py-0 h-6 w-6 rounded shadow-sm" onClick={() => setFiles((prev) => prev.filter((_, idx) => idx !== i))}>×</Button>
+                <div key={i} className="relative group">
+                  <div className="aspect-square rounded-2xl overflow-hidden glass shadow-glass">
+                    <img src={URL.createObjectURL(f)} alt={`upload-${i}`} className="w-full h-full object-cover" />
+                  </div>
+                  <Button 
+                    variant="destructive" 
+                    size="icon" 
+                    className="absolute -top-2 -right-2 h-7 w-7 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => setFiles((prev) => prev.filter((_, idx) => idx !== i))}
+                  >
+                    ×
+                  </Button>
                 </div>
               ))}
             </div>
           )}
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Dog's name (optional)</label>
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-slate-900">Dog's name (optional)</label>
             <input
               type="text"
               placeholder="e.g., Tassen (for artistic titles like 'Le Tassen')"
               value={dogName}
               onChange={(e) => setDogName(e.target.value)}
-              className="w-full px-3 py-2 border rounded text-sm"
+              className="w-full px-4 py-3 glass border-0 rounded-2xl text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
             />
-            <p className="text-xs text-gray-500">This will create artistic titles integrated into the paintings</p>
+            <p className="text-xs text-slate-600">This creates artistic titles integrated into the paintings</p>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-            <label className="text-sm font-medium">Output size</label>
-            <select value={size} onChange={(e) => setSize(e.target.value as any)} className="border rounded px-3 py-2 text-sm">
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-slate-900">Output size</label>
+            <select 
+              value={size} 
+              onChange={(e) => setSize(e.target.value as any)} 
+              className="w-full px-4 py-3 glass border-0 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+            >
               <option value="1024x1024">1024 × 1024 (Square)</option>
               <option value="1024x1536">1024 × 1536 (Portrait)</option>
               <option value="1536x1024">1536 × 1024 (Landscape)</option>
             </select>
           </div>
 
-          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg space-y-2">
+          <div className="glass rounded-2xl p-4 sm:p-5 shadow-glass space-y-3 border border-blue-200/50">
             <div className="flex items-center gap-2 text-sm">
               <Checkbox checked={publish} disabled />
               <span className="font-medium">Publish to public gallery (required)</span>
             </div>
-            <div className="text-xs text-blue-700">
+            <div className="text-xs text-slate-700">
               Free users share their creations with our community. 
-              <span className="font-medium">Paying customers will have opt-out available.</span>
+              <span className="font-semibold">Paying customers will have opt-out available.</span>
             </div>
             {generationStatus ? (
-              <div className="space-y-1">
+              <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className={generationStatus.remaining > 0 ? 'text-green-600' : 'text-red-600'}>
-                    {generationStatus.remaining > 0 ? '✅' : '⚠️'} 
+                  <span className={generationStatus.remaining > 0 ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'}>
+                    {generationStatus.remaining > 0 ? '✨' : '⚠️'} 
                     {generationStatus.remaining} generations remaining today
                   </span>
-                  <span className="text-gray-500">
+                  <span className="text-slate-600">
                     {generationStatus.used}/{generationStatus.dailyLimit} used
                   </span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-1.5">
+                <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
                   <div 
-                    className={`h-1.5 rounded-full transition-all ${
-                      generationStatus.remaining > 1 ? 'bg-green-500' : 
-                      generationStatus.remaining === 1 ? 'bg-yellow-500' : 'bg-red-500'
+                    className={`h-2 rounded-full transition-all duration-500 ${
+                      generationStatus.remaining > 1 ? 'bg-gradient-to-r from-emerald-500 to-green-600' : 
+                      generationStatus.remaining === 1 ? 'bg-gradient-to-r from-yellow-500 to-orange-500' : 'bg-gradient-to-r from-red-500 to-pink-600'
                     }`}
                     style={{ width: `${(generationStatus.used / generationStatus.dailyLimit) * 100}%` }}
                   />
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-slate-600">
                   Resets at {new Date(generationStatus.resetTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} 
                   {new Date(generationStatus.resetTime).toDateString() !== new Date().toDateString() ? ' tomorrow' : ' today'}
                 </div>
               </div>
             ) : (
-              <div className="text-xs text-blue-600">
+              <div className="text-xs text-blue-600 font-semibold">
                 ⚠️ Daily limit: 3 generations per user
               </div>
             )}
           </div>
 
-          <Button onClick={onGenerate} disabled={!canGenerate}>
+          <Button size="lg" onClick={onGenerate} disabled={!canGenerate} className="w-full shadow-2xl">
             {loading 
-              ? 'Generating…' 
+              ? '🎨 Generating Masterpiece…' 
               : generationStatus && generationStatus.remaining === 0 
-                ? 'Daily Limit Reached' 
-                : 'Generate Portraits'
+                ? '📵 Daily Limit Reached' 
+                : '✨ Generate Portraits'
             }
           </Button>
           
           {loading && (
-            <div className="space-y-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="glass rounded-2xl p-4 sm:p-5 shadow-glass space-y-3 border border-blue-200/50">
               <div className="text-sm font-medium text-blue-900">We're painting your dog...</div>
               
               <div className="w-full bg-blue-200 rounded-full h-2">
