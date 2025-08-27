@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { IS_MODERN } from '@/lib/flags'
 import dynamic from 'next/dynamic'
 import { Playfair_Display, Inter } from 'next/font/google'
 
@@ -37,9 +38,15 @@ export const metadata: Metadata = {
 export const viewport = 'width=device-width, initial-scale=1'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const bodyClass = IS_MODERN
+    ? 'min-h-full antialiased bg-gradient-to-b from-white via-neutral-50 to-neutral-100 text-gray-900'
+    : 'min-h-full antialiased bg-gradient-to-br from-stone-100 via-neutral-50 to-stone-200 text-gray-900'
+  const bgStyle = IS_MODERN
+    ? { backgroundImage: 'radial-gradient(circle at 20% 10%, rgba(0,0,0,0.03) 1px, transparent 1px), radial-gradient(circle at 80% 20%, rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '24px 24px, 28px 28px' }
+    : { backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '20px 20px' }
   return (
     <html lang="en" className={`h-full ${playfair.variable} ${inter.variable}`}>
-      <body className="min-h-full antialiased bg-gradient-to-br from-stone-100 via-neutral-50 to-stone-200 text-gray-900" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
+      <body className={bodyClass} style={bgStyle as any}>
         <NavBar />
         {/* Organization schema for stronger entity signals */}
         <script
@@ -54,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         <div className="container py-4 sm:py-6">{children}</div>
-        <footer className="mt-16 border-t">
+        <footer className={IS_MODERN ? 'mt-16 border-t border-gray-200/70' : 'mt-16 border-t'}>
           <div className="container py-8 text-sm text-gray-600 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
             <div>© {new Date().getFullYear()} Dog Paintings • Your dog in the style of history’s most famous painters</div>
             <div>
