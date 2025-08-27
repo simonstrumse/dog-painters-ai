@@ -118,8 +118,8 @@ export default async function GalleryItemPage({ params }: { params: { id: string
 
       <div className="grid gap-6 md:grid-cols-12">
         <div className="md:col-span-8">
-          {/* Wall box for consistency; inner frame follows the image aspect */}
-          <div className="relative w-full mx-auto overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
+          {/* Wall box for consistency; responsive aspect; inner frame follows the image aspect */}
+          <div className="relative w-full mx-auto overflow-hidden aspect-[3/4] sm:aspect-[2/3]">
             {(() => {
               const s = item.size || '1024x1536'
               const [w, h] = String(s).split('x').map((n) => parseInt(n, 10))
@@ -132,9 +132,11 @@ export default async function GalleryItemPage({ params }: { params: { id: string
                 maxHeight: '80vh',
               }
               return (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-white rounded-lg border shadow-sm p-3" style={frameStyle}>
-                    <div className="relative w-full h-full">
+                <div className="absolute inset-0 flex items-start justify-center">
+                  {/* Match gallery frame styling: amber outer with white mat */}
+                  <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg" style={frameStyle}>
+                    <div className="p-3 bg-white rounded-sm shadow-inner h-full">
+                      <div className="relative w-full h-full">
                       <Image
                         src={item.imageUrl.replace(/%2F/g, '/')}
                         alt={`${formatArtistName(item.artistKey)} — ${formatStyleName(item.styleKey)}`}
@@ -146,6 +148,7 @@ export default async function GalleryItemPage({ params }: { params: { id: string
                         quality={85}
                         priority
                       />
+                      </div>
                     </div>
                   </div>
                 </div>

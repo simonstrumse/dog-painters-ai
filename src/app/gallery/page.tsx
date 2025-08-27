@@ -97,8 +97,8 @@ export default async function GalleryPage({ searchParams }: { searchParams?: { s
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((it) => (
           <a key={it.id} href={`/gallery/${it.id}`} className="space-y-2 block group">
-            {/* Wall box keeps plaques aligned; inner frame follows true image aspect */}
-            <div className="relative overflow-hidden rounded-sm" style={{ aspectRatio: '2 / 3' }}>
+            {/* Wall box keeps plaques aligned; responsive aspect on small screens */}
+            <div className="relative overflow-hidden rounded-sm aspect-[3/4] sm:aspect-[2/3]">
               {(() => {
                 const s = it.size || '1024x1536'
                 const [w, h] = String(s).split('x').map((n) => parseInt(n, 10))
