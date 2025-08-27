@@ -174,7 +174,7 @@ export default function HomePage() {
   }
 
   return (
-    <main className="space-y-10">
+    <main className="min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -214,7 +214,9 @@ export default function HomePage() {
 
       
 
-      <section id="create" className="grid gap-6 lg:grid-cols-2 xl:gap-8">
+      <section id="create" className="bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
         <div className="space-y-4">
           <UploadDropzone onFiles={(f) => setFiles((prev) => [...prev, ...f])} />
           {files.length > 0 && (
@@ -385,6 +387,8 @@ export default function HomePage() {
 
         <div>
           <StylePicker value={selections} onChange={setSelections} />
+        </div>
+          </div>
         </div>
       </section>
 
