@@ -1,6 +1,7 @@
 "use client"
 import { useCallback, useRef, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { IS_MODERN } from '@/lib/flags'
 import { Button } from './ui/button'
 import { compressImage, isValidImageFile, formatFileSize } from '@/lib/imageUtils'
 
@@ -75,7 +76,7 @@ export default function UploadDropzone({ onFiles }: Props) {
             if (files.length) processFiles(files)
           }}
         />
-        <div className={`border-2 border-dashed rounded-lg p-6 text-center ${isCompressing ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
+        <div className={IS_MODERN ? `dropzone-modern p-8 text-center ${isCompressing ? 'bg-blue-50/60' : ''}` : `border-2 border-dashed rounded-lg p-6 text-center ${isCompressing ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
           {isCompressing ? (
             <>
               <div className="font-medium">Compressing images...</div>

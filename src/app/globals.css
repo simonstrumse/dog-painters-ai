@@ -97,3 +97,23 @@ html, body, :root {
   animation: pulseGlow 3s ease-in-out infinite;
 }
 
+/* Modern app shell (flagged via html[data-modern="1"]) */
+html[data-modern="1"] .app-toolbar {
+  @apply rounded-2xl shadow-glass glass;
+}
+
+html[data-modern="1"] .app-panel {
+  @apply glass rounded-3xl shadow-glass;
+}
+
+html[data-modern="1"] .app-pill {
+  @apply px-3 py-1.5 rounded-full bg-white/70 hover:bg-white text-slate-700 border border-gray-200/70 backdrop-blur;
+}
+
+html[data-modern="1"] .dropzone-modern {
+  @apply border-2 border-dashed rounded-2xl bg-white/70 hover:bg-white backdrop-blur;
+}
+
+html[data-modern="1"] .plaque-modern {
+  @apply bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-gray-200/70;
+}

@@ -1,6 +1,7 @@
 "use client"
 import { useMemo, useState, useEffect } from 'react'
 import UploadDropzone from '@/components/UploadDropzone'
+import { IS_MODERN } from '@/lib/flags'
 import StylePicker from '@/components/StylePicker'
 import type { GeneratedImage, StyleSelection } from '@/types'
 import { Button } from '@/components/ui/button'
@@ -214,32 +215,31 @@ export default function HomePage() {
 
       
 
-      <section id="create" className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/50 to-purple-50/50"></div>
-        <div className="relative z-10 mx-auto max-w-7xl mobile-tight sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 sm:mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-              Create Your <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Masterpiece</span>
+      <section id="create" className="bg-gray-50 py-12">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              Create Your Portrait
             </h2>
-            <p className="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto">
-              Upload your dog's photo and select art styles to create stunning AI-generated portraits
+            <p className="text-gray-600">
+              Upload your dog's photo and select art styles
             </p>
           </div>
           
-          <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-            <div className="glass rounded-3xl p-6 sm:p-8 shadow-glass space-y-6">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-6">
           <UploadDropzone onFiles={(f) => setFiles((prev) => [...prev, ...f])} />
           {files.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {files.map((f, i) => (
                 <div key={i} className="relative group">
-                  <div className="aspect-square rounded-2xl overflow-hidden glass shadow-glass">
+                  <div className="aspect-square rounded-lg overflow-hidden border border-gray-200">
                     <img src={URL.createObjectURL(f)} alt={`upload-${i}`} className="w-full h-full object-cover" />
                   </div>
                   <Button 
                     variant="destructive" 
                     size="icon" 
-                    className="absolute -top-2 -right-2 h-7 w-7 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute -top-2 -right-2 h-6 w-6 rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity"
                     onClick={() => setFiles((prev) => prev.filter((_, idx) => idx !== i))}
                   >
                     ×
@@ -249,28 +249,28 @@ export default function HomePage() {
             </div>
           )}
 
-          <div className="space-y-3">
-            <label className="text-sm font-semibold text-slate-900">Dog's name (optional)</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-900">Dog's name (optional)</label>
             <input
               type="text"
-              placeholder="e.g., Tassen (for artistic titles like 'Le Tassen')"
+              placeholder="e.g., Tassen"
               value={dogName}
               onChange={(e) => setDogName(e.target.value)}
-              className="w-full px-4 py-3 glass border-0 rounded-2xl text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-            <p className="text-xs text-slate-600">This creates artistic titles integrated into the paintings</p>
+            <p className="text-xs text-gray-500">For artistic titles in paintings</p>
           </div>
 
-          <div className="space-y-3">
-            <label className="text-sm font-semibold text-slate-900">Output size</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-900">Output size</label>
             <select 
               value={size} 
               onChange={(e) => setSize(e.target.value as any)} 
-              className="w-full px-4 py-3 glass border-0 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="1024x1024">1024 × 1024 (Square)</option>
-              <option value="1024x1536">1024 × 1536 (Portrait)</option>
-              <option value="1536x1024">1536 × 1024 (Landscape)</option>
+              <option value="1024x1024">Square (1024×1024)</option>
+              <option value="1024x1536">Portrait (1024×1536)</option>
+              <option value="1536x1024">Landscape (1536×1024)</option>
             </select>
           </div>
 
@@ -325,7 +325,7 @@ export default function HomePage() {
           </Button>
           
           {loading && (
-            <div className="glass rounded-2xl p-4 sm:p-5 shadow-glass space-y-3 border border-blue-200/50">
+            <div className={IS_MODERN ? 'app-panel p-4 sm:p-5 space-y-3 border border-blue-200/50' : 'glass rounded-2xl p-4 sm:p-5 shadow-glass space-y-3 border border-blue-200/50'}>
               <div className="text-sm font-medium text-blue-900">We're painting your dog...</div>
               
               <div className="w-full bg-blue-200 rounded-full h-2">
@@ -377,7 +377,7 @@ export default function HomePage() {
                             </div>
                           </div>
                           {/* Gallery-style plaque */}
-                          <div className="bg-white border shadow-sm rounded-lg p-3 mx-2">
+                          <div className={IS_MODERN ? 'plaque-modern p-3 mx-2' : 'bg-white border shadow-sm rounded-lg p-3 mx-2'}>
                             <div className="text-center space-y-1">
                               <div className="font-serif text-sm font-medium text-gray-900">
                                 {formatArtistName(r.artistKey)}
