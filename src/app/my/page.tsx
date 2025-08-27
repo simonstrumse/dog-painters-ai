@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { getClientApp } from '@/lib/firebaseClient'
 import { Button } from '@/components/ui/button'
+import { IS_MODERN } from '@/lib/flags'
 import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 import FavoriteHeart from '@/components/FavoriteHeart'
 
@@ -101,7 +102,7 @@ export default function MyGalleryPage() {
       {!loading && items.length === 0 && <div className="text-gray-600">No items yet. Publish some results to see them here.</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((it) => (
-          <div key={it.id} className="space-y-2">
+          <div key={it.id} className="space-y-2 group">
             {/* Image without frame for personal gallery */}
             {/* Wall box keeps plaques aligned; responsive aspect on small screens */}
             <div className="relative overflow-hidden aspect-[3/4] sm:aspect-[2/3]">
@@ -125,8 +126,16 @@ export default function MyGalleryPage() {
                           alt={`${formatArtistName(it.artistKey)} — ${formatStyleName(it.styleKey)}`}
                           fill
                           sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
-                          className="object-contain object-center"
+                          className={IS_MODERN ? 'object-contain object-center transition-transform duration-200 group-hover:scale-[1.02]' : 'object-contain object-center'}
                         />
+                        {IS_MODERN && (
+                          <div className="absolute inset-x-0 bottom-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="plaque-modern p-2 text-center">
+                              <div className="font-serif text-xs font-medium text-gray-900 truncate">{formatArtistName(it.artistKey)}</div>
+                              <div className="text-[11px] text-gray-600 italic truncate">{formatStyleName(it.styleKey)}</div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -134,7 +143,7 @@ export default function MyGalleryPage() {
               })()}
             </div>
             {/* Gallery-style plaque */}
-            <div className="bg-white border shadow-sm rounded-lg p-3 mx-2">
+            <div className={IS_MODERN ? 'hidden' : 'bg-white border shadow-sm rounded-lg p-3 mx-2'}>
               <div className="text-center space-y-1">
                 <div className="font-serif text-sm font-medium text-gray-900">
                   {formatArtistName(it.artistKey)}
