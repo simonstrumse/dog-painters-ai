@@ -38,87 +38,82 @@ export default function Hero() {
   }, [])
 
   return (
-    <div className="min-h-screen gradient-animated relative overflow-hidden">
-      {/* Floating elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-400/30 to-purple-600/30 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-gradient-to-br from-cyan-400/30 to-blue-600/30 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-purple-400/20 to-pink-600/20 rounded-full blur-2xl animate-float" style={{ animationDelay: '1.5s' }}></div>
-      </div>
-
-      <div className="relative z-10 mx-auto max-w-7xl mobile-tight sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-        <div className="grid gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16 items-center min-h-[80vh]">
+    <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Content */}
-          <div className="flex flex-col justify-center text-center lg:text-left">
-            <div className="mb-4 sm:mb-6 inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm font-medium text-slate-800 shadow-glass mx-auto lg:mx-0 animate-pulse-glow">
-              <Sparkles className="h-4 w-4 text-blue-600" />
+          <div className="flex flex-col justify-center">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
+              <Sparkles className="h-4 w-4" />
               AI-Powered Art Generation
             </div>
             
-            <h1 className="mb-4 sm:mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white drop-shadow-2xl leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
+            <h1 className="mb-6 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl" style={{ fontFamily: 'var(--font-display)' }}>
               Transform Your Dog Into{' '}
-              <span className="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent animate-pulse">
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Masterpiece Art
               </span>
             </h1>
             
-            <p className="mb-6 sm:mb-8 text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed max-w-2xl mx-auto lg:mx-0 drop-shadow-lg">
+            <p className="mb-8 text-lg text-slate-600 lg:text-xl">
               Create museum-quality portraits of your beloved pet in the styles of history's greatest artists. 
               From Van Gogh's swirls to Picasso's cubism — your dog deserves to be immortalized in art.
             </p>
             
-            <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 max-w-md mx-auto lg:mx-0">
-              <a href="#create" className="flex-1">
-                <Button size="lg" className="group w-full shadow-2xl">
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <a href="#create">
+                <Button size="lg" className="group w-full">
                   <ImageIcon className="mr-2 h-5 w-5" />
                   Start Creating
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </a>
-              <a href="/gallery" className="flex-1">
-                <Button variant="secondary" size="lg" className="w-full shadow-2xl">
+              <a href="/gallery">
+                <Button variant="outline" size="lg" className="w-full">
                   Explore Gallery
                 </Button>
               </a>
             </div>
             
-            <div className="mt-6 sm:mt-8 grid grid-cols-3 gap-4 sm:gap-8 max-w-md mx-auto lg:mx-0">
-              <div className="glass p-3 sm:p-4 rounded-2xl text-center shadow-glass">
-                <div className="text-lg sm:text-xl font-bold text-white drop-shadow-lg">50K+</div>
-                <div className="text-xs sm:text-sm text-white/80">Portraits</div>
+            <div className="mt-8 flex items-center gap-8">
+              <div className="text-sm text-slate-500">
+                <div className="font-semibold text-slate-900">50,000+</div>
+                Portraits Created
               </div>
-              <div className="glass p-3 sm:p-4 rounded-2xl text-center shadow-glass">
-                <div className="text-lg sm:text-xl font-bold text-white drop-shadow-lg">20+</div>
-                <div className="text-xs sm:text-sm text-white/80">Styles</div>
+              <div className="text-sm text-slate-500">
+                <div className="font-semibold text-slate-900">20+</div>
+                Artist Styles
               </div>
-              <div className="glass p-3 sm:p-4 rounded-2xl text-center shadow-glass">
-                <div className="text-lg sm:text-xl font-bold text-white drop-shadow-lg">Free</div>
-                <div className="text-xs sm:text-sm text-white/80">To Start</div>
+              <div className="text-sm text-slate-500">
+                <div className="font-semibold text-slate-900">Free</div>
+                To Start
               </div>
             </div>
           </div>
 
           {/* Visual Examples */}
-          <div className="relative mt-8 lg:mt-0">
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm font-medium text-white shadow-glass animate-pulse-glow">
-                <div className="h-2 w-2 animate-pulse rounded-full bg-green-400"></div>
-                Recent Transformations
+          <div className="relative">
+            <div className="absolute -top-4 -right-4 h-72 w-72 rounded-full bg-gradient-to-br from-blue-200/30 to-purple-200/30 blur-3xl"></div>
+            <div className="absolute -bottom-8 -left-8 h-64 w-64 rounded-full bg-gradient-to-br from-purple-200/30 to-pink-200/30 blur-3xl"></div>
+            
+            <div className="relative space-y-6">
+              <div className="text-center">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm backdrop-blur-sm">
+                  <div className="h-2 w-2 animate-pulse rounded-full bg-green-500"></div>
+                  Recent Transformations
+                </div>
               </div>
-            </div>
 
-            <div className="space-y-3 sm:space-y-4">
+              <div className="space-y-4">
                 {loading ? (
                   Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="glass rounded-2xl p-3 sm:p-4 shadow-glass">
-                      <div className="flex items-center gap-3 sm:gap-4">
-                        <div className="h-12 w-12 sm:h-16 sm:w-16 animate-pulse rounded-xl bg-white/30" />
-                        <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 text-white/60" />
-                        <div className="h-12 w-12 sm:h-16 sm:w-16 animate-pulse rounded-xl bg-white/30" />
-                        <div className="flex-1 min-w-0">
-                          <div className="h-3 sm:h-4 w-16 sm:w-24 animate-pulse rounded bg-white/30 mb-1" />
-                          <div className="h-2 sm:h-3 w-12 sm:w-16 animate-pulse rounded bg-white/20" />
-                        </div>
+                    <div key={i} className="flex items-center gap-4 rounded-xl bg-white/80 p-4 backdrop-blur-sm">
+                      <div className="h-16 w-16 animate-pulse rounded-lg bg-slate-200" />
+                      <ArrowRight className="h-5 w-5 text-slate-400" />
+                      <div className="h-16 w-16 animate-pulse rounded-lg bg-slate-200" />
+                      <div className="flex-1">
+                        <div className="h-4 w-24 animate-pulse rounded bg-slate-200" />
+                        <div className="mt-1 h-3 w-16 animate-pulse rounded bg-slate-200" />
                       </div>
                     </div>
                   ))
@@ -131,35 +126,33 @@ export default function Hero() {
                       return `${w} / ${h}`
                     })()
                     return (
-                      <div key={gen.id} className="glass rounded-2xl p-3 sm:p-4 shadow-glass hover:shadow-glow transition-all duration-300 transform hover:scale-105">
-                        <div className="flex items-center gap-3 sm:gap-4">
-                          <div className="relative h-12 w-12 sm:h-16 sm:w-16 overflow-hidden rounded-xl shadow-lg" style={{ aspectRatio: ratio }}>
-                            <Image
-                              src={gen.originalImageUrl}
-                              alt="Original"
-                              fill
-                              className="object-cover"
-                              placeholder="blur"
-                              blurDataURL={BLUR_DATA_URL}
-                              quality={80}
-                            />
-                          </div>
-                          <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400 animate-pulse" />
-                          <div className="relative h-12 w-12 sm:h-16 sm:w-16 overflow-hidden rounded-xl shadow-lg" style={{ aspectRatio: ratio }}>
-                            <Image
-                              src={gen.imageUrl}
-                              alt={`${formatArtistName(gen.artistKey)} style`}
-                              fill
-                              className="object-cover"
-                              placeholder="blur"
-                              blurDataURL={BLUR_DATA_URL}
-                              quality={80}
-                            />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="font-semibold text-white truncate text-sm sm:text-base drop-shadow-lg">{formatArtistName(gen.artistKey)}</div>
-                            <div className="text-xs sm:text-sm text-white/80 truncate">{formatStyleName(gen.styleKey)}</div>
-                          </div>
+                      <div key={gen.id} className="flex items-center gap-4 rounded-xl bg-white/80 p-4 backdrop-blur-sm shadow-sm hover:shadow-md transition-shadow">
+                        <div className="relative h-16 w-16 overflow-hidden rounded-lg" style={{ aspectRatio: ratio }}>
+                          <Image
+                            src={gen.originalImageUrl}
+                            alt="Original"
+                            fill
+                            className="object-cover"
+                            placeholder="blur"
+                            blurDataURL={BLUR_DATA_URL}
+                            quality={80}
+                          />
+                        </div>
+                        <ArrowRight className="h-5 w-5 text-blue-500" />
+                        <div className="relative h-16 w-16 overflow-hidden rounded-lg" style={{ aspectRatio: ratio }}>
+                          <Image
+                            src={gen.imageUrl}
+                            alt={`${formatArtistName(gen.artistKey)} style`}
+                            fill
+                            className="object-cover"
+                            placeholder="blur"
+                            blurDataURL={BLUR_DATA_URL}
+                            quality={80}
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold text-slate-900 truncate">{formatArtistName(gen.artistKey)}</div>
+                          <div className="text-sm text-slate-500 truncate">{formatStyleName(gen.styleKey)}</div>
                         </div>
                       </div>
                     )
@@ -170,19 +163,17 @@ export default function Hero() {
                     { before: 'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1542060748-10c28b62716d?q=80&w=200&auto=format&fit=crop', artist: 'Picasso', style: 'Blue Period' },
                     { before: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=200&auto=format&fit=crop', after: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=200&auto=format&fit=crop', artist: 'Monet', style: 'Water Lilies' },
                   ].map((example, i) => (
-                    <div key={i} className="glass rounded-2xl p-3 sm:p-4 shadow-glass hover:shadow-glow transition-all duration-300 transform hover:scale-105">
-                      <div className="flex items-center gap-3 sm:gap-4">
-                        <div className="relative h-12 w-12 sm:h-16 sm:w-16 overflow-hidden rounded-xl shadow-lg">
-                          <Image src={example.before} alt="Original example" fill className="object-cover" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={80} />
-                        </div>
-                        <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400 animate-pulse" />
-                        <div className="relative h-12 w-12 sm:h-16 sm:w-16 overflow-hidden rounded-xl shadow-lg">
-                          <Image src={example.after} alt="Transformed example" fill className="object-cover" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={80} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-semibold text-white truncate text-sm sm:text-base drop-shadow-lg">{example.artist}</div>
-                          <div className="text-xs sm:text-sm text-white/80 truncate">{example.style}</div>
-                        </div>
+                    <div key={i} className="flex items-center gap-4 rounded-xl bg-white/80 p-4 backdrop-blur-sm shadow-sm">
+                      <div className="relative h-16 w-16 overflow-hidden rounded-lg">
+                        <Image src={example.before} alt="Original example" fill className="object-cover" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={80} />
+                      </div>
+                      <ArrowRight className="h-5 w-5 text-blue-500" />
+                      <div className="relative h-16 w-16 overflow-hidden rounded-lg">
+                        <Image src={example.after} alt="Transformed example" fill className="object-cover" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={80} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-slate-900">{example.artist}</div>
+                        <div className="text-sm text-slate-500">{example.style}</div>
                       </div>
                     </div>
                   ))
