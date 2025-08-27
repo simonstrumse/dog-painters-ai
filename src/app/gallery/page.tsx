@@ -100,18 +100,37 @@ export default async function GalleryPage({ searchParams }: { searchParams?: { s
             {/* Elegant frame with mat */}
             <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg">
               <div className="p-3 bg-white rounded-sm shadow-inner">
-                {/* Use a consistent frame aspect so plaques align across rows */}
+                {/* Outer "wall space" box keeps plaques aligned */}
                 <div className="relative overflow-hidden rounded-sm" style={{ aspectRatio: '2 / 3' }}>
-                  <Image 
-                    src={it.imageUrl.replace(/%2F/g, '/')} 
-                    alt={`${formatArtistName(it.artistKey)} — ${formatStyleName(it.styleKey)}`} 
-                    fill
-                    sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
-                    className="object-contain object-center transition-transform duration-200 group-hover:scale-[1.01]" 
-                    placeholder="blur"
-                    blurDataURL={BLUR_DATA_URL}
-                    quality={80}
-                  />
+                  {/* Center an inner frame that matches the image's true aspect */}
+                  {(() => {
+                    const s = it.size || '1024x1536'
+                    const [w, h] = String(s).split('x').map((n) => parseInt(n, 10))
+                    const isLandscape = (w && h) ? w > h : false
+                    const innerStyle: React.CSSProperties = {
+                      aspectRatio: (w && h) ? `${w} / ${h}` : '2 / 3',
+                      width: isLandscape ? '100%' : 'auto',
+                      height: isLandscape ? 'auto' : '100%',
+                      maxWidth: '100%',
+                      maxHeight: '100%',
+                    }
+                    return (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="relative" style={innerStyle}>
+                          <Image
+                            src={it.imageUrl.replace(/%2F/g, '/')}
+                            alt={`${formatArtistName(it.artistKey)} — ${formatStyleName(it.styleKey)}`}
+                            fill
+                            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                            className="object-contain object-center transition-transform duration-200 group-hover:scale-[1.01]"
+                            placeholder="blur"
+                            blurDataURL={BLUR_DATA_URL}
+                            quality={80}
+                          />
+                        </div>
+                      </div>
+                    )
+                  })()}
                 </div>
               </div>
             </div>

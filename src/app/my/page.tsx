@@ -104,15 +104,33 @@ export default function MyGalleryPage() {
           <div key={it.id} className="space-y-2">
             {/* Image without frame for personal gallery */}
             <div className="border-2 border-gray-300 rounded-lg shadow-md overflow-hidden bg-white">
-              {/* Use a consistent frame aspect so plaques align across rows */}
+              {/* Outer box keeps plaques aligned; inner follows image aspect */}
               <div className="relative overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
-                <Image 
-                  src={it.imageUrl} 
-                  alt={`${formatArtistName(it.artistKey)} — ${formatStyleName(it.styleKey)}`} 
-                  fill
-                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
-                  className="object-contain object-center" 
-                />
+                {(() => {
+                  const s = it.size || '1024x1536'
+                  const [w, h] = String(s).split('x').map((n) => parseInt(n, 10))
+                  const isLandscape = (w && h) ? w > h : false
+                  const innerStyle: React.CSSProperties = {
+                    aspectRatio: (w && h) ? `${w} / ${h}` : '2 / 3',
+                    width: isLandscape ? '100%' : 'auto',
+                    height: isLandscape ? 'auto' : '100%',
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                  }
+                  return (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="relative" style={innerStyle}>
+                        <Image
+                          src={it.imageUrl}
+                          alt={`${formatArtistName(it.artistKey)} — ${formatStyleName(it.styleKey)}`}
+                          fill
+                          sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                          className="object-contain object-center"
+                        />
+                      </div>
+                    </div>
+                  )
+                })()}
               </div>
             </div>
             {/* Gallery-style plaque */}
