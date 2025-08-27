@@ -97,26 +97,24 @@ export default async function GalleryPage({ searchParams }: { searchParams?: { s
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((it) => (
           <a key={it.id} href={`/gallery/${it.id}`} className="space-y-2 block group">
-            {/* Elegant frame with mat */}
-            <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg">
-              <div className="p-3 bg-white rounded-sm shadow-inner">
-                {/* Outer "wall space" box keeps plaques aligned */}
-                <div className="relative overflow-hidden rounded-sm" style={{ aspectRatio: '2 / 3' }}>
-                  {/* Center an inner frame that matches the image's true aspect */}
-                  {(() => {
-                    const s = it.size || '1024x1536'
-                    const [w, h] = String(s).split('x').map((n) => parseInt(n, 10))
-                    const isLandscape = (w && h) ? w > h : false
-                    const innerStyle: React.CSSProperties = {
-                      aspectRatio: (w && h) ? `${w} / ${h}` : '2 / 3',
-                      width: isLandscape ? '100%' : 'auto',
-                      height: isLandscape ? 'auto' : '100%',
-                      maxWidth: '100%',
-                      maxHeight: '100%',
-                    }
-                    return (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="relative" style={innerStyle}>
+            {/* Wall box keeps plaques aligned; inner frame follows true image aspect */}
+            <div className="relative overflow-hidden rounded-sm" style={{ aspectRatio: '2 / 3' }}>
+              {(() => {
+                const s = it.size || '1024x1536'
+                const [w, h] = String(s).split('x').map((n) => parseInt(n, 10))
+                const isLandscape = (w && h) ? w > h : false
+                const frameStyle: React.CSSProperties = {
+                  aspectRatio: (w && h) ? `${w} / ${h}` : '2 / 3',
+                  width: isLandscape ? '100%' : 'auto',
+                  height: isLandscape ? 'auto' : '100%',
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                }
+                return (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg" style={frameStyle}>
+                      <div className="p-3 bg-white rounded-sm shadow-inner h-full">
+                        <div className="relative w-full h-full">
                           <Image
                             src={it.imageUrl.replace(/%2F/g, '/')}
                             alt={`${formatArtistName(it.artistKey)} — ${formatStyleName(it.styleKey)}`}
@@ -129,10 +127,10 @@ export default async function GalleryPage({ searchParams }: { searchParams?: { s
                           />
                         </div>
                       </div>
-                    )
-                  })()}
-                </div>
-              </div>
+                    </div>
+                  </div>
+                )
+              })()}
             </div>
             {/* Gallery-style plaque */}
             <div className="bg-white border shadow-sm rounded-lg p-3 mx-2">

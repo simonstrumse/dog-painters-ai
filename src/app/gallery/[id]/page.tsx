@@ -118,23 +118,23 @@ export default async function GalleryItemPage({ params }: { params: { id: string
 
       <div className="grid gap-6 md:grid-cols-12">
         <div className="md:col-span-8">
-          <div className="bg-white rounded-lg border shadow-sm p-3">
-            {/* For the detail page, keep a generous max-height, center the image, and respect its own aspect */}
-            <div className="relative w-full max-h-[80vh] mx-auto overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
-              {(() => {
-                const s = item.size || '1024x1536'
-                const [w, h] = String(s).split('x').map((n) => parseInt(n, 10))
-                const isLandscape = (w && h) ? w > h : false
-                const innerStyle: React.CSSProperties = {
-                  aspectRatio: (w && h) ? `${w} / ${h}` : '2 / 3',
-                  width: isLandscape ? '100%' : 'auto',
-                  height: isLandscape ? 'auto' : '100%',
-                  maxWidth: '100%',
-                  maxHeight: '100%',
-                }
-                return (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="relative" style={innerStyle}>
+          {/* Wall box for consistency; inner frame follows the image aspect */}
+          <div className="relative w-full mx-auto overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
+            {(() => {
+              const s = item.size || '1024x1536'
+              const [w, h] = String(s).split('x').map((n) => parseInt(n, 10))
+              const isLandscape = (w && h) ? w > h : false
+              const frameStyle: React.CSSProperties = {
+                aspectRatio: (w && h) ? `${w} / ${h}` : '2 / 3',
+                width: isLandscape ? '100%' : 'auto',
+                height: isLandscape ? 'auto' : '100%',
+                maxWidth: '100%',
+                maxHeight: '80vh',
+              }
+              return (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="bg-white rounded-lg border shadow-sm p-3" style={frameStyle}>
+                    <div className="relative w-full h-full">
                       <Image
                         src={item.imageUrl.replace(/%2F/g, '/')}
                         alt={`${formatArtistName(item.artistKey)} — ${formatStyleName(item.styleKey)}`}
@@ -148,9 +148,9 @@ export default async function GalleryItemPage({ params }: { params: { id: string
                       />
                     </div>
                   </div>
-                )
-              })()}
-            </div>
+                </div>
+              )
+            })()}
           </div>
         </div>
         <aside className="md:col-span-4 space-y-4">

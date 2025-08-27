@@ -103,23 +103,23 @@ export default function MyGalleryPage() {
         {items.map((it) => (
           <div key={it.id} className="space-y-2">
             {/* Image without frame for personal gallery */}
-            <div className="border-2 border-gray-300 rounded-lg shadow-md overflow-hidden bg-white">
-              {/* Outer box keeps plaques aligned; inner follows image aspect */}
-              <div className="relative overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
-                {(() => {
-                  const s = it.size || '1024x1536'
-                  const [w, h] = String(s).split('x').map((n) => parseInt(n, 10))
-                  const isLandscape = (w && h) ? w > h : false
-                  const innerStyle: React.CSSProperties = {
-                    aspectRatio: (w && h) ? `${w} / ${h}` : '2 / 3',
-                    width: isLandscape ? '100%' : 'auto',
-                    height: isLandscape ? 'auto' : '100%',
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                  }
-                  return (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="relative" style={innerStyle}>
+            {/* Wall box keeps plaques aligned; inner frame follows true image aspect */}
+            <div className="relative overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
+              {(() => {
+                const s = it.size || '1024x1536'
+                const [w, h] = String(s).split('x').map((n) => parseInt(n, 10))
+                const isLandscape = (w && h) ? w > h : false
+                const frameStyle: React.CSSProperties = {
+                  aspectRatio: (w && h) ? `${w} / ${h}` : '2 / 3',
+                  width: isLandscape ? '100%' : 'auto',
+                  height: isLandscape ? 'auto' : '100%',
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                }
+                return (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="border-2 border-gray-300 rounded-lg shadow-md bg-white" style={frameStyle}>
+                      <div className="relative w-full h-full">
                         <Image
                           src={it.imageUrl}
                           alt={`${formatArtistName(it.artistKey)} — ${formatStyleName(it.styleKey)}`}
@@ -129,9 +129,9 @@ export default function MyGalleryPage() {
                         />
                       </div>
                     </div>
-                  )
-                })()}
-              </div>
+                  </div>
+                )
+              })()}
             </div>
             {/* Gallery-style plaque */}
             <div className="bg-white border shadow-sm rounded-lg p-3 mx-2">
