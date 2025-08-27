@@ -22,10 +22,39 @@ export function formatArtistName(artistKey: string): string {
     'pollock': 'Jackson Pollock',
     'miro': 'Joan Miró',
     'lichtenstein': 'Roy Lichtenstein',
-    'haring': 'Keith Haring'
+    'haring': 'Keith Haring',
+    // Added Renaissance
+    'davinci': 'Leonardo da Vinci',
+    'botticelli': 'Sandro Botticelli',
+    'giotto': 'Giotto',
+    // Children’s/Illustration & style-first labels
+    'alice_tenniel': 'Alice in Wonderland (John Tenniel)',
+    'dr_seuss': 'Dr. Seuss',
+    'maurice_sendak': 'Maurice Sendak',
+    'quentin_blake': 'Quentin Blake',
+    'mary_blair': 'Mary Blair',
+    'winnie_pooh_shepard': 'Winnie-the-Pooh (E. H. Shepard)',
+    'mary_poppins_shepard': 'Mary Poppins (Mary Shepard)',
+    'fairy_tales_rackham': 'Fairy Tales (Arthur Rackham)',
+    'fairy_tales_kay_nielsen': 'Fairy Tales (Kay Nielsen)',
+    'madeline_bemelmans': 'Madeline (Ludwig Bemelmans)',
+    'charlottes_web_williams': "Charlotte's Web (Garth Williams)",
+    'moomins_jansson': 'Moomins (Tove Jansson)',
+    'jan_brett': 'Nordic Folk Borders (Jan Brett)',
+    'shel_silverstein': 'Shel Silverstein',
+    'eric_carle': 'Eric Carle',
+    'beatrix_potter': 'Beatrix Potter',
   }
-  
-  return nameMap[artistKey] || artistKey.replace(/([A-Z])/g, ' $1').trim()
+
+  if (nameMap[artistKey]) return nameMap[artistKey]
+  // Fallbacks: convert snake_case or camelCase to Title Case
+  if (artistKey.includes('_')) {
+    return artistKey
+      .split('_')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ')
+  }
+  return artistKey.replace(/([A-Z])/g, ' $1').replace(/^\w/, (c) => c.toUpperCase()).trim()
 }
 
 export function formatStyleName(styleKey: string): string {
@@ -104,7 +133,32 @@ export function formatStyleName(styleKey: string): string {
     'comic_pop': 'Comic Pop',
     'whaam': 'Whaam!-style',
     'outlined_figures': 'Outlined Figures',
-    'motion_lines': 'Motion Lines'
+    'motion_lines': 'Motion Lines',
+    // New styles (explicit where naming needs polish)
+    'victorian_engraving': 'Victorian Engraving',
+    'wonderland_ensemble': 'Wonderland Ensemble',
+    'cheshire_grin': 'Cheshire Grin',
+    'tissue_collage': 'Tissue Collage',
+    'simple_animals': 'Simple Animals',
+    'watercolor_animals': 'Watercolor Animals',
+    'storybook': 'Storybook Vignettes',
+    'wild_things': 'Wild Things',
+    'storybook_plate': 'Storybook Plate',
+    'ink_splash': 'Ink + Splash',
+    'chaotic_page': 'Chaotic Page',
+    'storybook_fantasia': 'Storybook Fantasia',
+    'pen_ink_hatching': 'Pen-and-Ink Hatching',
+    'woodland_vignette': 'Woodland Vignette',
+    'elegant_ink': 'Elegant Penwork',
+    'ink_watercolor_wash': 'Ink + Watercolor Wash',
+    'gnarled_forest_plate': 'Gnarled Forest Plate',
+    'decorative_plates': 'Decorative Plates',
+    'silhouette_scene': 'Silhouette Scene',
+    'ink_gouache_paris': 'Ink + Gouache Paris',
+    'graphite_realism': 'Graphite Realism',
+    'pen_ink_crosshatch': 'Pen-and-Ink Crosshatch',
+    'ornate_borders': 'Ornate Borders',
+    'minimal_line': 'Minimal Line',
   }
   
   return styleMap[styleKey] || styleKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())

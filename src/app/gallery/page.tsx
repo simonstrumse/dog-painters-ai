@@ -100,13 +100,14 @@ export default async function GalleryPage({ searchParams }: { searchParams?: { s
             {/* Elegant frame with mat */}
             <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg">
               <div className="p-3 bg-white rounded-sm shadow-inner">
-                <div className="relative overflow-hidden rounded-sm" style={{ aspectRatio: (() => { const s=it.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
+                {/* Use a consistent frame aspect so plaques align across rows */}
+                <div className="relative overflow-hidden rounded-sm" style={{ aspectRatio: '2 / 3' }}>
                   <Image 
                     src={it.imageUrl.replace(/%2F/g, '/')} 
-                    alt={`${it.artistKey}-${it.styleKey}`} 
+                    alt={`${formatArtistName(it.artistKey)} — ${formatStyleName(it.styleKey)}`} 
                     fill
                     sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
-                    className="object-contain transition-transform duration-200 group-hover:scale-[1.01]" 
+                    className="object-contain object-center transition-transform duration-200 group-hover:scale-[1.01]" 
                     placeholder="blur"
                     blurDataURL={BLUR_DATA_URL}
                     quality={80}

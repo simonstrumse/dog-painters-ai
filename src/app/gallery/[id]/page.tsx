@@ -120,7 +120,7 @@ export default async function GalleryItemPage({ params }: { params: { id: string
         <div className="md:col-span-8">
           <div className="bg-white rounded-lg border shadow-sm p-3">
             <div className="relative w-full max-h-[80vh] mx-auto overflow-hidden" style={{ aspectRatio: (() => { const s=item.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
-              <Image src={item.imageUrl.replace(/%2F/g, '/')} alt={`${item.artistKey}-${item.styleKey}`} fill sizes="100vw" className="object-contain" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={85} priority />
+              <Image src={item.imageUrl.replace(/%2F/g, '/')} alt={`${formatArtistName(item.artistKey)} — ${formatStyleName(item.styleKey)}`} fill sizes="100vw" className="object-contain object-center" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={85} priority />
             </div>
           </div>
         </div>
@@ -157,8 +157,9 @@ export default async function GalleryItemPage({ params }: { params: { id: string
           <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
             {relatedByStyle.map((r: any) => (
               <a key={r.id} href={`/gallery/${r.id}`} className="block border rounded-lg overflow-hidden bg-white hover:shadow-sm">
-                <div className="relative overflow-hidden" style={{ aspectRatio: (() => { const s=r.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
-                  <Image src={r.imageUrl.replace(/%2F/g, '/')} alt="related" fill sizes="(max-width: 640px) 45vw, 15vw" className="object-contain" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={75} />
+                {/* Use a consistent aspect for related thumbnails */}
+                <div className="relative overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
+                  <Image src={r.imageUrl.replace(/%2F/g, '/')} alt={`${formatArtistName(r.artistKey)} — ${formatStyleName(r.styleKey)}`} fill sizes="(max-width: 640px) 45vw, 15vw" className="object-contain object-center" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={75} />
                 </div>
               </a>
             ))}
@@ -171,8 +172,8 @@ export default async function GalleryItemPage({ params }: { params: { id: string
           <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
             {relatedByArtist.map((r: any) => (
               <a key={r.id} href={`/gallery/${r.id}`} className="block border rounded-lg overflow-hidden bg-white hover:shadow-sm">
-                <div className="relative overflow-hidden" style={{ aspectRatio: (() => { const s=r.size||'1024x1536'; const [w,h]=String(s).split('x').map((n)=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
-                  <Image src={r.imageUrl.replace(/%2F/g, '/')} alt="related" fill sizes="(max-width: 640px) 45vw, 15vw" className="object-contain" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={75} />
+                <div className="relative overflow-hidden" style={{ aspectRatio: '2 / 3' }}>
+                  <Image src={r.imageUrl.replace(/%2F/g, '/')} alt={`${formatArtistName(r.artistKey)} — ${formatStyleName(r.styleKey)}`} fill sizes="(max-width: 640px) 45vw, 15vw" className="object-contain object-center" placeholder="blur" blurDataURL={BLUR_DATA_URL} quality={75} />
                 </div>
               </a>
             ))}
