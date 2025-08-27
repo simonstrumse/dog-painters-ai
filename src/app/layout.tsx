@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     ? { backgroundImage: 'radial-gradient(circle at 20% 10%, rgba(0,0,0,0.03) 1px, transparent 1px), radial-gradient(circle at 80% 20%, rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '24px 24px, 28px 28px' }
     : { backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '20px 20px' }
   return (
-    <html lang="en" className={`h-full ${playfair.variable} ${inter.variable}`}>
+    <html lang="en" className={`h-full ${playfair.variable} ${inter.variable}`} data-modern={IS_MODERN ? '1' : '0'}>
       <body className={bodyClass} style={bgStyle as any}>
         <NavBar />
         {/* Organization schema for stronger entity signals */}
