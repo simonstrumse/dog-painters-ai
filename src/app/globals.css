@@ -6,3 +6,17 @@ html, body, :root {
   height: 100%;
 }
 
+/* Ensure backdrop-blur support */
+@supports (backdrop-filter: blur(8px)) {
+  .backdrop-blur {
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(8px)) {
+  .backdrop-blur {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+}
+

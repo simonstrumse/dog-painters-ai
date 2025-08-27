@@ -71,8 +71,8 @@ export default function AuthButtons() {
         {showEmail && (
           <div className="absolute right-4 top-14 z-50 w-64 rounded-md border bg-white p-3 shadow">
             <div className="flex items-center gap-3 mb-2 text-sm">
-              <button className={`px-2 py-1 rounded ${mode==='signin' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`} onClick={() => setMode('signin')}>Sign in</button>
-              <button className={`px-2 py-1 rounded ${mode==='signup' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`} onClick={() => setMode('signup')}>Sign up</button>
+              <Button variant={mode==='signin' ? 'default' : 'outline'} size="sm" onClick={() => setMode('signin')}>Sign in</Button>
+              <Button variant={mode==='signup' ? 'default' : 'outline'} size="sm" onClick={() => setMode('signup')}>Sign up</Button>
             </div>
             <div className="space-y-2">
               <input className="w-full rounded border px-2 py-1 text-sm" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />

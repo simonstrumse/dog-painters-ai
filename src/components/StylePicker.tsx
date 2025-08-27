@@ -165,7 +165,7 @@ export default function StylePicker({ value, onChange }: Props) {
               )
             })}
             {activeCategories.length > 0 && (
-              <button onClick={() => setActiveCategories([])} className="text-xs px-2 py-1 rounded border bg-white text-gray-700 hover:bg-gray-50">Clear</button>
+              <Button variant="outline" size="sm" onClick={() => setActiveCategories([])}>Clear</Button>
             )}
           </div>
         )}
