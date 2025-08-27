@@ -39,7 +39,7 @@ export const viewport = 'width=device-width, initial-scale=1'
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`h-full ${playfair.variable} ${inter.variable}`} data-modern="1">
-      <body className="h-full bg-slate-50 text-slate-900 antialiased">
+      <body className="h-full bg-gray-50 text-gray-900 antialiased">
         <div className="flex h-full flex-col">
           <NavBar />
           {/* Organization schema for stronger entity signals */}
@@ -57,18 +57,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="flex-1 overflow-auto">
             {children}
           </main>
-          <footer className="border-t border-slate-200 bg-white/80 backdrop-blur-sm">
-            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-              <div className="flex flex-col items-center justify-between gap-4 text-sm text-slate-600 sm:flex-row">
-                <div>© {new Date().getFullYear()} Dog Paintings — AI-powered pet portraits</div>
-                <div className="flex items-center gap-4">
-                  <span>Inspired by the great masters</span>
-                  <div className="h-1 w-1 rounded-full bg-slate-400" />
-                  <span>Crafted with care</span>
-                </div>
-              </div>
-            </div>
-          </footer>
         </div>
       </body>
     </html>

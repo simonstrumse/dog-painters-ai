@@ -1,6 +1,7 @@
 import { getAdminServices } from '@/lib/firebaseAdmin'
 import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 import Image from 'next/image'
+import { IS_MODERN } from '@/lib/flags'
 import type { Metadata } from 'next'
 import { BLUR_DATA_URL } from '@/lib/blurData'
 import FavoriteHeart from '@/components/FavoriteHeart'
@@ -125,6 +126,14 @@ export default async function GalleryPage({ searchParams }: { searchParams?: { s
                             blurDataURL={BLUR_DATA_URL}
                             quality={80}
                           />
+                          {IS_MODERN && (
+                            <div className="absolute inset-x-0 bottom-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <div className="plaque-modern p-2 text-center">
+                                <div className="font-serif text-xs font-medium text-gray-900 truncate">{formatArtistName(it.artistKey)}</div>
+                                <div className="text-[11px] text-gray-600 italic truncate">{formatStyleName(it.styleKey)}</div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -133,7 +142,7 @@ export default async function GalleryPage({ searchParams }: { searchParams?: { s
               })()}
             </div>
             {/* Gallery-style plaque */}
-            <div className="bg-white border shadow-sm rounded-lg p-3 mx-2">
+            <div className={IS_MODERN ? 'hidden' : 'bg-white border shadow-sm rounded-lg p-3 mx-2'}>
               <div className="text-center space-y-1">
                 <div className="font-serif text-sm font-medium text-gray-900">
                   {formatArtistName(it.artistKey)}

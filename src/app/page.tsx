@@ -274,82 +274,75 @@ export default function HomePage() {
             </select>
           </div>
 
-          <div className="glass rounded-2xl p-4 sm:p-5 shadow-glass space-y-3 border border-blue-200/50">
+          <div className="bg-blue-50 rounded-lg p-4 space-y-3 border border-blue-100">
             <div className="flex items-center gap-2 text-sm">
               <Checkbox checked={publish} disabled />
-              <span className="font-medium">Publish to public gallery (required)</span>
+              <span className="font-medium text-gray-900">Publish to gallery (required)</span>
             </div>
-            <div className="text-xs text-slate-700">
-              Free users share their creations with our community. 
-              <span className="font-semibold">Paying customers will have opt-out available.</span>
+            <div className="text-xs text-gray-600">
+              Free users share creations with our community
             </div>
             {generationStatus ? (
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className={generationStatus.remaining > 0 ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'}>
-                    {generationStatus.remaining > 0 ? '✨' : '⚠️'} 
-                    {generationStatus.remaining} generations remaining today
+                  <span className={generationStatus.remaining > 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
+                    {generationStatus.remaining} generations remaining
                   </span>
-                  <span className="text-slate-600">
+                  <span className="text-gray-600">
                     {generationStatus.used}/{generationStatus.dailyLimit} used
                   </span>
                 </div>
-                <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                <div className="w-full bg-gray-200 rounded-full h-2">
                   <div 
-                    className={`h-2 rounded-full transition-all duration-500 ${
-                      generationStatus.remaining > 1 ? 'bg-gradient-to-r from-emerald-500 to-green-600' : 
-                      generationStatus.remaining === 1 ? 'bg-gradient-to-r from-yellow-500 to-orange-500' : 'bg-gradient-to-r from-red-500 to-pink-600'
+                    className={`h-2 rounded-full transition-all ${
+                      generationStatus.remaining > 1 ? 'bg-green-500' : 
+                      generationStatus.remaining === 1 ? 'bg-yellow-500' : 'bg-red-500'
                     }`}
                     style={{ width: `${(generationStatus.used / generationStatus.dailyLimit) * 100}%` }}
                   />
                 </div>
-                <div className="text-xs text-slate-600">
+                <div className="text-xs text-gray-500">
                   Resets at {new Date(generationStatus.resetTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} 
-                  {new Date(generationStatus.resetTime).toDateString() !== new Date().toDateString() ? ' tomorrow' : ' today'}
+                  {new Date(generationStatus.resetTime).toDateString() !== new Date().toDateString() ? ' tomorrow' : ''}
                 </div>
               </div>
             ) : (
-              <div className="text-xs text-blue-600 font-semibold">
-                ⚠️ Daily limit: 3 generations per user
+              <div className="text-xs text-blue-600 font-medium">
+                Daily limit: 3 generations per user
               </div>
             )}
           </div>
 
-          <Button size="lg" onClick={onGenerate} disabled={!canGenerate} className="w-full shadow-2xl">
+          <Button size="lg" onClick={onGenerate} disabled={!canGenerate} className="w-full">
             {loading 
-              ? '🎨 Generating Masterpiece…' 
+              ? 'Generating...' 
               : generationStatus && generationStatus.remaining === 0 
-                ? '📵 Daily Limit Reached' 
-                : '✨ Generate Portraits'
+                ? 'Daily Limit Reached' 
+                : 'Generate Portraits'
             }
           </Button>
           
           {loading && (
-            <div className={IS_MODERN ? 'app-panel p-4 sm:p-5 space-y-3 border border-blue-200/50' : 'glass rounded-2xl p-4 sm:p-5 shadow-glass space-y-3 border border-blue-200/50'}>
-              <div className="text-sm font-medium text-blue-900">We're painting your dog...</div>
+            <div className="bg-blue-50 rounded-lg p-4 space-y-3 border border-blue-200">
+              <div className="text-sm font-medium text-blue-900">Creating your portraits...</div>
               
               <div className="w-full bg-blue-200 rounded-full h-2">
                 <div 
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-1000 ease-out"
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-1000"
                   style={{ width: `${loadingProgress}%` }}
                 />
               </div>
               
-              <div className="space-y-1">
-                <div className="text-sm text-blue-800 font-medium">
-                  ⚠️ Please don't close this tab or browser
-                </div>
-                <div className="text-xs text-blue-700">
-                  We're working on your portraits. Closing this page will cancel the process.
-                </div>
+              <div className="text-xs text-blue-700">
+                Please don't close this page while generating
               </div>
             </div>
           )}
 
           {/* Results appear right below the generation button */}
           {results.length > 0 && (
-            <div id="results" className="space-y-4 pt-4 border-t">
-              <h3 className="text-lg font-semibold">Your Generated Portraits</h3>
+            <div id="results" className="space-y-4 pt-4 border-t border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900">Your Generated Portraits</h3>
               {files.map((f, i) => {
                 const perImage = results.filter((r) => r.originalIndex === i)
                 if (perImage.length === 0) return null
@@ -359,43 +352,41 @@ export default function HomePage() {
                     <div className="grid gap-3">
                       {perImage.map((r, idx) => (
                         <div key={idx} className="space-y-2">
-                          {/* Elegant frame with mat */}
-                          <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg">
-                            <div className="p-3 bg-white rounded-sm shadow-inner">
-                              <div className="relative overflow-hidden rounded-sm" style={{ aspectRatio: (() => { const [w,h]=size.split('x').map(n=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
-                                <Image 
-                                  src={r.dataUrl.replace(/%2F/g, '/')} 
-                                  alt={`${r.artistKey}-${r.styleKey}`} 
-                                  fill
-                                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
-                                  className="object-contain" 
-                                  placeholder="blur"
-                                  blurDataURL={BLUR_DATA_URL}
-                                  quality={80}
-                                />
-                              </div>
+                          <div className="bg-white rounded-lg border border-gray-200 p-4">
+                            <div className="relative overflow-hidden rounded-lg" style={{ aspectRatio: (() => { const [w,h]=size.split('x').map(n=>parseInt(n,10)); return (w&&h)? `${w} / ${h}` : '2 / 3' })() }}>
+                              <Image 
+                                src={r.dataUrl.replace(/%2F/g, '/')} 
+                                alt={`${r.artistKey}-${r.styleKey}`} 
+                                fill
+                                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                                className="object-contain" 
+                                placeholder="blur"
+                                blurDataURL={BLUR_DATA_URL}
+                                quality={80}
+                              />
                             </div>
-                          </div>
-                          {/* Gallery-style plaque */}
-                          <div className={IS_MODERN ? 'plaque-modern p-3 mx-2' : 'bg-white border shadow-sm rounded-lg p-3 mx-2'}>
-                            <div className="text-center space-y-1">
-                              <div className="font-serif text-sm font-medium text-gray-900">
+                            <div className="mt-3 text-center space-y-1">
+                              <div className="font-medium text-gray-900">
                                 {formatArtistName(r.artistKey)}
                               </div>
-                              <div className="text-xs text-gray-600 italic">
+                              <div className="text-sm text-gray-600">
                                 {formatStyleName(r.styleKey)}
                               </div>
                             </div>
-                            <div className="flex flex-col sm:flex-row gap-2 mt-3 pt-2 border-t">
-                              <button
-                                className="flex-1 text-sm px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 font-medium"
+                            <div className="flex gap-2 mt-3">
+                              <Button
+                                variant="outline" 
+                                size="sm"
+                                className="flex-1"
                                 onClick={() => { setPrintImage(r.dataUrl); setPrintOpen(true) }}
-                              >Print</button>
+                              >Print</Button>
                               <a
                                 download={`dog-${i}-${r.artistKey}-${r.styleKey}.png`}
                                 href={r.dataUrl}
-                                className="flex-1 text-sm px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-medium text-center"
-                              >Download</a>
+                                className="flex-1"
+                              >
+                                <Button size="sm" className="w-full">Download</Button>
+                              </a>
                             </div>
                           </div>
                         </div>
@@ -408,80 +399,137 @@ export default function HomePage() {
           )}
         </div>
 
-        <div>
+        <div className={IS_MODERN ? 'bg-white rounded-2xl p-6 shadow-sm border border-gray-100 lg:sticky lg:top-24' : 'bg-white rounded-2xl p-6 shadow-sm border border-gray-100'}>
           <StylePicker value={selections} onChange={setSelections} />
         </div>
           </div>
         </div>
       </section>
 
+      {/* Bottom action bar (modern only) */}
+      {IS_MODERN && (
+        <div className="fixed inset-x-0 bottom-0 z-40">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 pb-4">
+            <div className="app-toolbar px-4 py-3 rounded-2xl border border-gray-200/70 bg-white/75 backdrop-blur shadow-glass flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+              <div className="text-sm text-gray-600">
+                {generationStatus ? (
+                  <span>
+                    Daily limit: {generationStatus.used}/{generationStatus.dailyLimit} used • resets {new Date(generationStatus.resetTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                  </span>
+                ) : (
+                  <span>Sign in to track your daily generation limit</span>
+                )}
+              </div>
+              <div className="flex items-center gap-3">
+                <select
+                  value={size}
+                  onChange={(e) => setSize(e.target.value as any)}
+                  className="text-sm border rounded-full px-3 py-1 app-pill"
+                >
+                  <option value="1024x1536">Portrait</option>
+                  <option value="1024x1024">Square</option>
+                  <option value="1536x1024">Landscape</option>
+                </select>
+                <Button onClick={onGenerate} disabled={!canGenerate} className="btn-modern">
+                  {loading
+                    ? '🎨 Generating…'
+                    : generationStatus && generationStatus.remaining === 0
+                    ? '📵 Daily Limit Reached'
+                    : '✨ Generate Portraits'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       <HowItWorks />
       <TrustBadges />
 
-      {/* Product-focused value props for clear extraction (moved to bottom) */}
-      <section className="rounded-xl border bg-white p-6 md:p-10">
-        <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>Why Dog Paintings</h2>
-        <ul className="grid gap-4 md:grid-cols-2 text-gray-700">
-          <li><strong>Museum-inspired styles:</strong> Portraits inspired by masters like Van Gogh, Hokusai, and Klimt.</li>
-          <li><strong>Keep your dog’s markings:</strong> We retain unique features and expressions in every portrait.</li>
-          <li><strong>Ready for display:</strong> Download high‑resolution files and request framed prints.</li>
-          <li><strong>Fast turnaround:</strong> Create and publish to the gallery in just minutes.</li>
-        </ul>
-      </section>
-
-      {/* FAQ: visible content + JSON-LD for FAQPage (moved to bottom) */}
-      <section className="rounded-xl border bg-white p-6 md:p-10">
-        <h2 className="text-2xl md:text-3xl font-bold mb-6" style={{ fontFamily: 'var(--font-display)' }}>Frequently Asked Questions</h2>
-        <div className="space-y-5 text-gray-800">
-          <div>
-            <div className="font-semibold">What is Dog Paintings?</div>
-            <p>Dog Paintings transforms your dog photos into museum‑quality portraits inspired by history’s most famous painters.</p>
-          </div>
-          <div>
-            <div className="font-semibold">How long does it take?</div>
-            <p>Most portraits are ready within minutes. You can publish to the gallery and request a framed print when you’re happy.</p>
-          </div>
-          <div>
-            <div className="font-semibold">Do my uploads keep their details?</div>
-            <p>Yes. We preserve your dog’s distinctive markings and expressions for a faithful final portrait.</p>
+      {/* Features Section */}
+      <section className="bg-white py-12">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Why Choose Dog Paintings</h2>
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <h3 className="font-medium text-gray-900 mb-2">Museum-Quality Styles</h3>
+                <p className="text-gray-600 text-sm">Portraits inspired by Van Gogh, Hokusai, Klimt and other masters</p>
+              </div>
+              <div>
+                <h3 className="font-medium text-gray-900 mb-2">Preserves Unique Features</h3>
+                <p className="text-gray-600 text-sm">We retain your dog's distinctive markings and expressions</p>
+              </div>
+              <div>
+                <h3 className="font-medium text-gray-900 mb-2">Ready for Display</h3>
+                <p className="text-gray-600 text-sm">Download high-resolution files or order framed prints</p>
+              </div>
+              <div>
+                <h3 className="font-medium text-gray-900 mb-2">Fast Generation</h3>
+                <p className="text-gray-600 text-sm">Create and publish portraits in just minutes</p>
+              </div>
+            </div>
           </div>
         </div>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'FAQPage',
-              mainEntity: [
-                {
-                  '@type': 'Question',
-                  name: 'What is Dog Paintings?',
-                  acceptedAnswer: {
-                    '@type': 'Answer',
-                    text: 'Dog Paintings transforms dog photos into museum‑quality portraits inspired by history’s most famous painters.'
+      </section>
+
+      {/* FAQ Section */}
+      <section className="bg-gray-50 py-12">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-medium text-gray-900 mb-2">What is Dog Paintings?</h3>
+                <p className="text-gray-600 text-sm">Dog Paintings transforms your dog photos into museum-quality portraits inspired by history's most famous painters.</p>
+              </div>
+              <div>
+                <h3 className="font-medium text-gray-900 mb-2">How long does it take?</h3>
+                <p className="text-gray-600 text-sm">Most portraits are ready within minutes. You can publish to the gallery and request a framed print when you're happy.</p>
+              </div>
+              <div>
+                <h3 className="font-medium text-gray-900 mb-2">Do my uploads keep their details?</h3>
+                <p className="text-gray-600 text-sm">Yes. We preserve your dog's distinctive markings and expressions for a faithful final portrait.</p>
+              </div>
+            </div>
+          </div>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                '@context': 'https://schema.org',
+                '@type': 'FAQPage',
+                mainEntity: [
+                  {
+                    '@type': 'Question',
+                    name: 'What is Dog Paintings?',
+                    acceptedAnswer: {
+                      '@type': 'Answer',
+                      text: 'Dog Paintings transforms dog photos into museum-quality portraits inspired by history\'s most famous painters.'
+                    }
+                  },
+                  {
+                    '@type': 'Question',
+                    name: 'How long does it take?',
+                    acceptedAnswer: {
+                      '@type': 'Answer',
+                      text: 'Most portraits are ready within minutes. You can publish to the gallery and request a framed print when you\'re happy.'
+                    }
+                  },
+                  {
+                    '@type': 'Question',
+                    name: 'Do my uploads keep their details?',
+                    acceptedAnswer: {
+                      '@type': 'Answer',
+                      text: 'Yes. Distinctive markings and expressions are preserved for a faithful final portrait.'
+                    }
                   }
-                },
-                {
-                  '@type': 'Question',
-                  name: 'How long does it take?',
-                  acceptedAnswer: {
-                    '@type': 'Answer',
-                    text: 'Most portraits are ready within minutes. You can publish to the gallery and request a framed print when you’re happy.'
-                  }
-                },
-                {
-                  '@type': 'Question',
-                  name: 'Do my uploads keep their details?',
-                  acceptedAnswer: {
-                    '@type': 'Answer',
-                    text: 'Yes. Distinctive markings and expressions are preserved for a faithful final portrait.'
-                  }
-                }
-              ]
-            }),
-          }}
-        />
+                ]
+              }),
+            }}
+          />
+        </div>
       </section>
 
       <Modal open={printOpen} onClose={() => setPrintOpen(false)} title="Order a Framed Print">
