@@ -222,7 +222,7 @@ export default function HomePage() {
               {files.map((f, i) => (
                 <div key={i} className="w-full sm:w-28 h-28 rounded-md overflow-hidden border relative">
                   <img src={URL.createObjectURL(f)} alt={`upload-${i}`} className="w-full h-full object-cover" />
-                  <button className="absolute top-1 right-1 bg-white/80 hover:bg-white text-xs px-2 py-1 rounded shadow-sm" onClick={() => setFiles((prev) => prev.filter((_, idx) => idx !== i))}>×</button>
+                  <Button variant="outline" size="sm" className="absolute top-1 right-1 bg-white/80 hover:bg-white text-xs px-1 py-0 h-6 w-6 rounded shadow-sm" onClick={() => setFiles((prev) => prev.filter((_, idx) => idx !== i))}>×</Button>
                 </div>
               ))}
             </div>
@@ -466,7 +466,7 @@ export default function HomePage() {
                 <div className="text-sm font-medium mb-2">Frame</div>
                 <div className="grid grid-cols-3 gap-2">
                   {(['black','walnut','white'] as const).map((c) => (
-                    <button key={c} onClick={() => setFrame(c)} className={`px-4 py-2 rounded border text-sm font-medium capitalize ${frame===c?'border-blue-600 bg-blue-50 text-blue-700':'border-gray-300 hover:border-gray-400'}`}>{c}</button>
+                    <Button key={c} variant={frame===c ? 'default' : 'outline'} size="sm" onClick={() => setFrame(c)} className="capitalize">{c}</Button>
                   ))}
                 </div>
               </div>
