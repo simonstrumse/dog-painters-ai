@@ -37,33 +37,39 @@ export const metadata: Metadata = {
 export const viewport = 'width=device-width, initial-scale=1'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const bodyClass = 'min-h-full antialiased bg-gradient-to-b from-white via-neutral-50 to-neutral-100 text-gray-900'
-  const bgStyle = { backgroundImage: 'radial-gradient(circle at 20% 10%, rgba(0,0,0,0.03) 1px, transparent 1px), radial-gradient(circle at 80% 20%, rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '24px 24px, 28px 28px' }
   return (
     <html lang="en" className={`h-full ${playfair.variable} ${inter.variable}`} data-modern="1">
-      <body className={bodyClass} style={bgStyle as any}>
-        <NavBar />
-        {/* Organization schema for stronger entity signals */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Organization',
-              name: 'Dog Paintings',
-              url: process.env.NEXT_PUBLIC_SITE_URL || undefined,
-            }),
-          }}
-        />
-        <div className="container py-4 sm:py-6">{children}</div>
-        <footer className="mt-16 border-t border-gray-200/70">
-          <div className="container py-8 text-sm text-gray-600 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-            <div>© {new Date().getFullYear()} Dog Paintings • Your dog in the style of history’s most famous painters</div>
-            <div>
-              Inspired by the great masters. Crafted with care.
+      <body className="h-full bg-slate-50 text-slate-900 antialiased">
+        <div className="flex h-full flex-col">
+          <NavBar />
+          {/* Organization schema for stronger entity signals */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                '@context': 'https://schema.org',
+                '@type': 'Organization',
+                name: 'Dog Paintings',
+                url: process.env.NEXT_PUBLIC_SITE_URL || undefined,
+              }),
+            }}
+          />
+          <main className="flex-1 overflow-auto">
+            {children}
+          </main>
+          <footer className="border-t border-slate-200 bg-white/80 backdrop-blur-sm">
+            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+              <div className="flex flex-col items-center justify-between gap-4 text-sm text-slate-600 sm:flex-row">
+                <div>© {new Date().getFullYear()} Dog Paintings — AI-powered pet portraits</div>
+                <div className="flex items-center gap-4">
+                  <span>Inspired by the great masters</span>
+                  <div className="h-1 w-1 rounded-full bg-slate-400" />
+                  <span>Crafted with care</span>
+                </div>
+              </div>
             </div>
-          </div>
-        </footer>
+          </footer>
+        </div>
       </body>
     </html>
   )
