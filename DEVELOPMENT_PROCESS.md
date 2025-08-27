@@ -270,6 +270,21 @@ Deliverable: production-ready app with [SPECIFIC_DELIVERABLES]
 
 ---
 
+## 🏷️ Tagging & Releases (Rule)
+
+- Always create an annotated tag after merging to `main` or pushing directly to `main` for substantive changes (e.g., prompt updates, API changes, style library expansions).
+- Recommended tag format: `prompts-variation-YYYY-MM-DD-<short-hash>` or semantic versioning for broader releases (e.g., `v1.2.0`).
+- Commands:
+  - `git tag -a <tag> -m "Short summary of changes"`
+  - `git push origin <tag>`
+- Draft a GitHub Release for each tag:
+  - GitHub → Releases → “Draft a new release”, select the new tag.
+  - Title: concise description (e.g., “Prompt variation + illustrators”).
+  - Notes: what changed, rationale, migration notes, and screenshots if relevant.
+  - Publish when ready.
+
+---
+
 ## 🎯 Key Success Factors
 
 1. **Single Comprehensive Prompt**: Started with detailed requirements upfront
