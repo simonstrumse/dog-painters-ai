@@ -21,7 +21,8 @@ type Props = {
 
 export default function GalleryDetailTop({ item, shareUrl }: Props) {
   const titleRef = useRef<HTMLDivElement | null>(null)
-  const [targetHeight, setTargetHeight] = useState<number | undefined>(undefined)
+  const [titleHeight, setTitleHeight] = useState<number | undefined>(undefined)
+  const [viewportH, setViewportH] = useState<number | undefined>(undefined)
   const [isMdUp, setIsMdUp] = useState(false)
 
   useEffect(() => {
@@ -34,13 +35,21 @@ export default function GalleryDetailTop({ item, shareUrl }: Props) {
   }, [])
 
   useEffect(() => {
+    // track viewport height for responsive sizing
+    const updateVh = () => setViewportH(window.innerHeight)
+    updateVh()
+    window.addEventListener('resize', updateVh)
+    return () => window.removeEventListener('resize', updateVh)
+  }, [])
+
+  useEffect(() => {
     if (!isMdUp) {
-      setTargetHeight(undefined)
+      setTitleHeight(undefined)
       return
     }
     if (!titleRef.current) return
     const el = titleRef.current
-    const set = () => setTargetHeight(el.getBoundingClientRect().height)
+    const set = () => setTitleHeight(el.getBoundingClientRect().height)
     set()
     const ro = new ResizeObserver(() => set())
     ro.observe(el)
@@ -57,13 +66,23 @@ export default function GalleryDetailTop({ item, shareUrl }: Props) {
     return parts.length === 2 && parts.every((n) => Number.isFinite(n)) ? (parts as [number, number]) : [1024, 1536]
   }, [item.size])
 
+  // Compute a generous target height: at least ~65vh and no more than ~85vh,
+  // and never smaller than the title box height when on md+.
+  const desiredHeight = useMemo(() => {
+    if (!isMdUp || !viewportH) return undefined
+    const minVh = Math.round(viewportH * 0.65)
+    const maxVh = Math.round(viewportH * 0.85)
+    const base = Math.max(titleHeight || 0, minVh)
+    return Math.min(base, maxVh)
+  }, [isMdUp, viewportH, titleHeight])
+
   return (
     <div className="grid gap-6 md:grid-cols-12">
       <div className="md:col-span-8">
         {/* No decorative frame on detail page; plain, top-aligned image */}
-        <div className="relative w-full mx-auto overflow-hidden aspect-[3/4] sm:aspect-[2/3] md:aspect-auto" style={isMdUp && targetHeight ? { height: targetHeight } as any : undefined}>
+        <div className="relative w-full mx-auto overflow-hidden aspect-[3/4] sm:aspect-[2/3] md:aspect-auto" style={isMdUp && desiredHeight ? { height: desiredHeight } as any : undefined}>
           <div className="absolute inset-0 flex items-start justify-center">
-            <div className="relative w-full h-full" style={{ maxHeight: isMdUp && targetHeight ? targetHeight : undefined }}>
+            <div className="relative w-full h-full" style={isMdUp && desiredHeight ? { maxHeight: desiredHeight } as any : undefined}>
               <Image
                 src={item.imageUrl.replace(/%2F/g, '/')}
                 alt={`${formatArtistName(item.artistKey)} — ${formatStyleName(item.styleKey)}`}
@@ -113,4 +132,3 @@ export default function GalleryDetailTop({ item, shareUrl }: Props) {
     </div>
   )
 }
-
