@@ -61,16 +61,18 @@ export default function Hero() {
             </p>
             
             <div className="flex flex-col gap-4 sm:flex-row">
-              <Button size="lg" className="group" asChild>
-                <a href="#create">
+              <a href="#create">
+                <Button size="lg" className="group w-full">
                   <ImageIcon className="mr-2 h-5 w-5" />
                   Start Creating
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </a>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <a href="/gallery">Explore Gallery</a>
-              </Button>
+                </Button>
+              </a>
+              <a href="/gallery">
+                <Button variant="outline" size="lg" className="w-full">
+                  Explore Gallery
+                </Button>
+              </a>
             </div>
             
             <div className="mt-8 flex items-center gap-8">
@@ -116,7 +118,7 @@ export default function Hero() {
                     </div>
                   ))
                 ) : generations.length > 0 ? (
-                  generations.slice(0, 3).map((gen, idx) => {
+                  generations.slice(0, 3).map((gen) => {
                     const ratio = (() => {
                       const s = gen.size || '1024x1536'
                       const [w, h] = s.split('x').map((n) => parseInt(n, 10))
