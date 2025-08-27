@@ -52,3 +52,22 @@ This is a Next.js 14 App Router application that generates AI-stylized dog portr
 
 ### Other APIs
 - OPENAI_API_KEY
+
+## Development Workflow
+
+**Primary Coding Tasks**: Always delegate design, front-end, functionality, and regular coding tasks to the Codex MCP server first. The Codex server should be the primary driver for:
+- UI/UX implementation
+- Component development
+- Feature implementation
+- Code refactoring
+- Bug fixes
+
+**Claude Code Role**: Handle supporting operations while Codex does the main coding:
+- Code reviews and validation
+- Git operations and GitHub management
+- Database operations via MCP servers
+- Research and documentation
+- Running commands (build, test, lint, etc.)
+- Environment and deployment management
+
+**Fallback**: If Codex MCP server runs out of tokens or hits usage limits, Claude Code takes over all coding tasks.
