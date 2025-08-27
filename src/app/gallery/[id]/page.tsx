@@ -2,8 +2,9 @@ import { getAdminServices } from '@/lib/firebaseAdmin'
 import { formatArtistName, formatStyleName } from '@/lib/displayUtils'
 import { ShareButton } from '@/components/ShareButton'
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import FavoriteHeart from '@/components/FavoriteHeart'
+import GalleryDetailTop from '@/components/GalleryDetailTop'
+import Image from 'next/image'
 import { BLUR_DATA_URL } from '@/lib/blurData'
 
 export const dynamic = 'force-dynamic'
@@ -116,72 +117,7 @@ export default async function GalleryItemPage({ params }: { params: { id: string
         <span className="text-gray-700">{formatArtistName(item.artistKey)}</span>
       </nav>
 
-      <div className="grid gap-6 md:grid-cols-12">
-        <div className="md:col-span-8">
-          {/* Wall box for consistency; responsive aspect; inner frame follows the image aspect */}
-          <div className="relative w-full mx-auto overflow-hidden aspect-[3/4] sm:aspect-[2/3]">
-            {(() => {
-              const s = item.size || '1024x1536'
-              const [w, h] = String(s).split('x').map((n) => parseInt(n, 10))
-              const isLandscape = (w && h) ? w > h : false
-              const frameStyle: React.CSSProperties = {
-                aspectRatio: (w && h) ? `${w} / ${h}` : '2 / 3',
-                width: isLandscape ? '100%' : 'auto',
-                height: isLandscape ? 'auto' : '100%',
-                maxWidth: '100%',
-                maxHeight: '80vh',
-              }
-              return (
-                <div className="absolute inset-0 flex items-start justify-center">
-                  {/* Match gallery frame styling: amber outer with white mat */}
-                  <div className="p-4 bg-gradient-to-br from-amber-900 to-amber-800 rounded-lg shadow-lg" style={frameStyle}>
-                    <div className="p-3 bg-white rounded-sm shadow-inner h-full">
-                      <div className="relative w-full h-full">
-                      <Image
-                        src={item.imageUrl.replace(/%2F/g, '/')}
-                        alt={`${formatArtistName(item.artistKey)} — ${formatStyleName(item.styleKey)}`}
-                        fill
-                        sizes="100vw"
-                        className="object-contain object-center"
-                        placeholder="blur"
-                        blurDataURL={BLUR_DATA_URL}
-                        quality={85}
-                        priority
-                      />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )
-            })()}
-          </div>
-        </div>
-        <aside className="md:col-span-4 space-y-4">
-          <div className="bg-white border rounded-lg p-4 space-y-2">
-            <h1 className="text-xl font-serif font-semibold">{formatArtistName(item.artistKey)}</h1>
-            <div className="text-gray-600 italic">{formatStyleName(item.styleKey)}</div>
-            <div className="text-sm text-gray-500">{item.createdAt.toLocaleString()}</div>
-            <div className="pt-2"><FavoriteHeart imageId={item.id} /></div>
-          </div>
-          <div className="bg-white border rounded-lg p-4 space-y-3">
-            <div className="font-medium">Share</div>
-            <div className="flex items-center gap-2">
-              <ShareButton url={shareUrl} />
-              <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent('Check out this dog portrait!')}`} className="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" target="_blank">Twitter</a>
-            </div>
-          </div>
-          <div className="bg-white border rounded-lg p-4 space-y-2">
-            <div className="font-medium">Details</div>
-            {item.user ? (
-              <div className="text-sm text-gray-600">
-                <div>By: {item.user.displayName || item.user.email || 'Anonymous'}</div>
-              </div>
-            ) : (
-              <div className="text-sm text-gray-600">By: Anonymous</div>
-            )}
-          </div>
-        </aside>
-      </div>
+      <GalleryDetailTop item={item as any} shareUrl={shareUrl} />
 
       {relatedByStyle.length > 0 && (
         <section className="space-y-3">
